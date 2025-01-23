@@ -170,10 +170,3 @@ table {
 body {
   font-family: var(--font-main);
 }
-
-.container {
-  width: 480px;
-  height: 100vh;
-  margin: 0 auto;
-  background-color: var(--grey-2-color);
-}
