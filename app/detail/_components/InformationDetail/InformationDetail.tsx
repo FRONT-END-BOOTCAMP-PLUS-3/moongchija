@@ -25,25 +25,25 @@ const InformationDetail = () => {
       <div className={styles.box}>
         {/* 장소 */}
         <div className={styles.place}>
-          <FaMapMarkerAlt />
+          <FaMapMarkerAlt className={styles.markerIcon} />
           <span>장소</span>
-          <div>|</div>
+          <div className={styles.divider}></div>
           <a href="#">홍대입구역</a>
         </div>
 
         {/* 일자 */}
         <div className={styles.date}>
-          <FaCalendarAlt />
+          <FaCalendarAlt className={styles.calendarIcon} />
           <span>일자</span>
-          <div>|</div>
+          <div className={styles.divider}></div>
           <span>2015.1.17 (금) 18:00</span>
         </div>
 
         {/* 참여 인원 */}
         <div className={styles.participants}>
-          <FaUserFriends />
+          <FaUserFriends className={styles.friendsIcon} />
           <span>참여 인원</span>
-          <div>|</div>
+          <div className={styles.divider}></div>
           <span>3명</span>
         </div>
 
