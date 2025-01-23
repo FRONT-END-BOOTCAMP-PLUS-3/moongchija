@@ -1,0 +1,94 @@
+.container {
+  width: 400px;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  background-color: white;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.dDay {
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  color: white;
+  border-radius: 0 0 20px 20px;
+  width: 75px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+}
+
+.name {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  padding-bottom: 10px;
+}
+
+.crownIcon{
+  color: gold;
+}
+
+.box {
+  font-size: 16px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.place {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.participantsBox{
+  display: flex;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 5px;
+  gap: 20px;
+  border: 1px solid var(--grey-6-color);
+  
+}
+
+.participants {
+  display: flex;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+
+.participantsIcons {
+  background-color: aqua;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-top: 10px;
+  border-radius: 5px;
+  padding: 10px;
+}
+
+.place a {
+  color: black;
+}
+
+.place a:hover {
+  color: var(--primary-color);
+}
