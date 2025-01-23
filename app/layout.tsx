@@ -17,7 +17,7 @@ export default function RootLayout({
         <title>뭉치자</title>
       </head>
       <body>
-        <div className="container">{children}</div>
+        <div>{children}</div>
       </body>
     </html>
   );
