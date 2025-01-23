@@ -3,13 +3,13 @@ import styles from "./button.module.scss";
 const Button = ({
   text,
   size,
-  color,
-  active,
+  color = "--primary-color",
+  active = true,
 }: {
   text: string;
   size: "xs" | "sm" | "md" | "lg";
-  color: "--primary-color" | "--exit-red";
-  active: boolean;
+  color?: "--primary-color" | "--exit-red";
+  active?: boolean;
 }) => {
   return (
     <div className={styles.buttonWrapper}>
