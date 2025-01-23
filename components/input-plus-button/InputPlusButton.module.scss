@@ -1,0 +1,21 @@
+.inputPlusButton {
+  width: 400px;
+  height: 60px;
+  background-color: #aaaaaa;
+  border: none;
+  border-radius: 10px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background-color: #888888;
+  }
+}
+
+.icon {
+  font-size: 20px;
+}
