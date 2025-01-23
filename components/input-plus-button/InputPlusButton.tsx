@@ -1,9 +1,13 @@
 import { FaPlus } from "react-icons/fa";
 import styles from "./InputPlusButton.module.scss";
 
-const InputPlusButton = () => {
+type InputPlusButtonProps = {
+  onClick?: React.MouseEventHandler<HTMLButtonElement>;
+};
+
+const InputPlusButton: React.FC<InputPlusButtonProps> = ({ onClick }) => {
   return (
-    <button className={styles.inputPlusButton}>
+    <button className={styles.inputPlusButton} onClick={onClick}>
       <FaPlus className={styles.icon} />
     </button>
   );
