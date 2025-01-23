@@ -1,22 +1,38 @@
 .inputField {
-    margin-bottom: 1rem;
-  
+    padding-bottom: 20px;
+
     label {
       display: block;
-      margin: 0.25rem 0;
+      margin-bottom: 10px;
+      font-size: var(--font-size-md);
     }
   
     input {
       margin: 0;
-      padding: 10px;
+      padding: 15px;
       width: 100%;
       border: 1px solid #d1d5db;
       border-radius: 10px;
       outline: none;
+      font-size: 14px;
+      
+      &::placeholder {
+        color: #898989;
+      }
   
       &:focus {
         border-color: #2563eb;
       }
+    }
+
+    &.errorField input {
+      border-color: red;
+    }
+  
+    .errorMessage {
+      color: red;
+      font-size: 14px;
+      margin-top: 4px;
     }
   }
   
