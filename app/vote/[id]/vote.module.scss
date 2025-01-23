@@ -1,0 +1,97 @@
+.timeVoteContainer {
+  max-width: 500px;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  user-select: none;
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.subtitle {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 20px 0;
+}
+
+.description {
+  font-size: 16px;
+  color: gray;
+  margin-bottom: 50px;
+}
+
+.schedule {
+  overflow-x: auto; // ✅ 날짜와 그리드가 함께 스크롤
+  .row {
+    display: flex;
+    // justify-content: start;
+    font-weight: bold;
+    font-size: 16px;
+    margin-bottom: 10px;
+    min-width: fit-content; // ✅ 스크롤 시 날짜 유지
+    .timeLabel {
+      width: 40px;
+      font-size: var(--font-size-xs);
+      margin-right: 10px;
+      color: var(--grey-3-color);
+    }
+    .day {
+      width: 40px;
+      text-align: center;
+      margin-right: 5px;
+    }
+  }
+}
+
+.timeGrid {
+  display: flex;
+  align-items: flex-start;
+
+  .timeLabels {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 40px;
+
+    .time {
+      width: 40px;
+      height: 40px;
+      margin-bottom: 5px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+      font-weight: bold;
+    }
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(
+      auto-fit,
+      minmax(40px, 1fr)
+    ); /* ✅ 가로축 날짜 개수만큼 컬럼 생성 */
+    gap: 5px;
+    margin-left: 10px;
+
+    .cell {
+      width: 40px;
+      height: 40px;
+      background: var(--grey-1-color);
+      border-radius: 4px;
+      cursor: pointer;
+      transition: background 0.2s ease-in-out;
+
+      &.selected {
+        background: var(--primary-color);
+      }
+    }
+  }
+}
