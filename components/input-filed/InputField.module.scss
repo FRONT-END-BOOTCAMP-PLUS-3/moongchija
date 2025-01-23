@@ -10,12 +10,11 @@
       width: 100%;
       padding: 10px;
       border: 1px solid #d1d5db;
-      border-radius: 4px;
+      border-radius: 10px;
       outline: none;
   
       &:focus {
         border-color: #2563eb;
-        // box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.5); 
       }
     }
   }
