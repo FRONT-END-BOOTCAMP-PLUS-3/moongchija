@@ -1,0 +1,21 @@
+.inputField {
+    margin-bottom: 1rem;
+  
+    label {
+      display: block;
+      margin-bottom: 0.25rem;
+    }
+  
+    input {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      outline: none;
+  
+      &:focus {
+        border-color: #2563eb;
+      }
+    }
+  }
+  
