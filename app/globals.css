@@ -167,11 +167,18 @@ table {
   --exit-red: #ff2626;
 }
 
-body {
+body,
+button {
   font-family: var(--font-main);
 }
 
+button {
+  padding: 0;
+}
+
 .container {
+  display: flex;
+  flex-direction: column;
   width: 480px;
   height: 100vh;
   margin: 0 auto;

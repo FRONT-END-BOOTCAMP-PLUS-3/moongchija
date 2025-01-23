@@ -1,16 +1,17 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import styles from "./vote.module.scss";
+import { useState, useRef } from "react";
+import styles from "./TimeVote.module.scss";
+import Button from "@/components/button/Button";
 
 interface TimeRange {
   start_time: string; // "2025-01-02 12:00:00"
   end_time: string; // "2025-01-10 22:00:00"
 }
 
-const VotePage = () => {
+const TimeVotePage = () => {
   const timeRange: TimeRange = {
-    start_time: "2025-01-05 00:00:00",
-    end_time: "2025-01-30 23:00:00",
+    start_time: "2025-01-01 00:00:00",
+    end_time: "2025-01-14 23:00:00",
   };
 
   // 날짜 및 시간 목록 생성 함수
@@ -122,7 +123,7 @@ const VotePage = () => {
         <div className={styles.row}>
           <div className={styles.timeLabel}></div>
           {dateList.map((date, index) => (
-            <div key={index} className={styles.day}>
+            <div key={index} className={styles.weekDay}>
               {date.split("-")[3]} {/* "01-02" 형식 */}
             </div>
           ))}
@@ -164,11 +165,11 @@ const VotePage = () => {
           </div>
         </div>
       </div>
-      <button className={styles.saveButton} onClick={saveSelectedTimes}>
-        선택된 시간 저장
-      </button>
+      <div className={styles.wrapButton} onClick={saveSelectedTimes}>
+        <Button text="다음" size="lg" />
+      </div>
     </div>
   );
 };
 
-export default VotePage;
+export default TimeVotePage;

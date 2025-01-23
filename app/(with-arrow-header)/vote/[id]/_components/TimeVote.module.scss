@@ -1,0 +1,108 @@
+.timeVoteContainer {
+  height: 100%;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  text-align: center;
+  user-select: none;
+  .subtitle {
+    font-size: 20px;
+    font-weight: bold;
+    margin: 50px 0 20px;
+  }
+
+  .description {
+    font-size: var(--font-size-sm);
+    color: var(--grey-3-color);
+    margin-bottom: 70px;
+  }
+
+  .schedule {
+    overflow-x: auto; // ✅ 날짜와 그리드가 함께 스크롤
+
+    .row {
+      display: flex;
+      margin-bottom: 10px;
+      min-width: fit-content; // ✅ 스크롤 시 날짜 유지
+      .timeLabel {
+        width: 43px;
+        font-size: var(--font-size-sm);
+        margin-right: 10px;
+        color: var(--grey-3-color);
+      }
+      .weekDay {
+        width: 50px;
+        font-size: var(--font-size-sm);
+        font-weight: 400;
+        text-align: center;
+        margin-right: 5px;
+        color: var(--grey-3-color);
+      }
+      .day {
+        width: 50px;
+        font-size: var(--font-size-md);
+        text-align: center;
+        margin-right: 5px;
+        margin-bottom: 5px;
+      }
+    }
+  }
+
+  .timeGrid {
+    display: flex;
+    align-items: flex-start;
+    height: 400px;
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+
+    .timeLabels {
+      position: sticky; /* 스크롤 시에도 고정 */
+      top: 0; /* 상단에 고정 */
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 50px;
+
+      .time {
+        width: 50px;
+        height: 50px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-md);
+        // font-weight: bold;
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(50px, 1fr)
+      ); /* ✅ 가로축 날짜 개수만큼 컬럼 생성 */
+      gap: 5px;
+      margin-left: 3px;
+      overflow-y: auto; /* 세로 스크롤이 가능하도록 설정 */
+
+      .cell {
+        width: 50px;
+        height: 50px;
+        background: var(--grey-1-color);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+
+        &.selected {
+          background: var(--primary-color);
+        }
+      }
+    }
+  }
+  .wrapButton {
+    // position: fixed; /* 화면에 고정 */
+    // bottom: 80px; /* 화면 하단에서 20px 위로 위치 */
+    // left: 50%; /* 화면 중앙에 위치 */
+    // transform: translateX(-50%); /* 정확한 중앙 정렬 */
+    // z-index: 100; /* 다른 요소들 위에 표시되도록 */
+  }
+}
