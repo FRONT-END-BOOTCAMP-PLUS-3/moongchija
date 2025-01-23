@@ -175,6 +175,10 @@ button {
   padding: 0;
 }
 
+input {
+  box-sizing: border-box;
+}
+
 .container {
   width: 480px;
   height: 100vh;
