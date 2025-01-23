@@ -12,7 +12,7 @@ const LogoWithTitle = () => {
         height={209}
         alt="메인 로고"
       />
-      <span className={styles.loginTitle}>로그인</span>
+      <h1 className={styles.loginTitle}>로그인</h1>
     </div>
   );
 };
