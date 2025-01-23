@@ -13,7 +13,7 @@ const DropdownMenu: React.FC = () => {
 
   return (
     <div className={styles.dropdown}>
-      <Link href="/" className={styles.dropdownItem}>
+      <Link href="/mypage" className={styles.dropdownItem}>
         마이페이지
       </Link>
       <button onClick={handleLogout} className={styles.dropdownItem}>

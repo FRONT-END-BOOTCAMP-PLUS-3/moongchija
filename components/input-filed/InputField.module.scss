@@ -3,12 +3,13 @@
   
     label {
       display: block;
-      margin-bottom: 0.25rem;
+      margin: 0.25rem 0;
     }
   
     input {
-      width: 100%;
+      margin: 0;
       padding: 10px;
+      width: 100%;
       border: 1px solid #d1d5db;
       border-radius: 10px;
       outline: none;

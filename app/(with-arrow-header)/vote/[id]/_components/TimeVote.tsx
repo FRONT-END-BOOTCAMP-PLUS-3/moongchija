@@ -11,7 +11,7 @@ interface TimeRange {
 const TimeVotePage = () => {
   const timeRange: TimeRange = {
     start_time: "2025-01-01 00:00:00",
-    end_time: "2025-01-14 23:00:00",
+    end_time: "2025-01-08 23:00:00",
   };
 
   // 날짜 및 시간 목록 생성 함수
