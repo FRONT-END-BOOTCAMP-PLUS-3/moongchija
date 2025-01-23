@@ -1,5 +1,14 @@
+"use client";
+
+import styles from "./vote.module.scss";
+import TimeVotePage from "./_components/TimeVote";
+
 const VotePage = () => {
-  return <div> 투표 페이지</div>;
+  return (
+    <div className={styles.voteContainer}>
+      <TimeVotePage />
+    </div>
+  );
 };
 
 export default VotePage;

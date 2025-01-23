@@ -98,7 +98,8 @@ table {
   --exit-red: #ff2626;
 }
 
-body, button {
+body,
+button {
   font-family: var(--font-main);
 }
 
@@ -107,6 +108,8 @@ button {
 }
 
 .container {
+  display: flex;
+  flex-direction: column;
   width: 480px;
   height: 100vh;
   margin: 0 auto;
