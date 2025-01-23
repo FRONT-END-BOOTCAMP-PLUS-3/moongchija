@@ -167,8 +167,12 @@ table {
   --exit-red: #ff2626;
 }
 
-body {
+body, button {
   font-family: var(--font-main);
+}
+
+button {
+  padding: 0;
 }
 
 .container {
