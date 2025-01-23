@@ -1,0 +1,58 @@
+.container {
+  width: 400px;
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  background-color: white;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.title {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 5px;
+  margin-bottom: 20px;
+  justify-content: space-between;
+}
+
+.plusIcon {
+  color: var(--primary-color); /* primary 색상 적용 */
+  font-size: 25px;
+  cursor: pointer; /* 클릭 가능 표시 */
+}
+
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--grey-2-color);
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+  font-size: 20px;
+  cursor: pointer;
+}
+
+.editIcon {
+color: var(--grey-5-color);
+}
+
+.trashIcon {
+  color: rgb(247, 103, 103); 
+
+
+}
