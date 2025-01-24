@@ -2,20 +2,19 @@
 import { useState } from "react";
 import styles from "./PlaceVote.module.scss";
 import Button from "@/components/button/Button";
+import { FaMapMarkerAlt } from "react-icons/fa";
 
 interface Place {
   place: string;
   place_url: string;
 }
+interface PlaceVoteProps {
+  votePlaces: Place[];
+  onPlaceSelect: (place: string) => void; // 장소 선택 완료 시 호출되는 함수
+}
 
-const PlaceVote = () => {
-  const places: Place[] = [
-    { place: "홍대입구", place_url: "https://naver.me/xEABuNEP" },
-    { place: "서울역", place_url: "https://naver.me/xEABuNEP" },
-    { place: "동대문", place_url: "https://naver.me/xEABuNEP" },
-    { place: "동역사", place_url: "https://naver.me/xEABuNEP" },
-    { place: "가나다", place_url: "https://naver.me/xEABuNEP" },
-  ];
+const PlaceVote: React.FC<PlaceVoteProps> = ({ votePlaces, onPlaceSelect }) => {
+  const places: Place[] = votePlaces;
   const [selectedPlace, setSelectedPlace] = useState<string>("");
 
   const handleSelect = (place: string) => {
@@ -23,8 +22,7 @@ const PlaceVote = () => {
   };
   const handleSubmit = () => {
     if (selectedPlace) {
-      console.log("선택된 장소:", selectedPlace); // 콘솔 출력
-      alert(`선택된 장소: ${selectedPlace}`); // 사용자 피드백
+      onPlaceSelect(selectedPlace);
     } else {
       alert("장소를 선택해주세요.");
     }
@@ -43,7 +41,10 @@ const PlaceVote = () => {
             onClick={() => handleSelect(item.place)}
           >
             <div className={styles.itemTop}>
-              <div className={styles.placeName}>{item.place}</div>
+              <div className={styles.placeName}>
+                <FaMapMarkerAlt className={styles.markerIcon} />
+                {item.place}
+              </div>
               <div
                 className={`${styles.radioButton} ${
                   selectedPlace === item.place ? styles.checked : ""
