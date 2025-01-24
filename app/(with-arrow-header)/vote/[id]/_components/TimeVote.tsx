@@ -7,12 +7,16 @@ interface TimeRange {
   start_time: string; // "2025-01-02 12:00:00"
   end_time: string; // "2025-01-10 22:00:00"
 }
+interface TimeVotePageProps {
+  voteTimes: TimeRange;
+  onTimeSelect: (times: string[]) => void; // 시간 선택 완료 시 호출되는 함수
+}
 
-const TimeVotePage = () => {
-  const timeRange: TimeRange = {
-    start_time: "2025-01-01 00:00:00",
-    end_time: "2025-01-08 23:00:00",
-  };
+const TimeVotePage: React.FC<TimeVotePageProps> = ({
+  voteTimes,
+  onTimeSelect,
+}) => {
+  const timeRange: TimeRange = voteTimes;
 
   // 날짜 및 시간 목록 생성 함수
   const getDateList = (start: Date, end: Date) => {
@@ -106,8 +110,11 @@ const TimeVotePage = () => {
       });
     });
 
-    console.log(selectedArray); // 선택된 시간 출력
-    return selectedArray;
+    if (selectedArray.length === 0) {
+      alert("날짜를 선택해주세요");
+    } else {
+      return onTimeSelect(selectedArray);
+    }
   };
 
   return (
