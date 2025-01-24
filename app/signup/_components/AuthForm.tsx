@@ -98,7 +98,7 @@ const AuthForm = () => {
           label="비밀번호 확인"
           value={passwordCheck}
           onChange={habdleChangePasswordCheck}
-          placeholder="비밀번호를 한번 더 압력해주세요"
+          placeholder="비밀번호를 한 번 더 입력해 주세요"
           error={passwordCheckError}
         />
         <Button text="회원가입" size="lg" active={isFormValid} />
