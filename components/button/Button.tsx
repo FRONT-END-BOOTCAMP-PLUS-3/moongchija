@@ -1,15 +1,17 @@
-import styles from "./button.module.scss";
+import styles from "./Button.module.scss";
 
 const Button = ({
   text,
   size,
   color = "--primary-color",
   active = true,
+  onClick,
 }: {
   text: string;
   size: "xs" | "sm" | "md" | "lg";
   color?: "--primary-color" | "--exit-red";
   active?: boolean;
+  onClick?: () => void; 
 }) => {
   return (
     <div className={styles.buttonWrapper}>
@@ -17,6 +19,7 @@ const Button = ({
         className={styles[`${size}Button`]}
         style={{ backgroundColor: `var(${color})` }}
         disabled={!active}
+        onClick={onClick}
       >
         {text}
       </button>
