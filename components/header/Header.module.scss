@@ -1,0 +1,27 @@
+.header {
+  width: 100%;
+  height: 65px;
+  background: var(--primary-color);
+  display: flex;
+  align-items: center;
+  caret-color: transparent;
+
+  .container {
+    margin: 0 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 100%;
+  }
+
+  .userContainer {
+    position: relative;
+  }
+
+  .username {
+    font-family: var(--font-sub);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    color: white;
+  }
+}

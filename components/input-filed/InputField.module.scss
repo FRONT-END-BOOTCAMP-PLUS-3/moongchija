@@ -1,21 +1,36 @@
 .inputField {
-    margin-bottom: 1rem;
-  
-    label {
-      display: block;
-      margin-bottom: 0.25rem;
+  height: 100px;
+  label {
+    display: block;
+    margin-bottom: 10px;
+    font-size: var(--font-size-md);
+  }
+
+  input {
+    margin: 0;
+    padding: 15px;
+    width: 100%;
+    border: 1px solid #d1d5db;
+    border-radius: 10px;
+    outline: none;
+    font-size: 14px;
+
+    &::placeholder {
+      color: #898989;
     }
-  
-    input {
-      width: 100%;
-      padding: 10px;
-      border: 1px solid #d1d5db;
-      border-radius: 10px;
-      outline: none;
-  
-      &:focus {
-        border-color: #2563eb;
-      }
+
+    &:focus {
+      border-color: #2563eb;
     }
   }
-  
+
+  &.errorField input {
+    border-color: red;
+  }
+
+  .errorMessage {
+    color: red;
+    font-size: 12px;
+    margin-top: 4px;
+  }
+}
