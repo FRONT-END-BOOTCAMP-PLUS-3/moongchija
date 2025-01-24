@@ -1,10 +1,10 @@
-"use client"
+"use client";
 
 import React, { useState } from "react";
-import styles from "./list.module.scss"
+import styles from "./list.module.scss";
 import TabMenu from "../../../components/tabMenu/TabMenu";
-import AppointmentList from "./_components/AppointmentList";
-import VotingList from "./_components/VotingList";
+import AppointmentList from "./components/AppointmentList";
+import VotingList from "./components/VotingList";
 
 const MainComponent: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];

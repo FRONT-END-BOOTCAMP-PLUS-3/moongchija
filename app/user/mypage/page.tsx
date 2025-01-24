@@ -1,12 +1,12 @@
 "use client";
 
 import Image from "next/image";
-import Calendar from "./_components/Calendar";
+import Calendar from "./components/Calendar";
 import styles from "./mypage.module.scss";
 import Button from "@/components/button/Button";
-import AppointmentCount from "./_components/AppointmentCount";
+import AppointmentCount from "./components/AppointmentCount";
 import { useState } from "react";
-import useInput from "@/app/signup/_hooks/useInput";
+import useInput from "@/app/(anon)/signup/hooks/useInput";
 
 const appointmentData = [
   { color: "greenColor", text: "투표중" },

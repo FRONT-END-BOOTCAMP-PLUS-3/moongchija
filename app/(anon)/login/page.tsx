@@ -2,8 +2,8 @@
 
 import Image from "next/image";
 import styles from "./login.module.scss";
-import LoginForm from "./_components/LoginForm";
-import LogoWithTitle from "./_components/LogoWithTitle";
+import LoginForm from "./components/LoginForm";
+import LogoWithTitle from "./components/LogoWithTitle";
 import Link from "next/link";
 
 const LoginPage = () => {
