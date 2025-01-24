@@ -1,0 +1,22 @@
+.copyButton {
+  margin: 20px 0px 0px 40px;
+}
+
+.container {
+  height: 675px;
+  overflow-y: scroll;
+}
+
+.buttonWrapper {
+  display: flex;
+  margin-top: 20px;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.redButtonWrapper {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-right: 30px;
+}

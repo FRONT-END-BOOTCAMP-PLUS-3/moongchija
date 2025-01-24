@@ -1,4 +1,4 @@
-import styles from "./TabMenu.module.scss";
+import styles from "./DetailTabMenu.module.scss";
 
 const TabMenu = () => {
   return(
