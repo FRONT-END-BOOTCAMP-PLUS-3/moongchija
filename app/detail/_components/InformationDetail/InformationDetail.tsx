@@ -1,11 +1,14 @@
+"use client"
+
 import styles from "./InformationDetail.module.scss";
+import Participants from "../Participants/Participants";
 import {
   FaCrown,
   FaMapMarkerAlt,
   FaCalendarAlt,
   FaUserFriends,
-  FaSmile,
 } from "react-icons/fa";
+import Link from "next/link"; 
 
 const InformationDetail = () => {
   return (
@@ -28,7 +31,8 @@ const InformationDetail = () => {
           <FaMapMarkerAlt className={styles.markerIcon} />
           <span>장소</span>
           <div className={styles.divider}></div>
-          <a href="#">홍대입구역</a>
+          <Link href="/location">홍대입구역</Link>  
+           {/* 링크 추후 변경 */}
         </div>
 
         {/* 일자 */}
@@ -49,18 +53,9 @@ const InformationDetail = () => {
 
         {/* 참여 인원 하단 박스 */}
         <div className={styles.participantsBox}>
-          <div className={styles.participants}>
-            <FaSmile />
-            <span>고뭉치</span>
-          </div>
-          <div className={styles.participants}>
-            <FaSmile />
-            <span>고뭉치</span>
-          </div>
-          <div className={styles.participants}>
-            <FaSmile />
-            <span>고뭉치</span>
-          </div>
+          <Participants />
+          <Participants />
+          <Participants />
         </div>
       </div>
     </div>
