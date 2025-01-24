@@ -1,0 +1,39 @@
+.appointmentContainer {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .spanBox {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    gap: 10px;
+
+    color: #fff;
+
+    span:nth-child(1) {
+      font-family: var(--font-sub);
+    }
+    span:nth-child(2) {
+      font-size: var(--font-size-xs);
+      font-family: var(--font-main);
+    }
+  }
+}
+
+.greenColor {
+  background-color: var(--mypage-green);
+}
+
+.orangeColor {
+  background-color: var(--mypage-orange);
+}
+
+.pinkColor {
+  background-color: var(--mypage-pink);
+}
