@@ -1,8 +1,8 @@
 "use client";
 
-import styles from "./vote.module.scss";
-import TimeVotePage from "./components/TimeVote";
 import PlaceVote from "./components/PlaceVote";
+import TimeVotePage from "./components/TimeVote";
+import styles from "./vote.module.scss";
 import { useState } from "react";
 
 interface VoteRange {
