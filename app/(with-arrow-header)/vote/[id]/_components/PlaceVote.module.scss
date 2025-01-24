@@ -1,0 +1,105 @@
+.placeVoteContainer {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background: #ffffff;
+
+  .subtitle {
+    font-size: var(--font-size-md);
+    margin: 20px 0 50px;
+  }
+
+  .placeList {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    .placeItem {
+      height: 100px;
+      display: flex;
+      flex-direction: column;
+      padding: 15px;
+      border: 1px solid #e0e0e0;
+      border-radius: 8px;
+      background: #f9f9f9;
+      cursor: pointer;
+      transition: background 0.2s ease;
+
+      &:hover {
+        background: #f0f0f0;
+      }
+
+      &.selected {
+        border-color: #6200ee;
+        background: #ecebff;
+
+        .radioButton {
+          border-color: #6200ee;
+          background: #6200ee;
+        }
+      }
+
+      .itemTop {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin: 10px 0 10px;
+        .placeName {
+          width: 50%;
+          margin-left: 15px;
+          font-size: var(--font-size-md);
+          font-weight: bold;
+          color: #333333;
+        }
+        .radioButton {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 20px;
+          height: 20px;
+          border: 2px solid #e0e0e0;
+          border-radius: 50%;
+          transition: background 0.2s ease, border-color 0.2s ease;
+
+          &.checked {
+            background: #fff;
+            border-color: #6200ee;
+          }
+          .innerButton {
+            width: 10px;
+            height: 10px;
+            // border: 2px solid #e0e0e0;
+            border-radius: 50%;
+            transition: background 0.2s ease, border-color 0.2s ease;
+
+            &.checked {
+              background: #6200ee;
+              border-color: #6200ee;
+            }
+          }
+        }
+      }
+
+      .placeLink {
+        display: block;
+        width: 60px;
+        margin-left: 15px;
+        font-size: var(--font-size-xs);
+        color: #555555;
+        text-decoration: underline;
+        white-space: nowrap;
+      }
+    }
+  }
+
+  .wrapButton {
+    position: fixed; /* 화면에 고정 */
+    bottom: 50px; /* 화면 하단에서 20px 위로 위치 */
+    left: 50%; /* 화면 중앙에 위치 */
+    transform: translateX(-50%); /* 정확한 중앙 정렬 */
+    z-index: 100; /* 다른 요소들 위에 표시되도록 */
+  }
+}
