@@ -1,5 +1,48 @@
+import InformationDetail from "../../_components/InformationDetail/InformationDetail";
+import NoticeDetail from "../../_components/NoticeDetail/NoticeDetail";
+import DetailTabMenu from "../../_components/DetailTabMenu/DetailTabMenu";
+import Button from "@/components/button/Button";
+import styles from "./information.module.scss";
+
 const InformationPage = () => {
-  return <div> 약속 상세 정보 페이지</div>;
+  return (
+    <div>
+      <DetailTabMenu />
+      <div className={styles.container}>
+        <InformationDetail />
+        <NoticeDetail />
+
+        <div className={styles.buttonWrapper}>
+          <div className={styles.copyButton}>
+            <Button
+              text="방 번호 복사"
+              size="sm"
+              color="--primary-color"
+              active={true}
+            />
+          </div>
+          <div className={styles.redButtonWrapper}>
+            <div className={styles.deleteButton}>
+              <Button
+                text="삭제하기"
+                size="sm"
+                color="--exit-red"
+                active={true}
+              />
+            </div>
+            <div className={styles.exitButton}>
+              <Button
+                text="나가기"
+                size="sm"
+                color="--exit-red"
+                active={true}
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default InformationPage;

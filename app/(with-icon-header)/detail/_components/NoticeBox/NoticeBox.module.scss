@@ -1,0 +1,22 @@
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--grey-2-color);
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.editIcon {
+  color: var(--grey-5-color);
+}
+
+.trashIcon {
+  color: rgb(247, 103, 103);
+}
+
+.icons{
+  display: flex;
+  gap:10px;
+}
