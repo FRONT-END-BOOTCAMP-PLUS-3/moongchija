@@ -1,0 +1,74 @@
+.schedule {
+  margin-left: 3%;
+  .row {
+    display: flex;
+    margin-bottom: 10px;
+    min-width: fit-content; // 날짜가 많아져도 간견유지
+    .timeLabel {
+      width: 40px;
+      font-size: var(--font-size-sm);
+      margin-right: 9px;
+      color: var(--grey-3-color);
+    }
+    .weekDay {
+      width: 45px;
+      font-size: var(--font-size-sm);
+      text-align: center;
+      margin-right: 5px;
+      color: var(--grey-3-color);
+    }
+    .day {
+      width: 45px;
+      font-size: var(--font-size-md);
+      text-align: center;
+      margin-right: 5px;
+      margin-bottom: 5px;
+    }
+  }
+  .timeGrid {
+    display: flex;
+    align-items: flex-start;
+    height: 400px;
+    overflow-y: auto; /* 세로 스크롤 활성화 */
+
+    .timeLabels {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 45px;
+
+      .time {
+        width: 45px;
+        height: 45px;
+        margin-bottom: 5px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: var(--font-size-md);
+      }
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(
+        auto-fit,
+        minmax(45px, 1fr)
+      ); /* ✅ 가로축 날짜 개수만큼 컬럼 생성 */
+      gap: 5px;
+      margin-left: 3px;
+
+      .cell {
+        width: 45px;
+        height: 45px;
+        background: var(--grey-1-color);
+        border-radius: 4px;
+        cursor: pointer;
+        transition: background 0.2s ease-in-out;
+
+        &.selected {
+          background: var(--primary-color);
+        }
+      }
+    }
+  }
+}
