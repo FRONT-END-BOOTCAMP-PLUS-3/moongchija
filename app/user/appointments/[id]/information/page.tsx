@@ -1,6 +1,6 @@
-import InformationDetail from "../../_components/InformationDetail/InformationDetail";
-import NoticeDetail from "../../_components/NoticeDetail/NoticeDetail";
-import DetailTabMenu from "../../_components/DetailTabMenu/DetailTabMenu";
+import InformationDetail from "../components/detail/InformationDetail/InformationDetail";
+import NoticeDetail from "../components/detail/NoticeDetail/NoticeDetail";
+import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
 

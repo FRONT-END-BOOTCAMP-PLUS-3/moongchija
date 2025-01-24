@@ -1,5 +1,5 @@
 "use client";
-import AuthForm from "./_components/AuthForm";
+import AuthForm from "./components/AuthForm";
 import styles from "./signup.module.scss";
 
 const SignupPage = () => {

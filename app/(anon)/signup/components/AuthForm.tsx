@@ -3,13 +3,13 @@ import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
 import styles from "./AuthForm.module.scss";
 import { useState } from "react";
-import useInput from "../_hooks/useInput";
+import useInput from "../hooks/useInput";
 import {
   validateEmail,
   validateNickname,
   validatePassword,
   validatePasswordCheck,
-} from "../_hooks/useValidate";
+} from "../hooks/useValidate";
 
 const AuthForm = () => {
   const {
