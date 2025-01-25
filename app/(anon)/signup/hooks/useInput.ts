@@ -10,10 +10,14 @@ const useInput = (
   const [error, setError] = useState<string | null>(null);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
+    emailOrEvent: string | React.ChangeEvent<HTMLInputElement>,
     additionalValue?: string
   ) => {
-    const newValue = e.target.value;
+    const newValue =
+      typeof emailOrEvent === "string"
+        ? emailOrEvent
+        : emailOrEvent.target.value;
+
     setValue(newValue);
 
     if (validate) {
@@ -22,7 +26,7 @@ const useInput = (
     }
   };
 
-  return { value, error, onChange: handleChange };
+  return { value, error, onChange: handleChange, setValue };
 };
 
 export default useInput;
