@@ -1,7 +1,7 @@
 export const validateEmail = (value: string) => {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  const emailRegex = /^[a-z0-9]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(value)) {
-    return "유효하지 않은 이메일 형식입니다.";
+    return "이메일 아이디는 소문자와 숫자만 포함할 수 있습니다.";
   }
   return null;
 };
