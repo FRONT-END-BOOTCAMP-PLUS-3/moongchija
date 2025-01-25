@@ -27,7 +27,11 @@ const useForm = () => {
     value: passwordCheck,
     error: passwordCheckError,
     onChange: habdleChangePasswordCheck,
-  } = useInput("", (value) => validatePasswordCheck(value, password));
+  } = useInput(
+    "",
+    (passwordCheck) => validatePasswordCheck(passwordCheck, password),
+    password
+  );
 
   const isFormValid = [
     emailError,
