@@ -8,7 +8,7 @@
     .duplicateTest {
       display: grid;
       grid-template-columns: 1fr auto;
-      gap: 10px;
+      gap: 15px;
       align-items: center;
 
       button:nth-child(1) {
