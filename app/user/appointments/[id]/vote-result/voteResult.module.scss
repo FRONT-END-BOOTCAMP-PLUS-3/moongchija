@@ -20,16 +20,16 @@
       width: 120px;
       border-radius: 10%;
       button {
-        background-color: var(--primary-color);
-        color: #fff;
+        background-color: var(--grey-2-color);
+        color: #000;
         width: 60px;
         height: 40px;
         font-size: var(--font-size-sm);
         border: none;
-        &:disabled {
-          background-color: var(--grey-2-color);
-          color: #000;
-        }
+      }
+      .selected {
+        background-color: var(--primary-color);
+        color: #fff;
       }
       .timeButton {
         border-radius: 10 0 0 10;
