@@ -1,22 +1,25 @@
 "use client";
-import { useState, useRef } from "react";
-import styles from "./TimeVote.module.scss";
+
+import { useState, useRef, use } from "react";
+import styles from "./voteTime.module.scss";
 import Button from "@/components/button/Button";
+import { usePathname, useRouter } from "next/navigation";
 
 interface TimeRange {
   start_time: string; // "2025-01-02 12:00:00"
   end_time: string; // "2025-01-10 22:00:00"
 }
-interface TimeVotePageProps {
-  voteTimes: TimeRange;
-  onTimeSelect: (times: string[]) => void; // 시간 선택 완료 시 호출되는 함수
-}
 
-const TimeVotePage: React.FC<TimeVotePageProps> = ({
-  voteTimes,
-  onTimeSelect,
-}) => {
-  const timeRange: TimeRange = voteTimes;
+const VoteTimePage: React.FC = () => {
+  const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
+
+  const pathname = usePathname();
+  const id = pathname.split("/").slice(-2, -1)[0]; // 경로에서 ID 추출
+
+  const timeRange: TimeRange = {
+    start_time: "2025-01-01 00:00:00",
+    end_time: "2025-01-07 23:00:00",
+  };
 
   // 날짜 및 시간 목록 생성 함수
   const getDateList = (start: Date, end: Date) => {
@@ -113,7 +116,8 @@ const TimeVotePage: React.FC<TimeVotePageProps> = ({
     if (selectedArray.length === 0) {
       alert("날짜를 선택해주세요");
     } else {
-      return onTimeSelect(selectedArray);
+      alert(selectedArray);
+      router.push(`/user/appointments/${id}/vote-place`); // 장소투표 페이지로 이동
     }
   };
 
@@ -172,11 +176,15 @@ const TimeVotePage: React.FC<TimeVotePageProps> = ({
           </div>
         </div>
       </div>
-      <div className={styles.wrapButton} onClick={saveSelectedTimes}>
-        <Button text="다음" size="lg" />
+      <div className={styles.wrapButton}>
+        <Button
+          text="장소투표 하러가기"
+          size="lg"
+          onClick={saveSelectedTimes}
+        />
       </div>
     </div>
   );
 };
 
-export default TimeVotePage;
+export default VoteTimePage;

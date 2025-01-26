@@ -1,3 +1,4 @@
+"use client";
 import Button from "@/components/button/Button";
 import styles from "./voteResult.module.scss";
 import TimeResult from "./components/TimeResult";
