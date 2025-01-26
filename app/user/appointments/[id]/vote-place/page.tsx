@@ -1,20 +1,27 @@
 "use client";
-import { useState } from "react";
-import styles from "./PlaceVote.module.scss";
+
+import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
+import { usePathname } from "next/navigation";
+import { useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
 interface Place {
   place: string;
   place_url: string;
 }
-interface PlaceVoteProps {
-  votePlaces: Place[];
-  onPlaceSelect: (place: string) => void; // 장소 선택 완료 시 호출되는 함수
-}
 
-const PlaceVote: React.FC<PlaceVoteProps> = ({ votePlaces, onPlaceSelect }) => {
-  const places: Place[] = votePlaces;
+const VotePlacePage: React.FC = () => {
+  const pathname = usePathname();
+  const id = pathname.split("/").slice(-2, -1)[0]; // 경로에서 ID 추출
+
+  const places: Place[] = [
+    { place: "홍대입구", place_url: "https://naver.me/xEABuNEP" },
+    { place: "서울역", place_url: "https://naver.me/xEABuNEP" },
+    { place: "동대문", place_url: "https://naver.me/xEABuNEP" },
+    { place: "동역사", place_url: "https://naver.me/xEABuNEP" },
+    { place: "가나다", place_url: "https://naver.me/xEABuNEP" },
+  ];
   const [selectedPlace, setSelectedPlace] = useState<string>("");
 
   const handleSelect = (place: string) => {
@@ -22,7 +29,7 @@ const PlaceVote: React.FC<PlaceVoteProps> = ({ votePlaces, onPlaceSelect }) => {
   };
   const handleSubmit = () => {
     if (selectedPlace) {
-      onPlaceSelect(selectedPlace);
+      alert(`${selectedPlace}${id}`);
     } else {
       alert("장소를 선택해주세요.");
     }
@@ -68,11 +75,11 @@ const PlaceVote: React.FC<PlaceVoteProps> = ({ votePlaces, onPlaceSelect }) => {
         ))}
       </div>
 
-      <div className={styles.wrapButton} onClick={handleSubmit}>
-        <Button text="다음" size="lg" />
+      <div className={styles.wrapButton}>
+        <Button text="투표 완료" size="lg" onClick={handleSubmit} />
       </div>
     </div>
   );
 };
 
-export default PlaceVote;
+export default VotePlacePage;
