@@ -7,6 +7,8 @@ import Button from "@/components/button/Button";
 import AppointmentCount from "./components/AppointmentCount";
 import { useState } from "react";
 import useInput from "@/app/(anon)/signup/hooks/useInput";
+import Modal from "@/components/modal/Modal";
+import DeleteAccountModalContent from "./components/DeleteAccountModalContent";
 
 const appointmentData = [
   { color: "greenColor", text: "투표중" },
@@ -17,6 +19,9 @@ const appointmentData = [
 const MyPagePage = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { value: nickname, onChange: handleChangeInput } = useInput("");
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const handleopenModal = () => setIsModalOpen(true);
+  const handlecloseModal = () => setIsModalOpen(false);
 
   const handleEditClick = () => {
     setIsEditing((prev) => !prev);
@@ -80,7 +85,15 @@ const MyPagePage = () => {
       </div>
 
       <div className={styles.deleteAccountButton}>
-        <Button text="탈퇴하기" size="sm" color="--exit-red" />
+        <Button
+          text="탈퇴하기"
+          size="sm"
+          color="--exit-red"
+          onClick={handleopenModal}
+        />
+        <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
+          <DeleteAccountModalContent />
+        </Modal>
       </div>
     </div>
   );
