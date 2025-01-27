@@ -23,8 +23,8 @@ const MyPagePage = () => {
   };
 
   return (
-    <div>
-      <div className={styles.container}>
+    <div className={styles.myPagecontainer}>
+      <div className={styles.profileWrapper}>
         <div className={styles.profileBox}>
           <div className={styles.profileImage}>
             <Image
@@ -58,29 +58,30 @@ const MyPagePage = () => {
               </div>
             )}
 
-            <div onClick={handleEditClick} className={styles.editButtonBox}>
-              <Button text="수정" size="xs" />
+            <div className={styles.editButtonBox}>
+              <Button text="수정" size="xs" onClick={handleEditClick} />
             </div>
           </div>
-          <div>
-            <div className={styles.appointmentCountBox}>
-              {appointmentData.map((item, index) => (
-                <AppointmentCount
-                  key={index}
-                  color={item.color}
-                  text={item.text}
-                />
-              ))}
-            </div>
+
+          <div className={styles.appointmentCountBox}>
+            {appointmentData.map((item, index) => (
+              <AppointmentCount
+                key={index}
+                color={item.color}
+                text={item.text}
+              />
+            ))}
           </div>
         </div>
       </div>
 
-      <div>
+      <div className={styles.calendarWrapper}>
         <Calendar />
       </div>
 
-      <button>회원 탈퇴하기</button>
+      <div className={styles.deleteAccountButton}>
+        <Button text="탈퇴하기" size="sm" color="--exit-red" />
+      </div>
     </div>
   );
 };
