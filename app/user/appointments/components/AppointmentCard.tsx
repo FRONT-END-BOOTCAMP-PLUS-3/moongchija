@@ -3,7 +3,14 @@
 import styles from "./AppointmentCard.module.scss";
 import { FaPeopleGroup } from "react-icons/fa6";
 import { IoMdPin } from "react-icons/io";
-import { calculateCountdown, formatDate, AppointmentInfo, formatTime } from "../page";
+import crown from "@/public/images/icons/crown.webp";
+import {
+  AppointmentInfo,
+  calculateCountdown,
+  formatDate,
+  formatTime,
+} from "../page";
+import Image from "next/image";
 
 interface AppointmentCardProps {
   appointment: AppointmentInfo;
@@ -14,21 +21,34 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     title,
     startDate,
     endDate,
+    confirmDate,
+    confirmPlace,
     participants,
+    isCreator,
     extraParticipants,
-    location,
   } = appointment;
 
   return (
     <div className={styles.container}>
       <section className={styles.leftBox}>
         <div className={styles.titleWrapper}>
-          <FaPeopleGroup size={25} />
+          {isCreator ? (
+            <Image src={crown} alt="logo" />
+          ) : (
+            <FaPeopleGroup size={25} />
+          )}
+
           <span>{title}</span>
         </div>
         <div className={styles.dateWrapper}>
-          <p>{`${formatTime(startDate)} ~`}</p>
-          <p>{`${formatDate(endDate)}`}</p>
+          <p>
+            {startDate
+              ? `${formatTime(startDate)} ~`
+              : confirmDate
+              ? `${formatTime(confirmDate)}`
+              : ""}
+          </p>
+          <p>{endDate && `${formatDate(endDate)}`}</p>
         </div>
         <div className={styles.participantWrapper}>
           <span className={styles.participants}>{participants.join("")}</span>
@@ -40,10 +60,16 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         </div>
       </section>
       <section className={styles.rightBox}>
-        <div className={styles.countdown}>{calculateCountdown(startDate)}</div>
+        <div className={styles.countdown}>
+          {confirmDate ? calculateCountdown(confirmDate) : "투표중"}
+        </div>
         <div className={styles.locationWrapper}>
-          <IoMdPin size={30} color="red" />
-          <span>{location}</span>
+          {confirmPlace && (
+            <>
+              <IoMdPin size={30} color="red" />
+              <span>{confirmPlace}</span>
+            </>
+          )}
         </div>
       </section>
     </div>

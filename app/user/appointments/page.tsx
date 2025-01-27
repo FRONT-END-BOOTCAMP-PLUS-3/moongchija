@@ -11,6 +11,16 @@ const AppointmentsPage: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [showButtons, setShowButtons] = useState<boolean>(false);
 
+  // 투표 진행중 필터링된 데이터
+  const inProgressAppointments = appointments.filter(
+    (appointment) => appointment.startDate && appointment.endDate
+  );
+
+  // 약속 리스트 필터링된 데이터
+  const confirmedAppointments = appointments.filter(
+    (appointment) => appointment.confirmDate
+  );
+
   const handleTabChange = (index: number) => {
     setCurrentTab(index);
   };
@@ -24,20 +34,18 @@ const AppointmentsPage: React.FC = () => {
       <TabMenu tabs={tabs} onTabChange={handleTabChange} />
       <main className={styles.container}>
         <section className={styles.listBox}>
-          {currentTab === 0 && (
-            <AppointmentList appointments={dummyListBoxData} />
+        {currentTab === 0 && (
+            <AppointmentList appointments={inProgressAppointments} />
           )}
           {currentTab === 1 && (
-            <AppointmentList appointments={dummyListBoxData} />
+            <AppointmentList appointments={confirmedAppointments} />
           )}
         </section>
 
         {/* 하단 + 버튼 */}
         <CircleButton onClick={handleCircleButtonClick} />
         <section
-          className={`${styles.buttonBox} ${
-            showButtons ? styles.show : ""
-          }`}
+          className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
           <button>약속 만들기</button>
@@ -54,44 +62,56 @@ export default AppointmentsPage;
 // types.ts
 export interface AppointmentInfo {
   id: number;
-  title: string; // 제목
-  startDate: Date; // 시작 날짜
-  endDate: Date; // 종료 날짜
-  participants: string[]; // 참여자 프로필 이미지 리스트
-  extraParticipants: number; // 추가 참여자 수
-  location: string; // 위치
+  title: string;
+  startDate?: Date; // 시작 날짜 (투표 진행 중에서만 사용)
+  endDate?: Date; // 종료 날짜 (투표 진행 중에서만 사용)
+  confirmDate?: Date; // 확정된 날짜 (약속 리스트에서만 사용)
+  confirmPlace?: string; // 확정된 장소 (약속 리스트에서만 사용)
+  participants: string[];
+  isCreator: boolean;
+  extraParticipants: number;
 }
 
 // data.ts
-export const dummyListBoxData: AppointmentInfo[] = [
+export const appointments: AppointmentInfo[] = [
   {
     id: 1,
     title: "저녁에 치맥",
     startDate: new Date(2025, 0, 30, 18, 0),
     endDate: new Date(2025, 0, 31),
     participants: ["😀", "😀", "😀", "😀", "😀"],
-    extraParticipants: 1,
-    location: "홍대입구역",
+    isCreator: true,
+    extraParticipants: 3,
   },
   {
     id: 2,
     title: "영화 관람",
     startDate: new Date(2025, 0, 27, 18, 0),
-    endDate: new Date(2025, 0, 31),
-    participants: ["😊", "😎", "🙂"],
-    extraParticipants: 2,
-    location: "강남역",
+    endDate: new Date(2025, 0, 28),
+    participants: ["😊", "😎"],
+    isCreator: false,
+    extraParticipants: 0,
   },
   {
     id: 3,
-    title: "오전 커피 모임",
-    startDate: new Date(2025, 0, 25, 10, 0), // 2025.01.25 10:00
-    endDate: new Date(2025, 0, 25), // 2025.01.25
-    participants: ["☕", "😊", "🤗"],
+    title: "확정된 저녁 약속",
+    confirmDate: new Date(2025, 0, 31, 19, 0),
+    confirmPlace: "홍대입구역",
+    participants: ["😀", "😀", "😀"],
+    isCreator: true,
     extraParticipants: 0,
-    location: "을지로입구역",
-  }
+  },
+  {
+    id: 4,
+    title: "확정된 영화 약속",
+    confirmDate: new Date(2025, 0, 28, 18, 0),
+    confirmPlace: "강남역",
+    participants: ["😊", "😎", "🙂", "😎", "🙂"],
+    isCreator: false,
+    extraParticipants: 1,
+  },
 ];
+
 
 // 유틸 함수 모음
 // utils/dateUtils.ts
