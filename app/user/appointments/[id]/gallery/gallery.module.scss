@@ -1,0 +1,38 @@
+.container {
+  // height: 675px;
+  // overflow-y: scroll;
+}
+
+.circleButtonWrapper {
+  position: fixed;
+  bottom: 5%; 
+  right: 5%;
+}
+
+.modalContainer {
+  width: 100%;
+}
+
+.title {
+  font-size: 20px;
+  margin-left: 30px;
+}
+
+.imageWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+}
+
+.uploadedImage {
+  border-radius: 10px; 
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); 
+}
+
+.buttonWrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+  margin-right: 30px;
+  margin-left: 30px;
+}
