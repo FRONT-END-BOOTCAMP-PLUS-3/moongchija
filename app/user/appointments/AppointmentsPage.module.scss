@@ -58,7 +58,12 @@
   pointer-events: none;
   transition: opacity 0.3s ease, transform 0.3s ease;
 
-  button {
+  button,
+  a {
+    font-family: var(--font-main);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    text-decoration: none;
     background-color: var(--primary-color);
     color: white;
     border: none;
@@ -79,4 +84,12 @@
   opacity: 1;
   transform: translateY(0);
   pointer-events: auto;
+}
+
+.roomEntryBox {
+  width: 100%;
+  display: flex;
+  // justify-content: center;
+  align-items: center;
+  flex-direction: column;
 }

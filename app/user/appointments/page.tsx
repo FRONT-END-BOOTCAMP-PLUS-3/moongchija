@@ -6,6 +6,10 @@ import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
 import CircleButton from "@/components/circleButton/CircleButton";
+import Link from "next/link";
+import Modal from "@/components/modal/Modal";
+import InputField from "@/components/input-filed/InputFiled";
+import Button from "@/components/button/Button";
 
 const AppointmentsPage: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];
@@ -13,6 +17,17 @@ const AppointmentsPage: React.FC = () => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<string>("전체");
+  const [roomNumber, setRoomNumber] = useState<string>("");
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
+
+  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setRoomNumber(e.target.value);
+    console.log(roomNumber)
+  };
 
   // 필터링된 데이터
   const inProgressAppointments = appointments.filter(
@@ -46,16 +61,24 @@ const AppointmentsPage: React.FC = () => {
         if (selectedOption === "방장" && !appointment.isCreator) {
           return false;
         }
-        if (selectedOption === "예정" && !calculateCountdown(appointment.confirmDate!).includes("D-")) {
+        if (
+          selectedOption === "예정" &&
+          !calculateCountdown(appointment.confirmDate!).includes("D-")
+        ) {
           return false;
         }
-        if (selectedOption === "종료" && calculateCountdown(appointment.confirmDate!) !== "종료") {
+        if (
+          selectedOption === "종료" &&
+          calculateCountdown(appointment.confirmDate!) !== "종료"
+        ) {
           return false;
         }
         return true;
       })
       .filter((appointment) => {
-        return appointment.title.toLowerCase().includes(searchText.toLowerCase());
+        return appointment.title
+          .toLowerCase()
+          .includes(searchText.toLowerCase());
       });
   };
 
@@ -87,10 +110,14 @@ const AppointmentsPage: React.FC = () => {
 
         <section className={styles.listBox}>
           {currentTab === 0 && (
-            <AppointmentList appointments={filteredAppointments(inProgressAppointments)} />
+            <AppointmentList
+              appointments={filteredAppointments(inProgressAppointments)}
+            />
           )}
           {currentTab === 1 && (
-            <AppointmentList appointments={filteredAppointments(confirmedAppointments)} />
+            <AppointmentList
+              appointments={filteredAppointments(confirmedAppointments)}
+            />
           )}
         </section>
 
@@ -100,16 +127,28 @@ const AppointmentsPage: React.FC = () => {
           className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
-          <button>약속 만들기</button>
-          <button>방번호로 참여</button>
+          <Link href={"/user/appointments/create"}>약속 만들기</Link>
+          <button onClick={openModal}>방번호로 참여</button>
         </section>
       </main>
+
+      {/* 모달 */}
+      <Modal isOpen={isModalOpen} onClose={closeModal}>
+        <div className={styles.roomEntryBox}>
+          <InputField 
+            label="방 번호"
+            value={roomNumber}
+            onChange={handleRoomNumberChange}
+            type="text"
+          />
+          <Button size="sm" text="참여" />
+        </ div>
+      </Modal>
     </>
   );
 };
 
 export default AppointmentsPage;
-
 
 // 더미 데이터
 // types.ts
