@@ -1,13 +1,22 @@
-"use client"
+"use client";
 
-import styles from "./AppointmentList.module.scss"
-import ListBox from "./listBox";
+import { AppointmentInfo } from "../page";
+import styles from "./AppointmentList.module.scss";
+import AppointmentCard from "./AppointmentCard";
+import Link from "next/link";
 
-const AppointmentList: React.FC = () => {
+interface AppointmentListProps {
+  appointments: AppointmentInfo[];
+}
 
+const AppointmentList: React.FC<AppointmentListProps> = ({ appointments }) => {
   return (
     <div className={styles.container}>
-        <ListBox />
+      {appointments.map((data, index) => (
+        <Link href={`appointments/${data.id}/information`} key={index}>
+          <AppointmentCard appointment={data} />
+        </Link>
+      ))}
     </div>
   );
 };

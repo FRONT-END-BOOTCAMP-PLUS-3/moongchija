@@ -23,7 +23,7 @@
     }
   } // leftBox
 
-  .RightBox {
+  .rightBox {
     width: 30%;
     display: flex;
     flex-direction: column;
@@ -32,21 +32,29 @@
       padding: 10px;
       margin: 0 20px;
       border-radius: 0 0 20px 20px;
-      background: var(--primary-color);
       color: white;
       text-align: center;
     }
 
-    .locationWrapper {  
-        display: flex;
-        align-items: center;
-        flex: 1;
+    .locationWrapper {
+      display: flex;
+      align-items: center;
+      flex: 1;
+
+      & > span {
+        width: 100%;
+        text-align: center;
+      }
     }
-  } // RightBox
+  } // rightBox
 
   .dateWrapper,
   .participantWrapper,
   .locationWrapper {
     color: var(--grey-4-color);
   }
+
+  .end { background: #AAAAAA; }
+  .dDay { background: #64c964; }
+  .count { background: var(--primary-color); }
 }
