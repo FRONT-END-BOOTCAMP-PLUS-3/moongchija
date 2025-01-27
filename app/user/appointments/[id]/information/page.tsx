@@ -17,8 +17,6 @@ const InformationPage = () => {
     );
     if (confirmation) {
       alert("방이 삭제되었습니다.");
-    } else {
-      alert("취소되었습니다.");
     }
   };
 
@@ -26,9 +24,7 @@ const InformationPage = () => {
     const confirmation = confirm("방을 정말 나가시겠습니까?");
     if (confirmation) {
       alert("방을 나갔습니다.");
-    } else {
-      alert("취소되었습니다.");
-    }
+    } 
   };
 
   return (
