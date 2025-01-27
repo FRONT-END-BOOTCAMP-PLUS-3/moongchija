@@ -5,10 +5,45 @@
   flex-direction: column;
 }
 
+.searchBox {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  padding: 20px 40px;
+
+  select {
+    padding: 5px;
+  }
+
+  .inputWrapper {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+  }
+
+  input {
+    padding: 10px;
+    width: 90%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  select, 
+  input {
+    font-family: var(--font-main);
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: 10px;
+  }
+}
+
 .listBox {
   flex: 1;
   overflow-y: auto;
-  max-height: 93vh;
+  max-height: 85vh;
+  padding: 0 40px;
 }
 
 .buttonBox {

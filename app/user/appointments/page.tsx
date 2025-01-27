@@ -63,7 +63,7 @@ const AppointmentsPage: React.FC = () => {
     <>
       <TabMenu tabs={tabs} onTabChange={handleTabChange} />
       <main className={styles.container}>
-        <section>
+        <section className={styles.searchBox}>
           <select onChange={handleSelectChange} value={selectedOption}>
             <option value="전체">전체</option>
             <option value="방장">내가 방장인 약속</option>
@@ -74,7 +74,7 @@ const AppointmentsPage: React.FC = () => {
               </>
             )}
           </select>
-          <div>
+          <div className={styles.inputWrapper}>
             <input
               type="text"
               value={searchText}
@@ -144,6 +144,33 @@ export const appointments: AppointmentInfo[] = [
     participants: ["😊", "😎"],
     isCreator: false,
     extraParticipants: 0,
+  },
+  {
+    id: 3,
+    title: "확정된 저녁 약속",
+    confirmDate: new Date(2025, 0, 31, 19, 0),
+    confirmPlace: "홍대입구역",
+    participants: ["😀", "😀", "😀"],
+    isCreator: true,
+    extraParticipants: 0,
+  },
+  {
+    id: 4,
+    title: "확정된 영화 약속",
+    confirmDate: new Date(2025, 0, 28, 18, 0),
+    confirmPlace: "강남역",
+    participants: ["😊", "😎", "🙂", "😎", "🙂"],
+    isCreator: false,
+    extraParticipants: 1,
+  },
+  {
+    id: 4,
+    title: "확정된 영화 약속",
+    confirmDate: new Date(2025, 0, 25, 18, 0),
+    confirmPlace: "강남역",
+    participants: ["😊", "😎", "🙂", "😎", "🙂"],
+    isCreator: false,
+    extraParticipants: 1,
   },
   {
     id: 3,
