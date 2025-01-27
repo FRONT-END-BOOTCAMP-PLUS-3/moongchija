@@ -28,6 +28,15 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     extraParticipants,
   } = appointment;
 
+  const countdown = confirmDate ? calculateCountdown(confirmDate) : "투표중";
+
+  const getCountdownClass = (countdown: string) => {
+    if (countdown === "종료") return styles.end;
+    if (countdown === "D-Day") return styles.dDay;
+    else return styles.count
+    return "";
+  };
+
   return (
     <div className={styles.container}>
       <section className={styles.leftBox}>
@@ -60,8 +69,8 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         </div>
       </section>
       <section className={styles.rightBox}>
-        <div className={styles.countdown}>
-          {confirmDate ? calculateCountdown(confirmDate) : "투표중"}
+      <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
+          {countdown}
         </div>
         <div className={styles.locationWrapper}>
           {confirmPlace && (
