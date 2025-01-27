@@ -10,13 +10,49 @@
 
 .editIcon {
   color: var(--grey-5-color);
+  cursor: pointer;
 }
 
 .trashIcon {
   color: rgb(247, 103, 103);
+  cursor: pointer;
+
 }
 
 .icons{
   display: flex;
   gap:10px;
 }
+
+.modalContainer {
+  width: 100%;
+}
+
+.title {
+  font-size: 20px;
+}
+
+.content {
+  width: 340px;
+  height: 300px;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid var(--grey-6-color);
+  border-radius: 5px;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  resize: none;
+  outline: none;
+
+  &::placeholder {
+    color: #898989; 
+  }
+}
+
+
+
+.editButton{
+ display: flex;
+ justify-content: center;
+}
+

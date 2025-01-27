@@ -41,14 +41,14 @@ const NoticeDetail = () => {
             <textarea
               className={styles.noticeContent}
               placeholder="공지사항을 작성해주세요."
-            ></textarea>
+            />
             <div className={styles.noticeButton}>
               <Button
                 text="등록"
                 size="sm"
                 color="--primary-color"
                 active={true}
-                onClick={handleRegister} // 등록 버튼 클릭 시 handleRegister 호출
+                onClick={handleRegister}
               />
             </div>
           </div>
