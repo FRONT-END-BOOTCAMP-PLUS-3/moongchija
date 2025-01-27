@@ -1,0 +1,28 @@
+.userImageModalContainer {
+  text-align: center;
+}
+.userEmojiWrapper {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3열로 정렬 */
+  gap: 30px; /* 이미지 간 간격 */
+  margin: 30px 0px;
+}
+
+.imageWrapper {
+  width: 70px;
+  height: 70px;
+  border-radius: 50%;
+  border: 1px solid black;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--grey-6-color);
+}
+
+.hiddenButton {
+  all: unset;
+  display: block;
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+}
