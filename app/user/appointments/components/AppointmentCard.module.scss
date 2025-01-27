@@ -23,7 +23,7 @@
     }
   } // leftBox
 
-  .RightBox {
+  .rightBox {
     width: 30%;
     display: flex;
     flex-direction: column;
@@ -38,11 +38,17 @@
     }
 
     .locationWrapper {  
+        
         display: flex;
         align-items: center;
         flex: 1;
+
+        & > span {
+          width: 100%;
+          text-align: center;
+        }
     }
-  } // RightBox
+  } // rightBox
 
   .dateWrapper,
   .participantWrapper,
