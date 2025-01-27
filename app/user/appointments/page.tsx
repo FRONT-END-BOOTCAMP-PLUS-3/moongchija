@@ -2,6 +2,7 @@
 
 import React, { useState } from "react";
 import styles from "./AppointmentsPage.module.scss";
+import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
 import CircleButton from "@/components/circleButton/CircleButton";
@@ -10,13 +11,14 @@ const AppointmentsPage: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [showButtons, setShowButtons] = useState<boolean>(false);
+  const [searchText, setSearchText] = useState<string>("");
+  const [selectedOption, setSelectedOption] = useState<string>("전체");
 
-  // 투표 진행중 필터링된 데이터
+  // 필터링된 데이터
   const inProgressAppointments = appointments.filter(
     (appointment) => appointment.startDate && appointment.endDate
   );
 
-  // 약속 리스트 필터링된 데이터
   const confirmedAppointments = appointments.filter(
     (appointment) => appointment.confirmDate
   );
@@ -29,16 +31,66 @@ const AppointmentsPage: React.FC = () => {
     setShowButtons((prev) => !prev);
   };
 
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchText(e.target.value);
+  };
+
+  const handleSelectChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    setSelectedOption(e.target.value);
+  };
+
+  // 필터링된 데이터
+  const filteredAppointments = (appointments: AppointmentInfo[]) => {
+    return appointments
+      .filter((appointment) => {
+        if (selectedOption === "방장" && !appointment.isCreator) {
+          return false;
+        }
+        if (selectedOption === "예정" && !calculateCountdown(appointment.confirmDate!).includes("D-")) {
+          return false;
+        }
+        if (selectedOption === "종료" && calculateCountdown(appointment.confirmDate!) !== "종료") {
+          return false;
+        }
+        return true;
+      })
+      .filter((appointment) => {
+        return appointment.title.toLowerCase().includes(searchText.toLowerCase());
+      });
+  };
+
   return (
     <>
       <TabMenu tabs={tabs} onTabChange={handleTabChange} />
       <main className={styles.container}>
+        <section>
+          <select onChange={handleSelectChange} value={selectedOption}>
+            <option value="전체">전체</option>
+            <option value="방장">내가 방장인 약속</option>
+            {currentTab === 1 && (
+              <>
+                <option value="예정">예정된 약속</option>
+                <option value="종료">종료된 약속</option>
+              </>
+            )}
+          </select>
+          <div>
+            <input
+              type="text"
+              value={searchText}
+              onChange={handleSearchChange}
+              placeholder="방 제목을 입력하세요."
+            />
+            <SlMagnifier />
+          </div>
+        </section>
+
         <section className={styles.listBox}>
-        {currentTab === 0 && (
-            <AppointmentList appointments={inProgressAppointments} />
+          {currentTab === 0 && (
+            <AppointmentList appointments={filteredAppointments(inProgressAppointments)} />
           )}
           {currentTab === 1 && (
-            <AppointmentList appointments={confirmedAppointments} />
+            <AppointmentList appointments={filteredAppointments(confirmedAppointments)} />
           )}
         </section>
 
@@ -57,6 +109,7 @@ const AppointmentsPage: React.FC = () => {
 };
 
 export default AppointmentsPage;
+
 
 // 더미 데이터
 // types.ts
@@ -110,8 +163,16 @@ export const appointments: AppointmentInfo[] = [
     isCreator: false,
     extraParticipants: 1,
   },
+  {
+    id: 4,
+    title: "확정된 영화 약속",
+    confirmDate: new Date(2025, 0, 25, 18, 0),
+    confirmPlace: "강남역",
+    participants: ["😊", "😎", "🙂", "😎", "🙂"],
+    isCreator: false,
+    extraParticipants: 1,
+  },
 ];
-
 
 // 유틸 함수 모음
 // utils/dateUtils.ts
