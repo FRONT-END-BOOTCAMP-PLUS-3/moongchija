@@ -18,7 +18,19 @@
     }
 
     div:nth-child(5) {
-      margin-top: 50px;
+      margin-top: 30px;
     }
+  }
+
+  .loginLink {
+    color: var(--grey-5-color);
+
+    a {
+      text-decoration: none;
+      color: #191919;
+    }
+
+    text-align: center;
+    margin-top: 20px;
   }
 }

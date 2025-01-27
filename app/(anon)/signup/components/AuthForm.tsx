@@ -5,6 +5,7 @@ import styles from "./AuthForm.module.scss";
 
 import EmailInputField from "./EmailInputField";
 import useForm from "../hooks/useForm";
+import Link from "next/link";
 
 const AuthForm = () => {
   const {
@@ -63,7 +64,12 @@ const AuthForm = () => {
           placeholder="비밀번호를 한 번 더 입력해 주세요"
           error={passwordCheckError}
         />
+
         <Button text="회원가입" size="lg" active={isFormValid} />
+
+        <p className={styles.loginLink}>
+          계정이 있으신가요? <Link href={"/login"}>로그인 하러가기</Link>
+        </p>
       </form>
     </div>
   );
