@@ -164,7 +164,7 @@ export const appointments: AppointmentInfo[] = [
     extraParticipants: 1,
   },
   {
-    id: 4,
+    id: 5,
     title: "확정된 영화 약속",
     confirmDate: new Date(2025, 0, 25, 18, 0),
     confirmPlace: "강남역",
@@ -173,7 +173,7 @@ export const appointments: AppointmentInfo[] = [
     extraParticipants: 1,
   },
   {
-    id: 3,
+    id: 6,
     title: "확정된 저녁 약속",
     confirmDate: new Date(2025, 0, 31, 19, 0),
     confirmPlace: "홍대입구역",
@@ -182,7 +182,7 @@ export const appointments: AppointmentInfo[] = [
     extraParticipants: 0,
   },
   {
-    id: 4,
+    id: 7,
     title: "확정된 영화 약속",
     confirmDate: new Date(2025, 0, 27, 18, 0),
     confirmPlace: "강남역",
@@ -191,7 +191,7 @@ export const appointments: AppointmentInfo[] = [
     extraParticipants: 1,
   },
   {
-    id: 4,
+    id: 8,
     title: "확정된 영화 약속",
     confirmDate: new Date(2025, 0, 25, 18, 0),
     confirmPlace: "강남역",
