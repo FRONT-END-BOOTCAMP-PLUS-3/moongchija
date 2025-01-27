@@ -4,6 +4,11 @@ import Button from "@/components/button/Button";
 import styles from "./SettlementDetail.module.scss";
 
 const SettlementDetail = () => {
+  // 복사 버튼 클릭 시 알림을 띄우는 함수
+  const handleCopy = () => {
+    alert("복사되었습니다"); // 복사 완료 알림
+  };
+
   return (
     <div className={styles.container}>
       <div className={styles.box}>
@@ -68,7 +73,12 @@ const SettlementDetail = () => {
               <span>계좌번호</span>
               <div>
                 1122452-1234570
-                <button className={styles.copyButton}>복사</button>
+                <button
+                  className={styles.copyButton}
+                  onClick={handleCopy} // 클릭 시 handleCopy 함수 호출
+                >
+                  복사
+                </button>
               </div>
             </div>
             <div className={styles.row}>
@@ -80,20 +90,18 @@ const SettlementDetail = () => {
               <div>고뭉치</div>
             </div>
           </div>
-
-
         </div>
-        
       </div>
-                {/* 수정하기 버튼 */}
-                <div className={styles.editButton}>
-            <Button
-              text="수정하기"
-              size="sm"
-              color="--primary-color"
-              active={true}
-            />
-          </div>
+
+      {/* 수정하기 버튼 */}
+      <div className={styles.editButton}>
+        <Button
+          text="수정하기"
+          size="sm"
+          color="--primary-color"
+          active={true}
+        />
+      </div>
     </div>
   );
 };
