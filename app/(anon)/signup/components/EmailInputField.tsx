@@ -2,7 +2,7 @@ import { useState } from "react";
 import styles from "./EmailInputField.module.scss";
 import InputField from "@/components/input-filed/InputFiled";
 import useInput from "../hooks/useInput";
-import { EMAIL_DOMAINS } from "../constants/emailDomains";
+import { EMAIL_DOMAINS } from "../constants/EMAIL_DOMAINS";
 
 interface EmailInputFieldProps {
   label: string;
@@ -12,7 +12,7 @@ interface EmailInputFieldProps {
 
 const EmailInputField = ({ label, onChange, error }: EmailInputFieldProps) => {
   const { value: localEmail, setValue: setLocalEmail } = useInput("");
-  const [domain, setDomain] = useState("google.com");
+  const [domain, setDomain] = useState("gmail.com");
   // const domain = "moongchi.com";
 
   const handleEmailChange = (e: React.ChangeEvent<HTMLInputElement>) => {

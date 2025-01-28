@@ -12,12 +12,23 @@ import { useRouter } from "next/navigation";
 const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+  const [nicknameCheckError, setNicknameCheckError] = useState<string | null>(
+    null
+  );
+  const [nicknameCheckSuccess, setNicknameCheckSuccess] = useState<
+    string | null
+  >(null);
 
   const router = useRouter();
 
   const {
     email: { email, emailError, handleChangeEmail },
-    nickname: { nickname, nicknameError, handleChangeNickname },
+    nickname: {
+      nickname,
+      nicknameError,
+      handleChangeNickname,
+      setIsNicknameAvailable,
+    },
     password: { password, passwordError, habdleChangePassword },
     passwordCheck: {
       passwordCheck,
@@ -68,6 +79,59 @@ const AuthForm = () => {
     }
   };
 
+  const handleCheckNickname = async (
+    e: React.MouseEvent<HTMLButtonElement>
+  ) => {
+    e.preventDefault();
+
+    if (!nickname) {
+      setNicknameCheckError(null);
+      setNicknameCheckSuccess(null);
+      return;
+    }
+
+    setNicknameCheckError(null);
+    setNicknameCheckSuccess(null);
+
+    try {
+      const response = await fetch("/api/auth/check-nickname", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nickname }),
+      });
+
+      const data = await response.json();
+
+      if (data.isAvailable) {
+        setIsNicknameAvailable(true);
+        setNicknameCheckSuccess("사용 가능한 닉네임입니다.");
+      } else {
+        setNicknameCheckError("이미 사용중인 닉네임입니다.");
+        setIsNicknameAvailable(false);
+      }
+    } catch (error) {
+      setNicknameCheckSuccess(
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다."
+      );
+
+      setIsNicknameAvailable(false);
+    }
+  };
+
+  const handleChangeNicknameWithReset = (
+    e: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    handleChangeNickname(e);
+
+    setNicknameCheckError(null);
+    setNicknameCheckSuccess(null);
+    setIsNicknameAvailable(false);
+  };
+
   return (
     <div className={styles.authFormContainer}>
       <form onSubmit={handleSubmit} className={styles.signupForm}>
@@ -82,11 +146,12 @@ const AuthForm = () => {
             type="text"
             label="닉네임"
             value={nickname}
-            onChange={handleChangeNickname}
+            onChange={handleChangeNicknameWithReset}
             placeholder="닉네임을 입력해주세요"
-            error={nicknameError}
+            error={nicknameCheckError ? nicknameCheckError : nicknameError}
+            success={nicknameCheckSuccess}
           />
-          <Button text="중복검사" size="md" />
+          <Button text="중복검사" size="md" onClick={handleCheckNickname} />
         </div>
         <InputField
           type="password"

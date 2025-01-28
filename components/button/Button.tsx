@@ -11,7 +11,7 @@ const Button = ({
   size: "xs" | "sm" | "md" | "lg";
   color?: "--primary-color" | "--exit-red" | "--grey-5-color";
   active?: boolean;
-  onClick?: () => void; 
+  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {
   return (
     <div className={styles.buttonWrapper}>

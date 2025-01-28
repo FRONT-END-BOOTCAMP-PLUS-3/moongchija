@@ -8,6 +8,7 @@ interface InputFieldProps {
   type?: string;
   placeholder?: string;
   error?: string | null; // 유효성 검사 실패 시 표시할 오류 메시지
+  success?: string | null;
 }
 
 const InputField: React.FC<InputFieldProps> = ({
@@ -17,6 +18,7 @@ const InputField: React.FC<InputFieldProps> = ({
   type = "text",
   placeholder = "",
   error,
+  success,
 }) => (
   <div className={`${styles.inputField} ${error ? styles.errorField : ""}`}>
     <label>{label}</label>
@@ -27,6 +29,7 @@ const InputField: React.FC<InputFieldProps> = ({
       placeholder={placeholder}
     />
     {error && <p className={styles.errorMessage}>{error}</p>}
+    {success && <p className={styles.successMessage}>{success}</p>}
   </div>
 );
 
