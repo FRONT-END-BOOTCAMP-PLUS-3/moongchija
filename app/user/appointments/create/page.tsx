@@ -71,7 +71,7 @@ const CreatePage = () => {
     <div className={styles.container}>
       <section className={styles.mainBox}>
         <div className={styles.indicatorWrapper}>
-          <CircleIndicator total={3} activeIndex={0} />
+          <CircleIndicator total={3} activeIndexs={[0]} />
         </div>
 
         <InputField
