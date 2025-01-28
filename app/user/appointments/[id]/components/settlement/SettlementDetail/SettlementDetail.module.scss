@@ -187,6 +187,7 @@
   box-sizing: border-box;
 }
 
+
 .modalResultBox {
   display: flex;
   flex-direction: column;
@@ -214,6 +215,18 @@
       margin-left: 5px;
     }
   }
+}
+
+
+.bank select{
+  border: 1px solid var(--grey-6-color);
+  width: 165px;
+  height: 35px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 15px;
+  box-sizing: border-box;
+  text-align: right;
 }
 
 .divide {
