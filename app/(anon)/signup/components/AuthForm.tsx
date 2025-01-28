@@ -6,11 +6,17 @@ import styles from "./AuthForm.module.scss";
 import EmailInputField from "./EmailInputField";
 import useForm from "../hooks/useForm";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+  const router = useRouter();
+
   const {
     email: { email, emailError, handleChangeEmail },
-    nickname: { nickname, nicknameError, habdleChangeNickname },
+    nickname: { nickname, nicknameError, handleChangeNickname },
     password: { password, passwordError, habdleChangePassword },
     passwordCheck: {
       passwordCheck,
@@ -20,13 +26,45 @@ const AuthForm = () => {
     isFormValid,
   } = useForm();
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    console.log(`email : ${email}
-      nickname : ${nickname}
-      password: ${password}
-      `);
+    if (!isFormValid) {
+      return;
+    }
+
+    setIsLoading(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_email: email,
+          password: password,
+          nickname: nickname,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "회원가입에 실패하였습니다.");
+      }
+
+      router.push("/user/appointments");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -42,7 +80,7 @@ const AuthForm = () => {
             type="text"
             label="닉네임"
             value={nickname}
-            onChange={habdleChangeNickname}
+            onChange={handleChangeNickname}
             placeholder="닉네임을 입력해주세요"
             error={nicknameError}
           />
@@ -65,7 +103,15 @@ const AuthForm = () => {
           error={passwordCheckError}
         />
 
-        <Button text="회원가입" size="lg" active={isFormValid} />
+        {submitError && (
+          <div className={styles.errorMessage}>{submitError}</div>
+        )}
+
+        <Button
+          text={isLoading ? "처리중..." : "회원가입"}
+          size="lg"
+          active={isFormValid}
+        />
 
         <p className={styles.loginLink}>
           계정이 있으신가요? <Link href={"/login"}>로그인 하러가기</Link>
