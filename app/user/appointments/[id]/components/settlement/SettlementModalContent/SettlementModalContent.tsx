@@ -191,7 +191,7 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
       </div>
 
       {/* 모달 내 수정하기 버튼 */}
-      <div className={styles.editButton}>
+      <div className={styles.modalEditButton}>
         <Button
           text="수정하기"
           size="sm"
