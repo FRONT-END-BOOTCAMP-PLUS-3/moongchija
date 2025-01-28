@@ -8,7 +8,8 @@ import Modal from "@/components/modal/Modal";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
-import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
+import GalleryDetail from "../components/gallery/galleryDetail/galleryDetail";
+
 
 const GalleryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
