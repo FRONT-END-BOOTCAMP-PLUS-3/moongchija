@@ -1,4 +1,4 @@
-import { SignUpUseCase } from "@/application/usecases/auth/SignUpUseCase";
+import { SignUpUsecase } from "@/application/usecases/auth/SignUpUsecase";
 import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
@@ -9,7 +9,7 @@ export const POST = async (request: NextRequest) => {
 
     const userRepository = new SbUserRepository();
     const userEmojiRepository = new SbUserEmojiRepository();
-    const signupUsecase = new SignUpUseCase(
+    const signupUsecase = new SignUpUsecase(
       userRepository,
       userEmojiRepository
     );
