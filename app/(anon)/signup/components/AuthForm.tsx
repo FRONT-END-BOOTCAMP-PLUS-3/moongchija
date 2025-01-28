@@ -12,6 +12,7 @@ import { useRouter } from "next/navigation";
 const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
+
   const router = useRouter();
 
   const {
@@ -73,8 +74,9 @@ const AuthForm = () => {
         <EmailInputField
           label="이메일"
           onChange={handleChangeEmail}
-          error={emailError}
+          error={submitError ? submitError : emailError}
         />
+
         <div className={styles.duplicateTest}>
           <InputField
             type="text"
@@ -102,10 +104,6 @@ const AuthForm = () => {
           placeholder="비밀번호를 한 번 더 입력해 주세요"
           error={passwordCheckError}
         />
-
-        {submitError && (
-          <div className={styles.errorMessage}>{submitError}</div>
-        )}
 
         <Button
           text={isLoading ? "처리중..." : "회원가입"}
