@@ -2,42 +2,18 @@
 import { useState } from "react";
 import styles from "./TimeResult.module.scss";
 
-interface Result {
+interface TimeResult {
   start_time: string;
   end_time: string;
   member: string[];
   result: {
     date: string;
-    count: number;
     user: string[];
   }[];
 }
 
-const TimeResult = () => {
-  const timeResult: Result = {
-    start_time: "2025-01-01 12:00:00",
-    end_time: "2025-01-07 22:00:00",
-    member: ["고뭉치", "김뭉치", "심뭉치", "이뭉치", "황뭉치", "빈뭉치"],
-    result: [
-      { date: "2025-01-01 12:00:00", count: 0, user: [] },
-      { date: "2025-01-01 13:00:00", count: 1, user: ["고뭉치"] },
-      {
-        date: "2025-01-01 14:00:00",
-        count: 2,
-        user: ["고뭉치", "심뭉치"],
-      },
-      {
-        date: "2025-01-01 15:00:00",
-        count: 3,
-        user: ["고뭉치", "김뭉치", "심뭉치"],
-      },
-      {
-        date: "2025-01-01 16:00:00",
-        count: 4,
-        user: ["고뭉치", "김뭉치", "심뭉치", "이뭉치"],
-      },
-    ],
-  };
+const TimeResult = ({ timeProps }: { timeProps: TimeResult }) => {
+  const timeResult: TimeResult = timeProps;
 
   const getDateList = (start: Date, end: Date) => {
     const dates = [];
@@ -85,11 +61,11 @@ const TimeResult = () => {
     const fullDate = `${date} ${String(hour).padStart(2, "0")}:00:00`;
     const result = timeResult.result.find((item) => item.date === fullDate);
 
-    if (!result || result.count === 0) {
+    if (!result || result.user.length === 0) {
       return styles.noVote; // 투표가 없는 경우
     }
 
-    const percentage = result.count / timeResult.member.length;
+    const percentage = result.user.length / timeResult.member.length;
     if (percentage > 0.66) return styles.highVote; // 진한 파란색
     if (percentage > 0.33) return styles.mediumVote; // 중간 파란색
     return styles.lowVote; // 연한 파란색
