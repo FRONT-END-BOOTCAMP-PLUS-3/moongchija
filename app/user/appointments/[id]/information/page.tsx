@@ -1,10 +1,32 @@
-import InformationDetail from "../components/detail/InformationDetail/InformationDetail";
-import NoticeDetail from "../components/detail/NoticeDetail/NoticeDetail";
+"use client"
+
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
+import InformationDetail from "../components/information/InformationDetail/InformationDetail";
+import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
 
 const InformationPage = () => {
+  const handleCopyRoomNumber = () => {
+    alert("방 번호가 복사 되었습니다.");
+  };
+
+  const handleDeleteRoom = () => {
+    const confirmation = confirm(
+      "방을 삭제하면 해당 약속과 관련된 정보가 전부 사라지게 됩니다. 방을 정말 삭제 하시겠습니까?"
+    );
+    if (confirmation) {
+      alert("방이 삭제되었습니다.");
+    }
+  };
+
+  const handleExitRoom = () => {
+    const confirmation = confirm("방을 정말 나가시겠습니까?");
+    if (confirmation) {
+      alert("방을 나갔습니다.");
+    } 
+  };
+
   return (
     <div>
       <DetailTabMenu />
@@ -19,8 +41,10 @@ const InformationPage = () => {
               size="sm"
               color="--primary-color"
               active={true}
+              onClick={handleCopyRoomNumber} 
             />
           </div>
+
           <div className={styles.redButtonWrapper}>
             <div className={styles.deleteButton}>
               <Button
@@ -28,14 +52,17 @@ const InformationPage = () => {
                 size="sm"
                 color="--exit-red"
                 active={true}
+                onClick={handleDeleteRoom} 
               />
             </div>
+
             <div className={styles.exitButton}>
               <Button
                 text="나가기"
                 size="sm"
                 color="--exit-red"
                 active={true}
+                onClick={handleExitRoom} 
               />
             </div>
           </div>

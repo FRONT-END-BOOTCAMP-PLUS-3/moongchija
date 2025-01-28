@@ -13,6 +13,11 @@ const NoticeDetail = () => {
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+  const handleRegister = () => {
+    alert("등록되었습니다"); // 등록 버튼 클릭 시 alert 표시
+    closeModal(); // 모달 닫기
+  };
+
   return (
     <>
       <div className={styles.container}>
@@ -36,14 +41,14 @@ const NoticeDetail = () => {
             <textarea
               className={styles.noticeContent}
               placeholder="공지사항을 작성해주세요."
-            ></textarea>
+            />
             <div className={styles.noticeButton}>
               <Button
                 text="등록"
                 size="sm"
                 color="--primary-color"
                 active={true}
-                onClick={closeModal}
+                onClick={handleRegister}
               />
             </div>
           </div>

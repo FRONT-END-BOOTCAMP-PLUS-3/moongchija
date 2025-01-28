@@ -1,0 +1,60 @@
+.box {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: var(--grey-2-color);
+  border-radius: 5px;
+  padding: 15px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  gap: 20px;
+}
+
+.editIcon {
+  color: var(--grey-5-color);
+  cursor: pointer;
+}
+
+.trashIcon {
+  color: rgb(247, 103, 103);
+  cursor: pointer;
+}
+
+.icons {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle {
+  color: var(--grey-4-color);
+  cursor: pointer;
+}
+
+.modalContainer {
+  width: 100%;
+}
+
+.modalTitle {
+  font-size: 20px;
+}
+
+.modalContent {
+  width: 360px;
+  height: 300px;
+  font-size: 16px;
+  padding: 10px;
+  border: 1px solid var(--grey-6-color);
+  border-radius: 5px;
+  resize: none;
+  outline: none;
+  margin-top: 20px;
+  margin-bottom: 20px;
+
+  &::placeholder {
+    color: #898989;
+  }
+}
+
+.editButton {
+  display: flex;
+  justify-content: center;
+}
