@@ -1,6 +1,11 @@
+export interface Place {
+  name: string;
+  link: string;
+}
+
 export interface Information {
   title: string;
-  place: string;
+  place: Place; 
   date: string;
   participants: string[];
 }
