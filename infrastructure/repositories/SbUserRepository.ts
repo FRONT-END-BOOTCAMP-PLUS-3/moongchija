@@ -58,4 +58,15 @@ export class SbUserRepository implements UserRepository {
       created_at: new Date(user.created_at),
     };
   }
+
+  async findUserByNickname(nickname: string): Promise<boolean> {
+    const supabase = await createClient();
+    const { data: user } = await supabase
+      .from("user")
+      .select("id")
+      .eq("nickname", nickname)
+      .single();
+
+    return !!user;
+  }
 }
