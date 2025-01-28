@@ -74,7 +74,7 @@ const CreateTimePage = () => {
 
         <div className={styles.datePickerWrapper}>
           <p>기간 선택</p>
-          <p>최대 7일까지 선택할 수 있습니다.</p>
+          <span className={styles.message}>최대 7일까지 선택할 수 있습니다.</span>
           <DateRange
             ranges={selectedRange}
             onChange={handleDateChange}
