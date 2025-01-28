@@ -1,11 +1,11 @@
 import { detailTypes } from "../types/detailTypes";
 
-const dummyData: detailTypes[] = [
+const detailDummyData: detailTypes[] = [
   {
     id: 1,
     information: {
       title: "저녁에 닭발",
-      place: "홍대 입구역",
+      place: { name: "홍대 입구역", link: "https://map.example.com/hongdae" },
       date: "2025.01.28 (화) 19:00",
       participants: ["고뭉치", "봉미선", "신짱구", "김코난"],
     },
@@ -38,13 +38,11 @@ const dummyData: detailTypes[] = [
     ],
   },
 
-
-
   {
     id: 2,
     information: {
       title: "주말 브런치",
-      place: "이태원 카페거리",
+      place: { name: "이태원 카페거리", link: "https://map.example.com/itaewon" },
       date: "2025.02.02 (일) 11:30",
       participants: ["이순신", "안중근", "윤봉길"],
     },
@@ -74,13 +72,11 @@ const dummyData: detailTypes[] = [
     ],
   },
 
-
-
   {
     id: 3,
     information: {
       title: "한강 피크닉",
-      place: "뚝섬유원지",
+      place: { name: "뚝섬유원지", link: "https://map.example.com/tukseom" },
       date: "2025.03.15 (토) 14:00",
       participants: ["김철수", "박영희", "최민수", "이정훈"],
     },
@@ -113,4 +109,4 @@ const dummyData: detailTypes[] = [
   },
 ];
 
-export default dummyData;
+export default detailDummyData;
