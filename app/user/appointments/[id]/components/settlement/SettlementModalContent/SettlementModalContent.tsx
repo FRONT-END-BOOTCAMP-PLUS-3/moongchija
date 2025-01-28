@@ -43,6 +43,7 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
   const [accountNumber, setAccountNumber] = useState("123456789123456"); // 계좌번호 상태 추가
   const [selectedBank, setSelectedBank] = useState("국민은행"); // 은행사 상태 추가
+  const [depositor, setDepositor] = useState("김코난"); // 예금주 상태 추가
 
   // 인원 수가 변경될 때마다 인당 금액을 계산
   useEffect(() => {
@@ -151,7 +152,11 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
             </div>
             <div className={styles.depositor}>
               <span>예금주</span>
-              <input type="text" value="김코난" readOnly />
+              <input
+                type="text"
+                value={depositor} // 예금주 상태 값 사용
+                onChange={(e) => setDepositor(e.target.value)} // 예금주 값 업데이트
+              />
             </div>
           </div>
         </div>
