@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./Appointments.module.scss";
+import styles from "./appointments.module.scss";
 import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
