@@ -8,4 +8,5 @@ export interface UserRepository {
     emoji: string
   ): Promise<Omit<User, "password">>;
   findUserByEmail(user_email: string): Promise<Omit<User, "password"> | null>;
+  findUserByNickname(nickname: string): Promise<boolean>;
 }
