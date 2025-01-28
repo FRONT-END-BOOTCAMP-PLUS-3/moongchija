@@ -1,10 +1,10 @@
 "use client";
 
-import styles from "./create.module.scss";
+import styles from "./information.module.scss";
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
 import { useState, useEffect } from "react";
-import CircleIndicator from "./components/CircleIndicator";
+import CircleIndicator from "../components/CircleIndicator";
 
 const quizList = [
   "내 MBTI는?",
@@ -20,7 +20,7 @@ const quizList = [
   "직접 입력하기",
 ];
 
-const CreatePage = () => {
+const CreateInformationPage = () => {
   const [name, setName] = useState<string>("");
   const [quiz, setQuiz] = useState<string>("내 MBTI는?");
   const [answer, setAnswer] = useState<string>("");
@@ -54,7 +54,7 @@ const CreatePage = () => {
   };
 
   const handleNextButton = () => {
-    console.log("다음");
+    window.location.href = "/user/appointments/create/time"
   };
 
   useEffect(() => {
@@ -71,7 +71,7 @@ const CreatePage = () => {
     <div className={styles.container}>
       <section className={styles.mainBox}>
         <div className={styles.indicatorWrapper}>
-          <CircleIndicator total={3} activeIndex={0} />
+          <CircleIndicator total={3} activeIndexs={[0]} />
         </div>
 
         <InputField
@@ -125,4 +125,4 @@ const CreatePage = () => {
   );
 };
 
-export default CreatePage;
+export default CreateInformationPage;
