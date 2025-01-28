@@ -25,7 +25,7 @@ const LoginPage = () => {
       </div>
 
       <div className={styles.signupInfo}>
-        <span>계정이 없으신가요?</span>
+        <p>계정이 없으신가요?</p>
         <Link href={"/signup"}>계정 생성</Link>
       </div>
     </div>

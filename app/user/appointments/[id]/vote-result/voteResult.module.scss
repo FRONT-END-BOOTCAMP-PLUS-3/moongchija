@@ -1,0 +1,49 @@
+.voteResultContainer {
+  width: 100%;
+  height: 100%;
+  margin: 0 auto;
+  background: white;
+  padding: 20px;
+  text-align: center;
+  user-select: none; // 드레그 금지
+  .subtitle {
+    font-size: var(--font-size-md);
+    font-weight: 500;
+    margin: 20px 0 30px;
+  }
+  .wrapTapButton {
+    display: flex;
+    flex-direction: row-reverse;
+    width: 100%;
+    margin: 25px 0;
+    .tapButton {
+      width: 120px;
+      border-radius: 10%;
+      button {
+        background-color: var(--grey-2-color);
+        color: #000;
+        width: 60px;
+        height: 40px;
+        font-size: var(--font-size-sm);
+        border: none;
+      }
+      .selected {
+        background-color: var(--primary-color);
+        color: #fff;
+      }
+      .timeButton {
+        border-radius: 10 0 0 10;
+      }
+      .placeButton {
+        border-radius: 0 10 10 0;
+      }
+    }
+  }
+  .wrapButton {
+    position: fixed; /* 화면에 고정 */
+    bottom: 50px; /* 화면 하단에서 20px 위로 위치 */
+    left: 50%; /* 화면 중앙에 위치 */
+    transform: translateX(-50%); /* 정확한 중앙 정렬 */
+    z-index: 100; /* 다른 요소들 위에 표시되도록 */
+  }
+}

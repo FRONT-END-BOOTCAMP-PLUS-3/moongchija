@@ -2,84 +2,87 @@
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
 import styles from "./AuthForm.module.scss";
+
+import EmailInputField from "./EmailInputField";
+import useForm from "../hooks/useForm";
+import Link from "next/link";
 import { useState } from "react";
-import useInput from "../hooks/useInput";
-import {
-  validateEmail,
-  validateNickname,
-  validatePassword,
-  validatePasswordCheck,
-} from "../hooks/useValidate";
+import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
-  const {
-    value: email,
-    onChange: habdleChangeEmail,
-    error: emailError,
-  } = useInput("", validateEmail);
-  const {
-    value: nickname,
-    onChange: habdleChangeNickname,
-    error: nicknameError,
-  } = useInput("", validateNickname);
-  const {
-    value: password,
-    onChange: habdleChangePassword,
-    error: passwordError,
-  } = useInput("", validatePassword);
+  const [isLoading, setIsLoading] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
+
+  const router = useRouter();
 
   const {
-    value: passwordCheck,
-    onChange: habdleChangePasswordCheck,
-    error: passwordCheckError,
-  } = useInput("", (value) => validatePasswordCheck(value, password));
+    email: { email, emailError, handleChangeEmail },
+    nickname: { nickname, nicknameError, handleChangeNickname },
+    password: { password, passwordError, habdleChangePassword },
+    passwordCheck: {
+      passwordCheck,
+      passwordCheckError,
+      habdleChangePasswordCheck,
+    },
+    isFormValid,
+  } = useForm();
 
-  const [submittedValues, setSubmittedValues] = useState({
-    email: "",
-    nickname: "",
-    password: "",
-    passwordCheck: "",
-  });
-
-  const isFormValid = [
-    emailError,
-    nicknameError,
-    passwordError,
-    passwordCheckError,
-    !email,
-    !nickname,
-    !password,
-    !passwordCheck,
-  ].every((error) => !error);
-
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    setSubmittedValues({
-      email,
-      nickname,
-      password,
-      passwordCheck,
-    });
+    if (!isFormValid) {
+      return;
+    }
+
+    setIsLoading(true);
+    setSubmitError(null);
+
+    try {
+      const response = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          user_email: email,
+          password: password,
+          nickname: nickname,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "회원가입에 실패하였습니다.");
+      }
+
+      router.push("/user/appointments");
+    } catch (error) {
+      setSubmitError(
+        error instanceof Error
+          ? error.message
+          : "회원가입 중 오류가 발생했습니다."
+      );
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className={styles.authFormContainer}>
       <form onSubmit={handleSubmit} className={styles.signupForm}>
-        <InputField
-          type="email"
+        <EmailInputField
           label="이메일"
-          value={email}
-          onChange={habdleChangeEmail}
-          placeholder="이메일을 입력해주세요"
-          error={emailError}
+          onChange={handleChangeEmail}
+          error={submitError ? submitError : emailError}
         />
+
         <div className={styles.duplicateTest}>
           <InputField
             type="text"
             label="닉네임"
             value={nickname}
-            onChange={habdleChangeNickname}
+            onChange={handleChangeNickname}
             placeholder="닉네임을 입력해주세요"
             error={nicknameError}
           />
@@ -101,7 +104,16 @@ const AuthForm = () => {
           placeholder="비밀번호를 한 번 더 입력해 주세요"
           error={passwordCheckError}
         />
-        <Button text="회원가입" size="lg" active={isFormValid} />
+
+        <Button
+          text={isLoading ? "처리중..." : "회원가입"}
+          size="lg"
+          active={isFormValid}
+        />
+
+        <p className={styles.loginLink}>
+          계정이 있으신가요? <Link href={"/login"}>로그인 하러가기</Link>
+        </p>
       </form>
     </div>
   );

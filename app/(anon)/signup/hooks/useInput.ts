@@ -1,28 +1,43 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const useInput = (
   initialValue: string,
-  validate?: (value: string, additionalValue?: string) => string | null
+  validate?: (passwordCheck: string, password?: string) => string | null,
+  comparisonValue?: string
 ) => {
   const [value, setValue] = useState(initialValue);
   const [error, setError] = useState<string | null>(null);
+  const [isTouched, setIsTouched] = useState<boolean>(false);
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement>,
-    additionalValue?: string
+    emailOrEvent: string | React.ChangeEvent<HTMLInputElement>
   ) => {
-    const newValue = e.target.value;
+    const newValue =
+      typeof emailOrEvent === "string"
+        ? emailOrEvent
+        : emailOrEvent.target.value;
+
     setValue(newValue);
 
-    if (validate) {
-      const validationError = validate(newValue, additionalValue);
-      setError(validationError);
+    if (!isTouched) {
+      setIsTouched(true);
     }
   };
 
-  return { value, error, onChange: handleChange };
+  useEffect(() => {
+    if (isTouched && validate) {
+      const validationError = validate(value, comparisonValue);
+      setError(validationError);
+    }
+  }, [value, comparisonValue, validate, isTouched]);
+  return {
+    value,
+    error: isTouched ? error : null,
+    onChange: handleChange,
+    setValue,
+  };
 };
 
 export default useInput;
