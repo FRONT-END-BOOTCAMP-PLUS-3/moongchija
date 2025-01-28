@@ -45,12 +45,38 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
   const [selectedBank, setSelectedBank] = useState("국민은행"); // 은행사 상태 추가
   const [depositor, setDepositor] = useState("김코난"); // 예금주 상태 추가
 
+  // 장소:금액 input
+  const [inputSets, setInputSets] = useState([
+    { place: "고깃집", price: 10000 }, // 첫 번째 세트는 10000원으로 초기화
+  ]);
+
   // 인원 수가 변경될 때마다 인당 금액을 계산
   useEffect(() => {
     if (numberOfPeople > 0) {
       setDividedPrice(totalPrice / numberOfPeople);
     }
   }, [totalPrice, numberOfPeople]);
+
+  // inputSets의 price가 변경될 때마다 totalPrice를 업데이트
+  useEffect(() => {
+    const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.price, 0);
+    setTotalPrice(updatedTotalPrice);
+  }, [inputSets]); // inputSets가 변경될 때마다 실행
+
+  // 새로운 장소:금액 세트 추가
+  const addNewSet = () => {
+    setInputSets((prevInputSets) => {
+      const newSet = { place: "", price: 0 }; // 항상 10000원을 추가
+      return [...prevInputSets, newSet]; // 새로운 세트를 추가
+    });
+  };
+
+  // 가격을 입력할 때마다 totalPrice를 갱신하는 코드
+  const handlePriceChange = (index: number, newPrice: number) => {
+    const updatedSets = [...inputSets];
+    updatedSets[index].price = newPrice;
+    setInputSets(updatedSets); // inputSets 상태 업데이트
+  };
 
   return (
     <div className={styles.modalContainer}>
@@ -60,28 +86,30 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
           {/* 내역 목록 */}
           <div className={styles.modalListContainer}>
             <div className={styles.modalListWrapper}>
-              <div className={styles.modalListBox}>
-                <input
-                  className={styles.place}
-                  type="text"
-                  value="고깃집"
-                  readOnly
-                />
-                <input
-                  className={styles.price}
-                  type="text" // type을 text로 변경하여 숫자 외 입력을 막음
-                  value={totalPrice.toString().replace(/^0+/, "")} // 숫자 앞의 0을 제거
-                  onChange={(e) => {
-                    const value = e.target.value;
-                    // 한글이나 숫자가 아닌 문자가 입력되면 무시
-                    if (/[^0-9]/.test(value)) return;
-                    setTotalPrice(Number(value));
-                  }}
-                />
-                원
-              </div>
+              {inputSets.map((set, index) => (
+                <div className={styles.modalListBox} key={index}>
+                  <input
+                    className={styles.place}
+                    type="text"
+                    value={set.place}
+                    readOnly
+                  />
+                  <input
+                    className={styles.price}
+                    type="text" // type을 text로 변경하여 숫자 외 입력을 막음
+                    value={set.price.toString().replace(/^0+/, "")} // 숫자 앞의 0을 제거
+                    onChange={(e) => {
+                      const value = e.target.value;
+                      // 한글이나 숫자가 아닌 문자가 입력되면 무시
+                      if (/[^0-9]/.test(value)) return;
+                      handlePriceChange(index, Number(value)); // 가격을 변경하면 총액을 갱신
+                    }}
+                  />
+                  원
+                </div>
+              ))}
 
-              <button className={styles.inputPlusButton}>
+              <button className={styles.inputPlusButton} onClick={addNewSet}>
                 <FaPlus className={styles.icon} />
               </button>
             </div>
