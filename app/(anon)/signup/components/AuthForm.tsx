@@ -127,10 +127,9 @@ const AuthForm = () => {
   ) => {
     handleChangeNickname(e);
 
-    if (!e.target.value) {
-      setNicknameCheckError(null);
-      setNicknameCheckSuccess(null);
-    }
+    setNicknameCheckError(null);
+    setNicknameCheckSuccess(null);
+    setIsNicknameAvailable(false);
   };
 
   return (
