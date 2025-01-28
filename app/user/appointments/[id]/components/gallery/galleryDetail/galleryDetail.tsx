@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import styles from "./galleryDetail.module.scss";
+import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import { useState } from "react";
 import Button from "@/components/button/Button";

@@ -3,12 +3,12 @@
 import { useState, useRef } from "react";
 import CircleButton from "@/components/circleButton/CircleButton";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-import GalleryDetail from "../components/gallery/galleryDetail/galleryDetail";
 import styles from "./gallery.module.scss";
 import Modal from "@/components/modal/Modal";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
+import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
 
 const GalleryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
