@@ -21,6 +21,13 @@
   flex-direction: column;
 }
 
+.divider {
+  border-bottom: 2px solid var(--grey-1-color); 
+  margin-bottom: 20px;
+  box-shadow: 0 2px 1px rgba(0, 0, 0, 0.1);
+}
+
+
 .tableWrapper {
   margin-bottom: 30px;
 }
@@ -163,6 +170,11 @@
 }
 
 .icon {
+  font-size: 20px;
+}
+
+
+.modalAccountTitle {
   font-size: 20px;
 }
 

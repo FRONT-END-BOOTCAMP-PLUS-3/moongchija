@@ -48,39 +48,41 @@ const SettlementDetail = () => {
               <tbody>
                 <tr>
                   <td>고깃집</td>
-                  <td>20,000</td>
+                  <td>20,000원</td>
                 </tr>
                 <tr>
                   <td>카페</td>
-                  <td>20,000</td>
+                  <td>20,000원</td>
                 </tr>
                 <tr>
                   <td>떡볶이집</td>
-                  <td>30,000</td>
+                  <td>30,000원</td>
                 </tr>
                 <tr>
                   <td>방탈출</td>
-                  <td>30,000</td>
+                  <td>30,000원</td>
                 </tr>
               </tbody>
             </table>
           </div>
+
+          <div className={styles.divider}></div>
 
           {/* 표 2 */}
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <tbody>
                 <tr>
-                  <td>총 액 (원)</td>
-                  <td>100,000</td>
+                  <td>총 액</td>
+                  <td>100,000원</td>
                 </tr>
                 <tr>
-                  <td>인원 수 (명)</td>
-                  <td>4</td>
+                  <td>인원 수</td>
+                  <td>4명</td>
                 </tr>
                 <tr>
-                  <td>인 당 (원)</td>
-                  <td>25,000</td>
+                  <td>인 당</td>
+                  <td>25,000원</td>
                 </tr>
               </tbody>
             </table>
