@@ -123,7 +123,7 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
                 </div>
               </div>
 
-              <div className={styles.totalNumber}>
+              <div className={styles.numberOfPeople}>
                 <span>인원 수</span>
                 <div className={styles.numberInput}>
                   <span className={styles.divide}>÷</span>
