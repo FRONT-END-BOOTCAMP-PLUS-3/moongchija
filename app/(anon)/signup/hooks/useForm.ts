@@ -15,7 +15,7 @@ const useForm = () => {
   const {
     value: nickname,
     error: nicknameError,
-    onChange: habdleChangeNickname,
+    onChange: handleChangeNickname,
   } = useInput("", validateNickname);
   const {
     value: password,
@@ -49,7 +49,7 @@ const useForm = () => {
     nickname: {
       nickname,
       nicknameError,
-      habdleChangeNickname,
+      handleChangeNickname,
     },
     password: {
       password,
