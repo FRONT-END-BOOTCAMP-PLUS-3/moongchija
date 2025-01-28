@@ -112,6 +112,10 @@
   border-radius: 4px;
   cursor: pointer;
   margin-left: 15px;
+
+  &:hover {
+    background: var(--primary-color);
+  }
 }
 
 .modalTitle {
@@ -132,16 +136,16 @@
   border-radius: 5px;
   padding: 10px;
   margin-top: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 
 .modalListWrapper {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  padding-bottom: 10px;
-  border-bottom: 1px solid var(--grey-4-color);
-  margin-bottom: 10px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--grey-6-color);
+  margin-bottom: 20px;
 }
 
 .modalListBox {
@@ -187,7 +191,6 @@
   box-sizing: border-box;
 }
 
-
 .modalResultBox {
   display: flex;
   flex-direction: column;
@@ -217,8 +220,7 @@
   }
 }
 
-
-.bank select{
+.bank select {
   border: 1px solid var(--grey-6-color);
   width: 165px;
   height: 35px;
