@@ -1,7 +1,7 @@
 import { UserEmojiRepository } from "@/domain/repositories/UserEmojiRepository";
 import { UserRepository } from "@/domain/repositories/UserRepository";
 
-export class SignUpUseCase {
+export class SignUpUsecase {
   constructor(
     private userRepository: UserRepository,
     private UserEmojiRepository: UserEmojiRepository
