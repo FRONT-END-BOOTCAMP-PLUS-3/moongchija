@@ -31,8 +31,8 @@ export interface Settlement {
 
 export interface GalleryItem {
   id: number;
-  photo: string;
-  uploader: string;
+  src: string;
+  user: string;
 }
 
 export interface detailTypes {
