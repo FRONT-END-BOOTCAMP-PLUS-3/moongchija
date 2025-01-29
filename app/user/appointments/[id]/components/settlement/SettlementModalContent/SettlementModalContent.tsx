@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
+import { Settlement } from "../../detail/types/detailTypes";
 
 type ModalContentProps = {
+  initialData: Settlement;
   handleRegister: () => void;
 };
 
@@ -37,36 +39,48 @@ const banks = [
   "SBI저축은행",
 ];
 
-const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
-  const [totalPrice, setTotalPrice] = useState(100000); // 총액
-  const [numberOfPeople, setNumberOfPeople] = useState(4); // 인원 수
+const SettlementModalContent = ({
+  initialData,
+  handleRegister,
+}: ModalContentProps) => {
+  const [totalPrice, setTotalPrice] = useState(0); // 총액
+  const [numberOfPeople, setNumberOfPeople] = useState(
+    initialData.numberOfPeople
+  ); // 인원 수
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
-  const [accountNumber, setAccountNumber] = useState("123456789123456"); // 계좌번호 상태 추가
-  const [selectedBank, setSelectedBank] = useState("국민은행"); // 은행사 상태 추가
-  const [depositor, setDepositor] = useState("김코난"); // 예금주 상태 추가
+  const [accountNumber, setAccountNumber] = useState(initialData.accountNumber); // 계좌번호 상태 추가
+  const [selectedBank, setSelectedBank] = useState(
+    banks.find(
+      (bank) => bank.replace(/\s/g, "") === initialData.bank.replace(/\s/g, "")
+    ) || banks[0]
+  ); // 은행사 상태 추가
+  const [depositor, setDepositor] = useState(initialData.depositor); // 예금주 상태 추가
 
-  // 장소:금액 input
-  const [inputSets, setInputSets] = useState([
-    { place: "고깃집", price: 10000 }, // 첫 번째 세트는 10000원으로 초기화
-  ]);
+  // 장소&금액 input
+  const [inputSets, setInputSets] = useState(
+    initialData.items.map((item) => ({ place: item.place, price: item.price }))
+  );
 
   // 인원 수가 변경될 때마다 인당 금액을 계산
   useEffect(() => {
     if (numberOfPeople > 0) {
-      setDividedPrice(totalPrice / numberOfPeople);
+      setDividedPrice(Math.floor(totalPrice / numberOfPeople)); // 소수점 제거
     }
   }, [totalPrice, numberOfPeople]);
 
   // inputSets의 price가 변경될 때마다 totalPrice를 업데이트
   useEffect(() => {
-    const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.price, 0);
+    const updatedTotalPrice = inputSets.reduce(
+      (acc, set) => acc + set.price,
+      0
+    );
     setTotalPrice(updatedTotalPrice);
   }, [inputSets]); // inputSets가 변경될 때마다 실행
 
-  // 새로운 장소:금액 세트 추가
+  // 새로운 장소&금액 세트 추가
   const addNewSet = () => {
     setInputSets((prevInputSets) => {
-      const newSet = { place: "", price: 0 }; // 항상 10000원을 추가
+      const newSet = { place: "", price: 0 }; 
       return [...prevInputSets, newSet]; // 새로운 세트를 추가
     });
   };
@@ -169,7 +183,7 @@ const SettlementModalContent = ({ handleRegister }: ModalContentProps) => {
               <span>은행사</span>
               <select
                 value={selectedBank} // 선택된 은행 상태 값 사용
-                onChange={(e) => setSelectedBank(e.target.value)} // 선택된 값 업데이트
+                onChange={(e) => setSelectedBank(e.target.value)} 
               >
                 {banks.map((bank, index) => (
                   <option key={index} value={bank}>
