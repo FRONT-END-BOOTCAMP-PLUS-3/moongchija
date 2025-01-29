@@ -1,16 +1,21 @@
 "use client";
 
-import { useState } from "react";
+import { FC, useState } from "react";
 import Button from "@/components/button/Button";
 import styles from "./SettlementDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import SettlementModalContent from "../SettlementModalContent/SettlementModalContent";
+import { Settlement } from "../../detail/types/detailTypes";
 
-const SettlementDetail = () => {
+interface SettlementDetailProps {
+  settlementData: Settlement;
+}
+
+const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText("1122452-1234570").then(() => {
+    navigator.clipboard.writeText(settlementData.accountNumber).then(() => {
       alert("복사되었습니다");
     });
   };
@@ -28,6 +33,13 @@ const SettlementDetail = () => {
     closeModal();
   };
 
+  // 총액 계산
+  const totalAmount = settlementData.items.reduce(
+    (sum, item) => sum + item.price,
+    0
+  );
+  const perPersonAmount = Math.floor(totalAmount / settlementData.numberOfPeople);
+
   return (
     <div className={styles.container}>
       <div className={styles.box}>
@@ -36,7 +48,7 @@ const SettlementDetail = () => {
         </div>
 
         <div className={styles.settlementDetails}>
-          {/* 표 1 */}
+          {/* 표 1: 결제 항목 */}
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <thead>
@@ -46,43 +58,33 @@ const SettlementDetail = () => {
                 </tr>
               </thead>
               <tbody>
-                <tr>
-                  <td>고깃집</td>
-                  <td>20,000원</td>
-                </tr>
-                <tr>
-                  <td>카페</td>
-                  <td>20,000원</td>
-                </tr>
-                <tr>
-                  <td>떡볶이집</td>
-                  <td>30,000원</td>
-                </tr>
-                <tr>
-                  <td>방탈출</td>
-                  <td>30,000원</td>
-                </tr>
+                {settlementData.items.map((item) => (
+                  <tr key={item.id}>
+                    <td>{item.place}</td>
+                    <td>{item.price.toLocaleString()}원</td>
+                  </tr>
+                ))}
               </tbody>
             </table>
           </div>
 
           <div className={styles.divider}></div>
 
-          {/* 표 2 */}
+          {/* 표 2: 정산 정보 */}
           <div className={styles.tableWrapper}>
             <table className={styles.table}>
               <tbody>
                 <tr>
                   <td>총 액</td>
-                  <td>100,000원</td>
+                  <td>{totalAmount.toLocaleString()}원</td>
                 </tr>
                 <tr>
                   <td>인원 수</td>
-                  <td>4명</td>
+                  <td>{settlementData.numberOfPeople}명</td>
                 </tr>
                 <tr>
                   <td>인 당</td>
-                  <td>25,000원</td>
+                  <td>{perPersonAmount.toLocaleString()}원</td>
                 </tr>
               </tbody>
             </table>
@@ -93,7 +95,7 @@ const SettlementDetail = () => {
             <div className={styles.row}>
               <span>계좌번호</span>
               <div>
-                123456789123456
+                {settlementData.accountNumber}
                 <button className={styles.copyButton} onClick={handleCopy}>
                   복사
                 </button>
@@ -101,11 +103,11 @@ const SettlementDetail = () => {
             </div>
             <div className={styles.row}>
               <span>은행사</span>
-              <div>국민은행</div>
+              <div>{settlementData.bank}</div>
             </div>
             <div className={styles.row}>
               <span>예금주</span>
-              <div>고뭉치</div>
+              <div>{settlementData.depositor}</div>
             </div>
           </div>
         </div>
@@ -124,7 +126,10 @@ const SettlementDetail = () => {
 
       {/* 모달 컴포넌트 */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <SettlementModalContent handleRegister={handleRegister} />
+        <SettlementModalContent
+          initialData={settlementData}
+          handleRegister={handleRegister}
+        />
       </Modal>
     </div>
   );

@@ -4,12 +4,14 @@ import { FaEdit, FaTrash } from "react-icons/fa";
 import Button from "@/components/button/Button";
 import { useState, useMemo, useRef } from "react";
 
-const NoticeBox = () => {
+interface NoticeBoxProps {
+  content: string; // content를 prop으로 받음
+}
+
+const NoticeBox = ({ content }: NoticeBoxProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 상태
   const textLimit = useRef(30); // 글자수 제한
-  const content =
-    "늦지마요늦지마요늦지마요... 다들 늦으면 1분 당 3만원입니다.늦지마요늦지마요늦지마요... 다들 늦으면 1분 당 3만원입니다.늦지마요늦지마요늦지마요... 다들 늦으면 1분 당 3만원입니다.";
 
   const truncatedContent = useMemo(() => {
     const shortContent = content.slice(0, textLimit.current);

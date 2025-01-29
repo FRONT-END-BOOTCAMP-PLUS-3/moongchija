@@ -1,11 +1,15 @@
 import styles from "./Participants.module.scss";
 import { FaSmile } from "react-icons/fa";
 
-const Participants = () => {
+interface ParticipantsProps {
+  name: string;
+}
+
+const Participants = ({ name }: ParticipantsProps) => {
   return (
     <div className={styles.participants}>
       <FaSmile />
-      <span>고뭉치</span>
+      <span>{name}</span>
     </div>
   );
 };

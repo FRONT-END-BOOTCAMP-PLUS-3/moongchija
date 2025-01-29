@@ -6,16 +6,27 @@ import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import Button from "@/components/button/Button";
 import NoticeBox from "../NoticeBox/NoticeBox";
+import { Notice } from "../../detail/types/detailTypes";
 
-const NoticeDetail = () => {
+interface NoticeDetailProps {
+  noticeData: Notice[];  
+}
+
+const NoticeDetail = ({ noticeData }: NoticeDetailProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [newNoticeContent, setNewNoticeContent] = useState(""); // 새 공지사항 내용
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
   const handleRegister = () => {
-    alert("등록되었습니다"); // 등록 버튼 클릭 시 alert 표시
-    closeModal(); // 모달 닫기
+    if (newNoticeContent.trim()) {
+      alert("등록되었습니다");
+      closeModal(); // 모달 닫기
+      setNewNoticeContent(""); // 입력 내용 초기화
+    } else {
+      alert("공지사항 내용을 입력해주세요.");
+    }
   };
 
   return (
@@ -28,9 +39,9 @@ const NoticeDetail = () => {
 
         {/* 공지사항 개별 박스 */}
         <div className={styles.wrapper}>
-          <NoticeBox />
-          <NoticeBox />
-          <NoticeBox />
+          {noticeData.map((noticeItem, index) => (
+            <NoticeBox key={index} content={noticeItem.content} />
+          ))}
         </div>
       </div>
 
@@ -41,6 +52,8 @@ const NoticeDetail = () => {
             <textarea
               className={styles.noticeContent}
               placeholder="공지사항을 작성해주세요."
+              value={newNoticeContent}
+              onChange={(e) => setNewNoticeContent(e.target.value)} // 입력값 업데이트
             />
             <div className={styles.noticeButton}>
               <Button

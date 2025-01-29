@@ -5,8 +5,26 @@ import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
+import { useEffect, useState } from "react";
+import detailDummyData from '../components/detail/dummyData/detailDummyData';
+import { useParams } from "next/navigation";
+import { detailTypes } from "../components/detail/types/detailTypes";
 
 const InformationPage = () => {
+
+  const { id } = useParams();
+  const [detail, setDetail] = useState<detailTypes | null>(null);
+
+  useEffect(() => {
+    if (id) {
+      const appointmentDetail = detailDummyData.find((data) => data.id === Number(id));
+      setDetail(appointmentDetail || null);
+    }
+  }, [id]);
+
+
+
+
   const handleCopyRoomNumber = () => {
     alert("방 번호가 복사 되었습니다.");
   };
@@ -27,12 +45,15 @@ const InformationPage = () => {
     } 
   };
 
+  if (!detail) return <div>Loading...</div>; 
+
   return (
     <div>
       <DetailTabMenu />
-      <div className={styles.container}>
-        <InformationDetail />
-        <NoticeDetail />
+      <div className={styles.container}>                                                                     
+      <InformationDetail informationData={detail.information} />
+
+      <NoticeDetail noticeData={detail.notice} />
 
         <div className={styles.buttonWrapper}>
           <div className={styles.copyButton}>
