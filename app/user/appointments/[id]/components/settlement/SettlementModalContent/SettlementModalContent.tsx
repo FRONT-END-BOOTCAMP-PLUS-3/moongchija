@@ -5,39 +5,12 @@ import { FaPlus } from "react-icons/fa6";
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
 import { Settlement } from "../../detail/types/detailTypes";
+import { banks } from "../../const/banks";
 
 type ModalContentProps = {
   initialData: Settlement;
   handleRegister: () => void;
 };
-
-const banks = [
-  "NH농협",
-  "카카오뱅크",
-  "KB국민",
-  "토스뱅크",
-  "신한",
-  "우리",
-  "IBK기업",
-  "하나",
-  "새마을",
-  "부산",
-  "IM뱅크(대구)",
-  "케이뱅크",
-  "신협",
-  "우체국",
-  "SC제일",
-  "경남",
-  "광주",
-  "수협",
-  "전북",
-  "저축은행",
-  "제주",
-  "씨티",
-  "KDB산업",
-  "산림조합",
-  "SBI저축은행",
-];
 
 const SettlementModalContent = ({
   initialData,
@@ -80,7 +53,7 @@ const SettlementModalContent = ({
   // 새로운 장소&금액 세트 추가
   const addNewSet = () => {
     setInputSets((prevInputSets) => {
-      const newSet = { place: "", price: 0 }; 
+      const newSet = { place: "", price: 0 };
       return [...prevInputSets, newSet]; // 새로운 세트를 추가
     });
   };
@@ -183,7 +156,7 @@ const SettlementModalContent = ({
               <span>은행사</span>
               <select
                 value={selectedBank} // 선택된 은행 상태 값 사용
-                onChange={(e) => setSelectedBank(e.target.value)} 
+                onChange={(e) => setSelectedBank(e.target.value)}
               >
                 {banks.map((bank, index) => (
                   <option key={index} value={bank}>
