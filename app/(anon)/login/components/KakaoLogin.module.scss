@@ -1,0 +1,27 @@
+.kakaoLoginContainer {
+  display: flex;
+  justify-content: center;
+  margin-top: 20px;
+
+  .kakaoLoginBtn {
+    width: 400px;
+    padding: 15px;
+    background-color: #ffeb3b;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+
+    position: relative;
+
+    font-size: var(--font-size-md);
+
+    .kakaoLogo {
+      position: absolute;
+      left: 0px;
+    }
+  }
+}
