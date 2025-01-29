@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import styles from "./appointments.module.scss";
+import styles from "./Appointments.module.scss";
 import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
@@ -26,7 +26,7 @@ const AppointmentsPage: React.FC = () => {
 
   const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRoomNumber(e.target.value);
-    console.log(roomNumber)
+    console.log(roomNumber);
   };
 
   // 필터링된 데이터
@@ -135,14 +135,14 @@ const AppointmentsPage: React.FC = () => {
       {/* 모달 */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className={styles.roomEntryBox}>
-          <InputField 
+          <InputField
             label="방 번호"
             value={roomNumber}
             onChange={handleRoomNumberChange}
             type="text"
           />
           <Button size="sm" text="참여" />
-        </ div>
+        </div>
       </Modal>
     </>
   );
