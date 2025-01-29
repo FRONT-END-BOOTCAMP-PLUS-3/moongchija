@@ -4,8 +4,12 @@ import styles from "./voteResult.module.scss";
 import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 const VoteResultPage = () => {
+  const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
+  const params = useParams(); // URL에서 ID 추출
+  const id = params.id as string; // ID값 추출
   const [page, setPage] = useState(1);
 
   const [resultData, setResultData] = useState({
@@ -102,7 +106,11 @@ const VoteResultPage = () => {
         <PlaceResult placeProps={resultData.place} />
       )}
       <div className={styles.wrapButton}>
-        <Button text="약속 확정하러 가기" size="lg" />
+        <Button
+          text="약속 확정하러 가기"
+          size="lg"
+          onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+        />
       </div>
     </div>
   );

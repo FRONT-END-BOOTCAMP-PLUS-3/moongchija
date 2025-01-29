@@ -3,7 +3,7 @@
 import { useState, useRef, use } from "react";
 import styles from "./voteTime.module.scss";
 import Button from "@/components/button/Button";
-import { usePathname, useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 interface TimeRange {
   start_time: string; // "2025-01-02 12:00:00"
@@ -12,9 +12,8 @@ interface TimeRange {
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
-
-  const pathname = usePathname();
-  const id = pathname.split("/").slice(-2, -1)[0]; // 경로에서 ID 추출
+  const params = useParams(); // URL에서 ID 추출
+  const id = params.id as string; // ID값 추출
 
   const timeRange: TimeRange = {
     start_time: "2025-01-01 00:00:00",
