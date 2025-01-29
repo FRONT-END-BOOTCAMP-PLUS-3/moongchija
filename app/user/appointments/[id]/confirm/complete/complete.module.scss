@@ -1,0 +1,57 @@
+.completeContainer {
+  display: flex;
+  height: 100%;
+  background-color: #fff;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 20px;
+
+  .logo {
+    margin-top: 100px;
+  }
+
+  .title {
+    font-size: var(--font-size-xl);
+    font-weight: bold;
+    color: var(--primary-color);
+    margin-top: 70px;
+  }
+
+  .description {
+    font-size: var(--font-size-md);
+    color: var(--grey-5-color);
+    margin-top: 50px;
+    line-height: 1.4;
+  }
+
+  .copyButton {
+    margin-top: 70px;
+    border: none;
+    border-bottom: 1px solid var(--grey-5-color);
+    background: #fff;
+    color: var(--grey-5-color);
+    font-size: var(--font-size-md);
+    font-weight: bold;
+    cursor: pointer;
+    transition: background 0.3s;
+
+    &:hover {
+      color: var(--primary-color);
+      border-bottom: 1px solid var(--primary-color);
+    }
+  }
+
+  .copyAlert {
+    margin-top: 10px;
+    color: green;
+    font-size: 14px;
+  }
+  .wrapButton {
+    position: fixed; /* 화면에 고정 */
+    bottom: 50px; /* 화면 하단에서 20px 위로 위치 */
+    left: 50%; /* 화면 중앙에 위치 */
+    transform: translateX(-50%); /* 정확한 중앙 정렬 */
+    z-index: 100; /* 다른 요소들 위에 표시되도록 */
+  }
+}
