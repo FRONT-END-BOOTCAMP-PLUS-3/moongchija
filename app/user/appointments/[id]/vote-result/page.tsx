@@ -5,24 +5,6 @@ import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
 import { useState } from "react";
 
-interface Place {
-  member: string[];
-  result: {
-    place: string;
-    place_url: string;
-    user: string[];
-  }[];
-}
-interface Time {
-  start_time: string;
-  end_time: string;
-  member: string[];
-  result: {
-    date: string;
-    user: string[];
-  }[];
-}
-
 const VoteResultPage = () => {
   const [page, setPage] = useState(1);
 
