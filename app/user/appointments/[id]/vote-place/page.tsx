@@ -2,7 +2,7 @@
 
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
-import { usePathname } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useState } from "react";
 import { FaMapMarkerAlt } from "react-icons/fa";
 
@@ -12,8 +12,9 @@ interface Place {
 }
 
 const VotePlacePage: React.FC = () => {
-  const pathname = usePathname();
-  const id = pathname.split("/").slice(-2, -1)[0]; // 경로에서 ID 추출
+  const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
+  const params = useParams(); // URL에서 ID 추출
+  const id = params.id as string; // ID값 추출
 
   const places: Place[] = [
     { place: "홍대입구", place_url: "https://naver.me/xEABuNEP" },
@@ -29,7 +30,8 @@ const VotePlacePage: React.FC = () => {
   };
   const handleSubmit = () => {
     if (selectedPlace) {
-      alert(`${selectedPlace}${id}`);
+      alert(`투표가 완료 되었습니다.`);
+      router.push(`/user/appointments/${id}/vote-result`);
     } else {
       alert("장소를 선택해주세요.");
     }
