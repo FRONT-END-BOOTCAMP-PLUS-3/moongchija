@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import CircleButton from "@/components/circleButton/CircleButton";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import styles from "./gallery.module.scss";
@@ -9,8 +9,13 @@ import Button from "@/components/button/Button";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
 import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
+import detailDummyData from "../components/detail/dummyData/detailDummyData";
+import { useParams } from "next/navigation";
+import { detailTypes } from "../components/detail/types/detailTypes";
 
 const GalleryPage = () => {
+  const { id } = useParams(); 
+  const [detail, setDetail] = useState<detailTypes | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
@@ -42,11 +47,20 @@ const GalleryPage = () => {
     }
   };
 
+  useEffect(() => {
+    if (id) {
+      const appointmentDetail = detailDummyData.find((data) => data.id === Number(id));
+      setDetail(appointmentDetail || null);
+    }
+  }, [id]);
+
+  if (!detail) return <div>Loading...</div>;
+
   return (
     <div>
       <DetailTabMenu />
       <div className={styles.container}>
-        <GalleryDetail />
+        <GalleryDetail galleryData={detail.gallery}  />
       </div>
 
       <div className={styles.circleButtonWrapper}>

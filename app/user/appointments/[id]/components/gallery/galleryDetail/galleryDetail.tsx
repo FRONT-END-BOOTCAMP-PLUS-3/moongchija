@@ -3,10 +3,15 @@
 import Image from "next/image";
 import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
-import { useState } from "react";
+import { FC, useState } from "react";
 import Button from "@/components/button/Button";
+import { GalleryItem } from "../../detail/types/detailTypes";
 
-const GalleryDetail = () => {
+interface GalleryDetailProps {
+  galleryData: GalleryItem[];
+}
+
+const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
   const photos = [
     { id: 1, src: "/images/고뭉치.png", username: "User1" },
     { id: 2, src: "/images/고뭉치.png", username: "User2" },
@@ -30,12 +35,12 @@ const GalleryDetail = () => {
   return (
     <div>
       <div className={styles.galleryContainer}>
-        {photos.map((photo) => (
+        {galleryData.map((photo) => (
           <div key={photo.id} className={styles.photoCard}>
             <div className={styles.photos}>
               <Image
                 src={photo.src}
-                alt={`Photo by ${photo.username}`}
+                alt={`Photo by ${photo.user}`}
                 width={190}
                 height={190}
                 className={styles.image}
@@ -44,7 +49,7 @@ const GalleryDetail = () => {
             </div>
             <div className={styles.userInfo}>
               <div className={styles.userIcon}></div>
-              <span className={styles.username}>{photo.username}</span>
+              <span className={styles.username}>{photo.user}</span>
             </div>
           </div>
         ))}
