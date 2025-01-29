@@ -7,10 +7,12 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import Button from "@/components/button/Button";
-import { useRouter } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 
 const ConfirmPage = () => {
   const router = useRouter();
+  const params = useParams(); // URL에서 ID 추출
+  const appointmentId = params.id as string; // ID값 추출
 
   const [confirmTime, setConfirmTime] = useState("오전 9시");
 
@@ -71,10 +73,10 @@ const ConfirmPage = () => {
     setModalOpen(true);
   };
 
-  // "확인" 버튼 클릭 시 `/user/appointments`로 이동
+  // "확인" 버튼 클릭 시 `/user/appointments/[id]/confirm/complete`로 이동
   const handleConfirm = () => {
     setModalOpen(false);
-    router.push("/user/appointments");
+    router.push(`/user/appointments/${appointmentId}/confirm/complete`);
   };
   return (
     <div className={styles.container}>
