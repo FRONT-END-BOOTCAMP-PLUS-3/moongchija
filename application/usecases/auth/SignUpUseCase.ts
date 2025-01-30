@@ -13,12 +13,16 @@ export class SignUpUsecase {
       throw new Error("이미 사용중인 이메일 입니다.");
     }
 
+    const uniqueNickname = await this.userRepository.generateUniqueNickname(
+      nickname
+    );
+
     const emoji = await this.UserEmojiRepository.createUserRandomEmoji();
 
     const userWithToken = await this.userRepository.createUser(
       user_email,
       password,
-      nickname,
+      uniqueNickname,
       emoji
     );
 
