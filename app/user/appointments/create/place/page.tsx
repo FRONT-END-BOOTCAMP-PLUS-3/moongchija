@@ -17,7 +17,8 @@ const CreatePlacePage = () => {
   }, [places]);
 
   const handleNextButton = () => {
-    console.log(places);
+    // console.log(places);
+    window.location.href = "/user/appointments/create/complete"
   };
 
   const handleAddPlace = () => {
