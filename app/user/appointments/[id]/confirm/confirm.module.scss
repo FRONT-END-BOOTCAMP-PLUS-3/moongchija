@@ -1,13 +1,13 @@
 .container {
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
-  padding: 20px 40px;
-  height: 100%;
   background: #fff;
   .mainBox {
     width: 100%;
+    padding: 30px 40px 20px;
 
     p {
       font-size: var(--font-size-md);
@@ -17,7 +17,7 @@
     }
 
     .title {
-      margin: 10px 0 30px;
+      margin-bottom: 30px;
       font-weight: bold;
     }
     .datePickerWrapper {
@@ -25,6 +25,7 @@
 
       & > div {
         width: 100%;
+        height: 30vh;
         margin-top: 20px;
         div {
           width: auto;
@@ -38,7 +39,7 @@
       }
     }
     .timeSelectWrapper {
-      margin-top: 40px;
+      margin-top: 5vh;
 
       .timePicker {
         margin-top: 20px;
@@ -68,7 +69,7 @@
       }
     }
     .placeSelectWrapper {
-      margin-top: 40px;
+      margin-top: 5vh;
       .placePicker {
         margin-top: 20px;
         select {
@@ -91,13 +92,9 @@
         }
       }
     }
-    .wrapButton {
-      position: fixed; /* 화면에 고정 */
-      bottom: 50px; /* 화면 하단에서 20px 위로 위치 */
-      left: 50%; /* 화면 중앙에 위치 */
-      transform: translateX(-50%); /* 정확한 중앙 정렬 */
-      z-index: 100; /* 다른 요소들 위에 표시되도록 */
-    }
+  }
+  .wrapButton {
+    margin-top: 5vh;
   }
   .modalOverlay {
     position: fixed;

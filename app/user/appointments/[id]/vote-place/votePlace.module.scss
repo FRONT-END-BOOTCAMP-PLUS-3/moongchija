@@ -31,17 +31,17 @@
       transition: background 0.2s ease;
 
       &:hover {
-        border-color: var(--pupple-color);
+        border-color: var(--purple-color);
         background: #ecebff;
       }
 
       &.selected {
-        border-color: var(--pupple-color);
+        border-color: var(--purple-color);
         background: #ecebff;
 
         .radioButton {
-          border-color: var(--pupple-color);
-          background: var(--pupple-color);
+          border-color: var(--purple-color);
+          background: var(--purple-color);
         }
       }
 
@@ -59,7 +59,7 @@
           .markerIcon {
             margin-right: 5px;
             font-size: var(--font-size-sm);
-            color: var(--pupple-color);
+            color: var(--purple-color);
           }
         }
         .radioButton {
@@ -74,7 +74,7 @@
 
           &.checked {
             background: #fff;
-            border-color: var(--pupple-color);
+            border-color: var(--purple-color);
           }
           .innerButton {
             width: 10px;
@@ -84,8 +84,8 @@
             transition: background 0.2s ease, border-color 0.2s ease;
 
             &.checked {
-              background: var(--pupple-color);
-              border-color: var(--pupple-color);
+              background: var(--purple-color);
+              border-color: var(--purple-color);
             }
           }
         }
@@ -100,7 +100,7 @@
         text-decoration: underline;
         white-space: nowrap;
         &:hover {
-          color: var(--pupple-color);
+          color: var(--purple-color);
         }
       }
     }
