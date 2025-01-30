@@ -1,4 +1,5 @@
 .schedule {
+  height: 62vh;
   margin-left: 3%;
   .row {
     display: flex;
@@ -92,7 +93,8 @@
       font-size: var(--font-size-md);
       position: sticky;
       top: 0;
-      background: #fff;
+      // background: #fff;
+      background: var(--grey-2-color);
       display: block;
     }
     .possible {
