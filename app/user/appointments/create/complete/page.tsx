@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/button/Button";
 
-const CompletePage = () => {
+const CreateCompletePage = () => {
   const [copyActive, setCopyActive] = useState<boolean>(false);
   const router = useRouter();
   const appointmentId = 1; // TODO: 상태 관리로 동적 ID 가져오기
@@ -85,4 +85,4 @@ const CompletePage = () => {
   );
 };
 
-export default CompletePage;
+export default CreateCompletePage;
