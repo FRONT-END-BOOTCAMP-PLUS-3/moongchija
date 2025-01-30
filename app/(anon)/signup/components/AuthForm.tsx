@@ -67,6 +67,10 @@ const AuthForm = () => {
         throw new Error(data.error || "회원가입에 실패하였습니다.");
       }
 
+      if (data.access_token) {
+        localStorage.setItem("access_token", data.access_token);
+      }
+
       router.push("/user/appointments");
     } catch (error) {
       setSubmitError(

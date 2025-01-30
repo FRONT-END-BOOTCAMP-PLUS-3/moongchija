@@ -1,4 +1,5 @@
-import { SignUpUsecase } from "@/application/usecases/auth/SignUpUsecase";
+import { SignUpUsecase } from "@/application/usecases/auth/SignUpUseCase";
+
 import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
@@ -14,13 +15,22 @@ export const POST = async (request: NextRequest) => {
       userEmojiRepository
     );
 
-    const user = await signupUsecase.execute(user_email, password, nickname);
+    const userWithToken = await signupUsecase.execute(
+      user_email,
+      password,
+      nickname
+    );
 
-    return NextResponse.json(user);
+    return NextResponse.json(userWithToken);
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error in signup:", error.message);
-      return NextResponse.json({ error: error.message }, { status: 400 });
+      const errorMessage =
+        error.message === "User already registered"
+          ? "이미 가입된 사용자입니다."
+          : error.message;
+
+      return NextResponse.json({ error: errorMessage }, { status: 400 });
     } else {
       console.error("Unknown error:", error);
       return NextResponse.json(
