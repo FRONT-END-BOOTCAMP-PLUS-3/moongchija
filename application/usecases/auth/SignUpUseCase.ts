@@ -15,11 +15,13 @@ export class SignUpUsecase {
 
     const emoji = await this.UserEmojiRepository.createUserRandomEmoji();
 
-    return this.userRepository.createUser(
+    const userWithToken = await this.userRepository.createUser(
       user_email,
       password,
       nickname,
       emoji
     );
+
+    return userWithToken;
   }
 }
