@@ -89,7 +89,7 @@ const PlaceResult = ({ placeProps }: { placeProps: PlaceResult }) => {
                     rel="noopener noreferrer"
                     className={styles.placeDetail}
                   >
-                    상세보기
+                    위치보기
                   </a>
                 )}
               </div>

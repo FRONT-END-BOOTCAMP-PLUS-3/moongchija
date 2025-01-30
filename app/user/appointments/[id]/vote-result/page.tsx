@@ -5,6 +5,7 @@ import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
 import { useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import ArrowHeader from "@/components/header/ArrowHeader";
 
 const VoteResultPage = () => {
   const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
@@ -15,7 +16,7 @@ const VoteResultPage = () => {
   const [resultData, setResultData] = useState({
     time: {
       start_time: "2025-01-01 12:00:00",
-      end_time: "2025-01-07 22:00:00",
+      end_time: "2025-01-06 22:00:00",
       member: ["고뭉치", "김뭉치", "심뭉치", "이뭉치", "황뭉치", "빈뭉치"],
       result: [
         { date: "2025-01-01 12:00:00", user: [] },
@@ -75,36 +76,39 @@ const VoteResultPage = () => {
   });
   return (
     <div className={styles.voteResultContainer}>
-      <p className={styles.subtitle}>
-        현재까지{" "}
-        <span style={{ color: "red" }}>{resultData.time.member.length}</span>{" "}
-        명의 {page === 1 ? "시간" : "장소"} 조율 결과예요
-      </p>
-      <div className={styles.wrapTapButton}>
-        <div className={styles.tapButton}>
-          <button
-            className={`${styles.timeButton} ${
-              page === 1 ? styles.selected : ""
-            }`}
-            onClick={() => setPage(1)}
-          >
-            시간
-          </button>
-          <button
-            className={`${styles.placeButton} ${
-              page === 2 ? styles.selected : ""
-            }`}
-            onClick={() => setPage(2)}
-          >
-            장소
-          </button>
+      <ArrowHeader />
+      <div className={styles.mainBox}>
+        <p className={styles.subtitle}>
+          현재까지{" "}
+          <span style={{ color: "red" }}>{resultData.time.member.length}</span>{" "}
+          명의 {page === 1 ? "시간" : "장소"} 조율 결과예요
+        </p>
+        <div className={styles.wrapTapButton}>
+          <div className={styles.tapButton}>
+            <button
+              className={`${styles.timeButton} ${
+                page === 1 ? styles.selected : ""
+              }`}
+              onClick={() => setPage(1)}
+            >
+              시간
+            </button>
+            <button
+              className={`${styles.placeButton} ${
+                page === 2 ? styles.selected : ""
+              }`}
+              onClick={() => setPage(2)}
+            >
+              장소
+            </button>
+          </div>
         </div>
+        {page === 1 ? (
+          <TimeResult timeProps={resultData.time} />
+        ) : (
+          <PlaceResult placeProps={resultData.place} />
+        )}
       </div>
-      {page === 1 ? (
-        <TimeResult timeProps={resultData.time} />
-      ) : (
-        <PlaceResult placeProps={resultData.place} />
-      )}
       <div className={styles.wrapButton}>
         <Button
           text="약속 확정하러 가기"
