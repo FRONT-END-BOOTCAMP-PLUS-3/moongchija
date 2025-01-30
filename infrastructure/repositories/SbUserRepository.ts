@@ -70,4 +70,19 @@ export class SbUserRepository implements UserRepository {
 
     return !!user;
   }
+
+  async generateUniqueNickname(baseNickname: string): Promise<string> {
+    let newNickname = baseNickname;
+    let isUnique = await this.findUserByNickname(newNickname);
+
+    let counter = 1;
+
+    while (isUnique) {
+      newNickname = `${baseNickname}${counter}`;
+      isUnique = await this.findUserByNickname(newNickname);
+      counter++;
+    }
+
+    return newNickname;
+  }
 }
