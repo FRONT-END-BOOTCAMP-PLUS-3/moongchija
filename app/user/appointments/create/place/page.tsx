@@ -5,6 +5,8 @@ import { useState, useEffect } from "react";
 import CircleIndicator from "../components/CircleIndicator";
 import styles from "./place.module.scss";
 
+const MAX_PLACES = 5;
+
 const CreatePlacePage = () => {
   const [places, setPlaces] = useState([{ name: "", url: "" }]);
   const [isButtonActive, setIsButtonActive] = useState(false);
@@ -19,7 +21,9 @@ const CreatePlacePage = () => {
   };
 
   const handleAddPlace = () => {
-    setPlaces([...places, { name: "", url: "" }]);
+    if (places.length < MAX_PLACES) {
+      setPlaces([...places, { name: "", url: "" }]);
+    }
   };
 
   const handleRemovePlace = () => {
