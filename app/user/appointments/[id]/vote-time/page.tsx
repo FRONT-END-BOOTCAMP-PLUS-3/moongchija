@@ -4,6 +4,7 @@ import { useState, useRef, use } from "react";
 import styles from "./voteTime.module.scss";
 import Button from "@/components/button/Button";
 import { useParams, useRouter } from "next/navigation";
+import ArrowHeader from "@/components/header/ArrowHeader";
 
 interface TimeRange {
   start_time: string; // "2025-01-02 12:00:00"
@@ -17,7 +18,7 @@ const VoteTimePage: React.FC = () => {
 
   const timeRange: TimeRange = {
     start_time: "2025-01-01 00:00:00",
-    end_time: "2025-01-07 23:00:00",
+    end_time: "2025-01-06 23:00:00",
   };
 
   // 날짜 및 시간 목록 생성 함수
@@ -122,56 +123,59 @@ const VoteTimePage: React.FC = () => {
 
   return (
     <div className={styles.timeVoteContainer} onMouseUp={handleMouseUp}>
-      <div>
-        <p className={styles.subtitle}>참여 가능한 시간을 선택해주세요.</p>
-        <p className={styles.description}>
-          클릭 혹은 드래그를 통해 가능한 영역을 선택해주세요.
-        </p>
-      </div>
-
-      <div className={styles.schedule}>
-        <div className={styles.row}>
-          <div className={styles.timeLabel}></div>
-          {dateList.map((date, index) => (
-            <div key={index} className={styles.weekDay}>
-              {date.split("-")[3]} {/* "01-02" 형식 */}
-            </div>
-          ))}
-        </div>
-        <div className={styles.row}>
-          <div className={styles.timeLabel}>시간</div>
-          {dateList.map((date, index) => (
-            <div key={index} className={styles.day}>
-              {date.split("-")[2]} {/* "01-02" 형식 */}
-            </div>
-          ))}
+      <ArrowHeader />
+      <div className={styles.mainBox}>
+        <div>
+          <p className={styles.subtitle}>참여 가능한 시간을 선택해주세요.</p>
+          <p className={styles.description}>
+            클릭 혹은 드래그를 통해 가능한 영역을 선택해주세요.
+          </p>
         </div>
 
-        <div className={styles.timeGrid}>
-          <div className={styles.timeLabels}>
-            {timeList.map((hour) => (
-              <div key={hour} className={styles.time}>
-                {hour}
+        <div className={styles.schedule}>
+          <div className={styles.row}>
+            <div className={styles.timeLabel}></div>
+            {dateList.map((date, index) => (
+              <div key={index} className={styles.weekDay}>
+                {date.split("-")[3]} {/* "01-02" 형식 */}
+              </div>
+            ))}
+          </div>
+          <div className={styles.row}>
+            <div className={styles.timeLabel}>시간</div>
+            {dateList.map((date, index) => (
+              <div key={index} className={styles.day}>
+                {date.split("-")[2]} {/* "01-02" 형식 */}
               </div>
             ))}
           </div>
 
-          <div
-            className={styles.grid}
-            style={{ gridTemplateColumns: `repeat(${dateList.length}, 1fr)` }} // ✅ 날짜 개수만큼 컬럼 설정
-          >
-            {timeList.map((_, rowIndex) =>
-              dateList.map((_, colIndex) => (
-                <div
-                  key={`${rowIndex}-${colIndex}`}
-                  className={`${styles.cell} ${
-                    selectedTimes[rowIndex][colIndex] ? styles.selected : ""
-                  }`}
-                  onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
-                  onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
-                ></div>
-              ))
-            )}
+          <div className={styles.timeGrid}>
+            <div className={styles.timeLabels}>
+              {timeList.map((hour) => (
+                <div key={hour} className={styles.time}>
+                  {hour}
+                </div>
+              ))}
+            </div>
+
+            <div
+              className={styles.grid}
+              style={{ gridTemplateColumns: `repeat(${dateList.length}, 1fr)` }} // ✅ 날짜 개수만큼 컬럼 설정
+            >
+              {timeList.map((_, rowIndex) =>
+                dateList.map((_, colIndex) => (
+                  <div
+                    key={`${rowIndex}-${colIndex}`}
+                    className={`${styles.cell} ${
+                      selectedTimes[rowIndex][colIndex] ? styles.selected : ""
+                    }`}
+                    onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
+                    onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                  ></div>
+                ))
+              )}
+            </div>
           </div>
         </div>
       </div>

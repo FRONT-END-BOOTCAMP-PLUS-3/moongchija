@@ -1,5 +1,6 @@
 "use client";
 
+import ArrowHeader from "@/components/header/ArrowHeader";
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
 import { useParams, useRouter } from "next/navigation";
@@ -38,47 +39,49 @@ const VotePlacePage: React.FC = () => {
   };
   return (
     <div className={styles.placeVoteContainer}>
-      <p className={styles.subtitle}>원하는 약속 장소를 선택해주세요.</p>
+      <ArrowHeader />
+      <div className={styles.mainBox}>
+        <p className={styles.subtitle}>원하는 약속 장소를 선택해주세요.</p>
 
-      <div className={styles.placeList}>
-        {places.map((item, index) => (
-          <div
-            key={index}
-            className={`${styles.placeItem} ${
-              selectedPlace === item.place ? styles.selected : ""
-            }`}
-            onClick={() => handleSelect(item.place)}
-          >
-            <div className={styles.itemTop}>
-              <div className={styles.placeName}>
-                <FaMapMarkerAlt className={styles.markerIcon} />
-                {item.place}
-              </div>
-              <div
-                className={`${styles.radioButton} ${
-                  selectedPlace === item.place ? styles.checked : ""
-                }`}
-              >
+        <div className={styles.placeList}>
+          {places.map((item, index) => (
+            <div
+              key={index}
+              className={`${styles.placeItem} ${
+                selectedPlace === item.place ? styles.selected : ""
+              }`}
+              onClick={() => handleSelect(item.place)}
+            >
+              <div className={styles.itemTop}>
+                <div className={styles.placeName}>
+                  <FaMapMarkerAlt className={styles.markerIcon} />
+                  {item.place}
+                </div>
                 <div
-                  className={`${styles.innerButton} ${
+                  className={`${styles.radioButton} ${
                     selectedPlace === item.place ? styles.checked : ""
                   }`}
-                ></div>
+                >
+                  <div
+                    className={`${styles.innerButton} ${
+                      selectedPlace === item.place ? styles.checked : ""
+                    }`}
+                  ></div>
+                </div>
               </div>
+              <a
+                href={item.place_url}
+                target="_blank"
+                className={styles.placeLink}
+              >
+                자세히 보기
+              </a>
             </div>
-            <a
-              href={item.place_url}
-              target="_blank"
-              className={styles.placeLink}
-            >
-              자세히 보기
-            </a>
-          </div>
-        ))}
-      </div>
-
-      <div className={styles.wrapButton}>
-        <Button text="투표 완료" size="lg" onClick={handleSubmit} />
+          ))}
+        </div>
+        <div className={styles.wrapButton}>
+          <Button text="투표 완료" size="lg" onClick={handleSubmit} />
+        </div>
       </div>
     </div>
   );
