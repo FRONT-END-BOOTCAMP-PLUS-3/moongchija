@@ -9,4 +9,5 @@ export interface UserRepository {
   ): Promise<Omit<User, "password">>;
   findUserByEmail(user_email: string): Promise<Omit<User, "password"> | null>;
   findUserByNickname(nickname: string): Promise<boolean>;
+  generateUniqueNickname(baseNickname: string): Promise<string>;
 }
