@@ -8,7 +8,7 @@ export class SbUserRepository implements UserRepository {
     password: string,
     nickname: string,
     emoji: string
-  ): Promise<Omit<User, "password">> {
+  ): Promise<Omit<User, "password"> & { access_token: string }> {
     const supabase = await createClient();
 
     const { data: authData, error: authError } = await supabase.auth.signUp({
@@ -34,6 +34,7 @@ export class SbUserRepository implements UserRepository {
       nickname: nickname,
       emoji: emoji,
       created_at: new Date(),
+      access_token: authData.session!.access_token,
     };
   }
 
