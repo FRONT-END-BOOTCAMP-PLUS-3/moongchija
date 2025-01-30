@@ -5,21 +5,33 @@ import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/button/Button";
+import ArrowHeader from "@/components/header/ArrowHeader";
 
 const CompletePage = () => {
-  const params = useParams(); // URL에서 ID 추출
+  const params = useParams();
   const router = useRouter();
-  const appointmentId = params.id as string; // ID값 추출
+  const appointmentId = params.id as string;
 
-  const [isCopied, setIsCopied] = useState(false);
+  const [isCopiedLink, setIsCopiedLink] = useState(false);
+  const [isCopiedRoomId, setIsCopiedRoomId] = useState(false);
 
-  const handleCopyRoomId = async () => {
+  const handleCopyInviteLink = async () => {
     try {
       await navigator.clipboard.writeText(
         `http://localhost:3000/user/appointments/${appointmentId}/entry`
       );
-      setIsCopied(true);
-      setTimeout(() => setIsCopied(false), 2000); // 2초 후 알림 제거
+      setIsCopiedLink(true);
+      setTimeout(() => setIsCopiedLink(false), 2000);
+    } catch (error) {
+      alert("초대링크 복사에 실패했습니다.");
+    }
+  };
+
+  const handleCopyRoomId = async () => {
+    try {
+      await navigator.clipboard.writeText(appointmentId);
+      setIsCopiedRoomId(true);
+      setTimeout(() => setIsCopiedRoomId(false), 2000);
     } catch (error) {
       alert("방번호 복사에 실패했습니다.");
     }
@@ -27,26 +39,39 @@ const CompletePage = () => {
 
   return (
     <div className={styles.completeContainer}>
-      <Image
-        src="/images/logos/main-logo.svg"
-        alt="메인 로고"
-        width={270}
-        height={270}
-        className={styles.logo}
-      />
+      <ArrowHeader />
+      <div className={styles.mainBox}>
+        <Image
+          src="/images/logos/main-logo.svg"
+          alt="메인 로고"
+          width={260}
+          height={260}
+          className={styles.logo}
+        />
 
-      <h2 className={styles.title}>약속이 확정 됐어요</h2>
-      <p className={styles.description}>
-        추가로 초대하고 싶은 멤버가 있다면 <br />
-        아래 초대링크를 공유해주세요!
-      </p>
+        <h2 className={styles.title}>약속이 확정 됐어요</h2>
+        <p className={styles.description}>
+          추가로 초대하고 싶은 멤버가 있다면 <br />
+          아래 초대링크를 공유해주세요!
+        </p>
 
-      <button onClick={handleCopyRoomId} className={styles.copyButton}>
-        초대링크 복사
-      </button>
-      {isCopied && (
-        <p className={styles.copyAlert}>✅ 초대링크가 복사되었습니다!</p>
-      )}
+        <div className={styles.copyButtonWrapper}>
+          <button onClick={handleCopyInviteLink} className={styles.copyButton}>
+            초대링크 복사
+          </button>
+          <p className={styles.copyAlert}>
+            {isCopiedLink ? "✅ 초대링크가 복사되었습니다!" : ""}
+          </p>
+
+          <button onClick={handleCopyRoomId} className={styles.copyButton}>
+            방번호 복사
+          </button>
+          <p className={styles.copyAlert}>
+            {isCopiedRoomId ? "✅ 방번호가 복사되었습니다!" : ""}
+          </p>
+        </div>
+      </div>
+
       <div className={styles.wrapButton}>
         <Button
           text="약속 페이지 가기"

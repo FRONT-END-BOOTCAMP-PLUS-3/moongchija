@@ -2,12 +2,13 @@
 
 import styles from "./confirm.module.scss";
 import { useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { DateRange } from "react-date-range";
+import { Calendar } from "react-date-range"; // ✅ Calendar 컴포넌트 사용 (단일 날짜 선택)
 import Button from "@/components/button/Button";
-import { useParams, useRouter } from "next/navigation";
+import ArrowHeader from "@/components/header/ArrowHeader";
 
 const ConfirmPage = () => {
   const router = useRouter();
@@ -15,18 +16,7 @@ const ConfirmPage = () => {
   const appointmentId = params.id as string; // ID값 추출
 
   const [confirmTime, setConfirmTime] = useState("오전 9시");
-
-  const initialStartDate = new Date();
-  const initialEndDate = new Date();
-  initialStartDate.setHours(timeTo24HourFormat(confirmTime), 0, 0, 0);
-
-  const [selectedRange, setSelectedRange] = useState([
-    {
-      startDate: initialStartDate,
-      endDate: initialEndDate,
-      key: "selection",
-    },
-  ]);
+  const [selectedDate, setSelectedDate] = useState(new Date()); // ✅ 단일 날짜 선택
 
   const placeList = [
     "홍대입구",
@@ -39,33 +29,20 @@ const ConfirmPage = () => {
 
   const [isModalOpen, setModalOpen] = useState(false); // ✅ 모달 상태 추가
 
-  const handleDateChange = (ranges: any) => {
-    const range = ranges.selection;
-    const differenceInDays =
-      (range.endDate - range.startDate) / (1000 * 60 * 60 * 24);
-    if (differenceInDays <= 7) {
-      setSelectedRange([range]);
-    } else {
-      alert("최대 7일까지 선택할 수 있습니다.");
-    }
+  const handleDateChange = (date: Date) => {
+    setSelectedDate(date); // ✅ 단일 날짜 선택
   };
 
   const handleConfirmTimeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const selectedTime = event.target.value;
-    setConfirmTime(selectedTime);
-
-    const updatedRange = { ...selectedRange[0] };
-    const startHour = timeTo24HourFormat(selectedTime);
-    updatedRange.startDate.setHours(startHour, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
-    setSelectedRange([updatedRange]);
+    setConfirmTime(event.target.value);
   };
+
   const handleConfirmPlaceChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const selectedPlace = event.target.value;
-    setConfirmPlace(selectedPlace);
+    setConfirmPlace(event.target.value);
   };
 
   // "약속 확정하기" 버튼 클릭 시 모달 열기
@@ -78,18 +55,21 @@ const ConfirmPage = () => {
     setModalOpen(false);
     router.push(`/user/appointments/${appointmentId}/confirm/complete`);
   };
+
   return (
     <div className={styles.container}>
+      <ArrowHeader />
       <section className={styles.mainBox}>
         <div className={styles.datePickerWrapper}>
           <p className={styles.title}>약속 확정하기</p>
           <p>확정 일자</p>
 
-          <DateRange
-            ranges={selectedRange}
+          {/* ✅ 하루만 선택할 수 있는 Calendar */}
+          <Calendar
+            date={selectedDate}
             onChange={handleDateChange}
-            rangeColors={["#6c63ff"]}
-            minDate={new Date()}
+            color="#6c63ff"
+            minDate={new Date()} // 오늘 이후 날짜만 선택 가능
           />
         </div>
 
@@ -119,19 +99,19 @@ const ConfirmPage = () => {
             </select>
           </div>
         </div>
-        <div className={styles.wrapButton}>
-          <Button text="약속 확정하기" size="lg" onClick={handleNextButton} />
-        </div>
       </section>
+
+      <div className={styles.wrapButton}>
+        <Button text="약속 확정하기" size="lg" onClick={handleNextButton} />
+      </div>
+
+      {/* ✅ 모달 구현 */}
       {isModalOpen && (
         <div className={styles.modalOverlay}>
           <div className={styles.modal}>
             <p className={styles.modalTitle}>약속을 확정하시겠습니까?</p>
             <div className={styles.modalContents}>
-              <p>
-                📅 일자: {selectedRange[0].startDate.toLocaleDateString()}~
-                {selectedRange[0].endDate.toLocaleDateString()}
-              </p>
+              <p>📅 일자: {selectedDate.toLocaleDateString()}</p>
               <p>⏰ 시간: {confirmTime}</p>
               <p>📍 장소: {confirmPlace}</p>
             </div>
@@ -181,16 +161,3 @@ const times = [
   "오후 10시",
   "오후 11시",
 ];
-
-// util.ts
-const timeTo24HourFormat = (time: string): number => {
-  const [period, hour] = time.split(" ");
-  let formattedHour = parseInt(hour.replace("시", ""));
-  if (period === "오후" && formattedHour !== 12) {
-    formattedHour += 12;
-  }
-  if (period === "오전" && formattedHour === 12) {
-    formattedHour = 0;
-  }
-  return formattedHour;
-};
