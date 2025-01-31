@@ -2,12 +2,8 @@
 
 import styles from "./AppointmentCard.module.scss";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
-import {
-  AppointmentInfo,
-  calculateCountdown,
-  formatDate,
-  formatTime,
-} from "../page";
+import { AppointmentInfo } from "../page";
+import { calculateCountdown, formatDate, formatTime } from "@/utils/dateUtils/dateUtils";
 
 interface AppointmentCardProps {
   appointment: AppointmentInfo;
