@@ -1,16 +1,13 @@
 "use client";
 
 import styles from "./AppointmentCard.module.scss";
-import { FaPeopleGroup } from "react-icons/fa6";
-import { IoMdPin } from "react-icons/io";
-import crown from "@/public/images/icons/crown.webp";
+import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import {
   AppointmentInfo,
   calculateCountdown,
   formatDate,
   formatTime,
 } from "../page";
-import Image from "next/image";
 
 interface AppointmentCardProps {
   appointment: AppointmentInfo;
@@ -33,22 +30,22 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
   const getCountdownClass = (countdown: string) => {
     if (countdown === "종료") return styles.end;
     if (countdown === "D-Day") return styles.dDay;
-    else return styles.count
-    return "";
+    else return styles.count;
   };
 
   return (
     <div className={styles.container}>
       <section className={styles.leftBox}>
+        {/* 제목 */}
         <div className={styles.titleWrapper}>
           {isCreator ? (
-            <Image src={crown} alt="logo" />
+            <FaCrown size={22} color={"gold"} />
           ) : (
-            <FaPeopleGroup size={25} />
+            <FaUserFriends size={22} />
           )}
-
           <span>{title}</span>
         </div>
+        {/* 일자 */}
         <div className={styles.dateWrapper}>
           <p>
             {startDate
@@ -59,6 +56,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
           </p>
           <p>{endDate && `${formatDate(endDate)}`}</p>
         </div>
+        {/* 참여 인원 */}
         <div className={styles.participantWrapper}>
           <span className={styles.participants}>{participants.join("")}</span>
           {extraParticipants > 0 && (
@@ -69,13 +67,15 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         </div>
       </section>
       <section className={styles.rightBox}>
-      <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
+        {/* D-Day */}
+        <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
           {countdown}
         </div>
+        {/* 장소 */}
         <div className={styles.locationWrapper}>
           {confirmPlace && (
             <>
-              <IoMdPin size={30} color="red" />
+              <FaMapMarkerAlt color={"rgb(90, 90, 244)"} />
               <span>{confirmPlace}</span>
             </>
           )}

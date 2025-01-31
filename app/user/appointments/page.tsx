@@ -10,6 +10,7 @@ import Link from "next/link";
 import Modal from "@/components/modal/Modal";
 import InputField from "@/components/input-filed/InputFiled";
 import Button from "@/components/button/Button";
+import IconHeader from "@/components/header/IconHeader";
 
 const AppointmentsPage: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];
@@ -28,11 +29,6 @@ const AppointmentsPage: React.FC = () => {
     setRoomNumber(e.target.value);
     console.log(roomNumber);
   };
-
-  // 필터링된 데이터
-  const inProgressAppointments = appointments.filter(
-    (appointment) => appointment.startDate && appointment.endDate
-  );
 
   const confirmedAppointments = appointments.filter(
     (appointment) => appointment.confirmDate
@@ -54,7 +50,12 @@ const AppointmentsPage: React.FC = () => {
     setSelectedOption(e.target.value);
   };
 
-  // 필터링된 데이터
+  // 투표중인 약속 데이터
+  const inProgressAppointments = appointments.filter(
+    (appointment) => appointment.startDate && appointment.endDate
+  );
+
+  // 확정된 약속 데이터
   const filteredAppointments = (appointments: AppointmentInfo[]) => {
     return appointments
       .filter((appointment) => {
@@ -84,6 +85,7 @@ const AppointmentsPage: React.FC = () => {
 
   return (
     <>
+      <IconHeader />
       <TabMenu tabs={tabs} onTabChange={handleTabChange} />
       <main className={styles.container}>
         <section className={styles.searchBox}>
@@ -127,7 +129,9 @@ const AppointmentsPage: React.FC = () => {
           className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
-          <Link href={"/user/appointments/create/information"}>약속 만들기</Link>
+          <Link href={"/user/appointments/create/information"}>
+            약속 만들기
+          </Link>
           <button onClick={openModal}>방번호로 참여</button>
         </section>
       </main>
