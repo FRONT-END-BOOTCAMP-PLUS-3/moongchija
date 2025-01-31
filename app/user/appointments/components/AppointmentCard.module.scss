@@ -40,13 +40,24 @@
       display: flex;
       align-items: center;
       flex: 1;
+      gap: 10px;
 
       & > span {
         width: 100%;
-        text-align: center;
+        text-align: left;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
   } // rightBox
+
+  .dateWrapper {
+    min-height: 32px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
 
   .dateWrapper,
   .participantWrapper,
@@ -54,7 +65,13 @@
     color: var(--grey-4-color);
   }
 
-  .end { background: #AAAAAA; }
-  .dDay { background: #64c964; }
-  .count { background: var(--primary-color); }
+  .end {
+    background: #aaaaaa;
+  }
+  .dDay {
+    background: #64c964;
+  }
+  .count {
+    background: var(--primary-color);
+  }
 }

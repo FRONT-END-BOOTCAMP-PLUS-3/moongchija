@@ -42,7 +42,7 @@
 .listBox {
   flex: 1;
   overflow-y: auto;
-  max-height: 85vh;
+  max-height: 77vh;
   padding: 0 40px;
 }
 
@@ -89,7 +89,6 @@
 .roomEntryBox {
   width: 100%;
   display: flex;
-  // justify-content: center;
   align-items: center;
   flex-direction: column;
 }

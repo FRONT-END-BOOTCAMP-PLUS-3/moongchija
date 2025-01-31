@@ -10,6 +10,8 @@ import Link from "next/link";
 import Modal from "@/components/modal/Modal";
 import InputField from "@/components/input-filed/InputFiled";
 import Button from "@/components/button/Button";
+import IconHeader from "@/components/header/IconHeader";
+import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
 
 const AppointmentsPage: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];
@@ -28,11 +30,6 @@ const AppointmentsPage: React.FC = () => {
     setRoomNumber(e.target.value);
     console.log(roomNumber);
   };
-
-  // 필터링된 데이터
-  const inProgressAppointments = appointments.filter(
-    (appointment) => appointment.startDate && appointment.endDate
-  );
 
   const confirmedAppointments = appointments.filter(
     (appointment) => appointment.confirmDate
@@ -54,7 +51,12 @@ const AppointmentsPage: React.FC = () => {
     setSelectedOption(e.target.value);
   };
 
-  // 필터링된 데이터
+  // 투표중인 약속 데이터
+  const inProgressAppointments = appointments.filter(
+    (appointment) => appointment.startDate && appointment.endDate
+  );
+
+  // 확정된 약속 데이터
   const filteredAppointments = (appointments: AppointmentInfo[]) => {
     return appointments
       .filter((appointment) => {
@@ -84,6 +86,7 @@ const AppointmentsPage: React.FC = () => {
 
   return (
     <>
+      <IconHeader />
       <TabMenu tabs={tabs} onTabChange={handleTabChange} />
       <main className={styles.container}>
         <section className={styles.searchBox}>
@@ -127,7 +130,9 @@ const AppointmentsPage: React.FC = () => {
           className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
-          <Link href={"/user/appointments/create/information"}>약속 만들기</Link>
+          <Link href={"/user/appointments/create/information"}>
+            약속 만들기
+          </Link>
           <button onClick={openModal}>방번호로 참여</button>
         </section>
       </main>
@@ -240,37 +245,4 @@ export const appointments: AppointmentInfo[] = [
   },
 ];
 
-// 유틸 함수 모음
-// utils/dateUtils.ts
-const getFormattedDateParts = (date: Date) => {
-  const dayNames = ["일", "월", "화", "수", "목", "금", "토"];
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-  const dayName = dayNames[date.getDay()];
-  const hours = String(date.getHours()).padStart(2, "0");
-  const minutes = String(date.getMinutes()).padStart(2, "0");
 
-  return { year, month, day, dayName, hours, minutes };
-};
-
-export const formatDate = (date: Date): string => {
-  const { year, month, day, dayName } = getFormattedDateParts(date);
-  return `${year}.${month}.${day}(${dayName})`;
-};
-
-export const formatTime = (date: Date): string => {
-  const { year, month, day, dayName, hours, minutes } =
-    getFormattedDateParts(date);
-  return `${year}.${month}.${day}(${dayName}) ${hours}:${minutes}`;
-};
-
-export const calculateCountdown = (startDate: Date): string => {
-  const today = new Date();
-  const timeDiff = startDate.getTime() - today.getTime(); // 시간 차이 (밀리초)
-  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // 밀리초 -> 일 단위로 변환
-
-  if (daysLeft < 0) return "종료"; // 이미 지난 날짜
-  if (daysLeft === 0) return "D-Day"; // 당일
-  return `D-${daysLeft}`;
-};
