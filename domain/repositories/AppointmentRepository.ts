@@ -3,7 +3,12 @@ import { Appointment } from "../entities/Appointment";
 export interface AppointmentRepository {
   create(appointment: Appointment): Promise<Appointment[]>; // 약속 생성
   findById(appointmentId: number): Promise<Appointment | null>; // 특정 약속 조회
+  getAppointmentTime(
+    appointmentId: number
+  ): Promise<Partial<Appointment> | null>; // 특정 약속의 start_time, end_time을 가져오는 함수
+
   findByOwner(ownerId: string): Promise<Appointment[]>; // 특정 사용자의 약속 목록 조회
+
   updateStatus(appointmentId: number, status: string): Promise<void>; // 약속 상태 업데이트
   confirm(
     appointmentId: number,
