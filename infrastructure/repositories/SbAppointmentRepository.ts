@@ -35,6 +35,26 @@ export class SbAppointmentRepository implements AppointmentRepository {
     return data;
   }
 
+  async getAppointmentTime(
+    appointmentId: number
+  ): Promise<Partial<Appointment> | null> {
+    const supabase = await createClient();
+    const { data, error } = await supabase
+      .from("appointment")
+      .select("id, start_time, end_time") // 필요한 필드만 선택
+      .eq("id", appointmentId)
+      .single();
+
+    if (error) {
+      console.error("Error fetching appointment time:", error.message);
+      return null;
+    }
+
+    return data
+      ? { id: data.id, start_time: data.start_time, end_time: data.end_time }
+      : null;
+  }
+
   async findByOwner(ownerId: string): Promise<Appointment[]> {
     const supabase = await this.getClient();
     const { data, error } = await supabase

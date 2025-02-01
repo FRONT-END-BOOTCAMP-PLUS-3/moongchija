@@ -1,3 +1,4 @@
+import { TimeVoteProvider } from "@/context/TimeVoteContext";
 import "./globals.css";
 
 export const metadata = {
@@ -17,7 +18,9 @@ export default function RootLayout({
         <title>뭉치자</title>
       </head>
       <body>
-        <div className="container">{children}</div>
+        <TimeVoteProvider>
+          <div className="container">{children}</div>
+        </TimeVoteProvider>
       </body>
     </html>
   );
