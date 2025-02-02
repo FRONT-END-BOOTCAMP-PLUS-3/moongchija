@@ -1,14 +1,18 @@
+import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   try {
-    const clientId = process.env.KAKAO_CLIENT_ID!;
-    const redirectUri = process.env.KAKAO_REDIRECT_URI!;
-    const encodedRedirectUri = encodeURIComponent(redirectUri);
+    const authRepository = new SbAuthRepository();
+    const loginUrl = await authRepository.getKakaoLoginUrl();
 
-    const loginUrl = `https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=${clientId}&redirect_uri=${encodedRedirectUri}`;
     return NextResponse.json({ loginUrl });
   } catch (error) {
-    return NextResponse.error(error);
+    console.error("Kakao 로그인 URL 생성 중 오류 발생:", error);
+
+    return NextResponse.json(
+      { error: "Kakao 로그인 URL을 생성하는 중 오류가 발생했습니다." },
+      { status: 500 }
+    );
   }
 }

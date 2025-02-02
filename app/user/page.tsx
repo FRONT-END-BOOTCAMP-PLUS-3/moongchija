@@ -7,13 +7,11 @@ import Modal from "@/components/modal/Modal";
 import DeleteAccountModalContent from "./components/DeleteAccountModalContent";
 import UserProfile from "./components/UserProfile";
 import MyCalendar from "./components/MyCalendar";
-import { useRouter } from "next/navigation";
 
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleopenModal = () => setIsModalOpen(true);
   const handlecloseModal = () => setIsModalOpen(false);
-  const router = useRouter();
 
   const handleLogout = async () => {
     try {
@@ -24,11 +22,10 @@ const MyPagePage = () => {
         },
       });
 
-      const data = await response.json();
-
-      if (response.ok) {
-        localStorage.removeItem("token");
-        router.push("/");
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        const data = await response.json();
         console.log("로그아웃 성공:", data.message);
       }
     } catch (error) {

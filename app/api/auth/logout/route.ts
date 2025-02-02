@@ -9,7 +9,14 @@ export const POST = async () => {
 
     await logoutUsecase.execute();
 
-    const response = NextResponse.json({ message: "로그아웃 성공" });
+    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/login`;
+
+    const response = NextResponse.redirect(redirectUrl);
+
+    response.headers.set(
+      "Set-Cookie",
+      "token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+    );
 
     return response;
   } catch (error) {
