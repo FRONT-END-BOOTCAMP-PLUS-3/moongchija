@@ -28,9 +28,9 @@ const LoginForm = () => {
         throw new Error(error || "로그인에 실패했습니다.");
       }
 
-      const { token } = await response.json(); // 서버에서 JWT 토큰을 받음
-      localStorage.setItem("token", token); // JWT를 localStorage에 저장
-      console.log("로그인 성공!");
+      const { token } = await response.json();
+      localStorage.setItem("token", token);
+
       router.push("/user/appointments");
     } catch (error) {
       console.log(error);
