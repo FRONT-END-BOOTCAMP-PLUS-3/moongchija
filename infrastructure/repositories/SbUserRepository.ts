@@ -85,4 +85,48 @@ export class SbUserRepository implements UserRepository {
 
     return newNickname;
   }
+
+  async updateUser(
+    userId: string,
+    updateData: { nickname?: string; emoji?: string }
+  ): Promise<User> {
+    const supabase = await createClient();
+
+    const { data: existingData, error: findError } = await supabase
+      .from("user")
+      .select()
+      .eq("id", userId)
+      .single();
+
+    if (findError || !existingData) {
+      console.error("사용자를 찾을 수 없음:", userId, findError);
+      throw new Error("업데이트할 사용자를 찾을 수 없습니다.");
+    }
+
+    const { data, error } = await supabase
+      .from("user")
+      .update(updateData)
+      .eq("id", userId)
+      .select()
+      .single();
+
+    if (error) {
+      console.error("사용자 정보 업데이트 중 오류:", error);
+      console.log("업데이트 시도한 데이터:", { userId, updateData });
+      throw new Error("사용자 정보를 업데이트하는 데 실패했습니다.");
+    }
+
+    if (!data) {
+      throw new Error("업데이트된 사용자 정보를 찾을 수 없습니다.");
+    }
+
+    return {
+      id: data.id,
+      user_email: data.user_email,
+      password: data.password,
+      nickname: data.nickname,
+      emoji: data.emoji,
+      created_at: new Date(data.created_at),
+    };
+  }
 }
