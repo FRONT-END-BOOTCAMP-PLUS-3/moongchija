@@ -99,11 +99,10 @@ const ConfirmPage = () => {
             </select>
           </div>
         </div>
+        <div className={styles.wrapButton}>
+          <Button text="약속 확정하기" size="lg" onClick={handleNextButton} />
+        </div>
       </section>
-
-      <div className={styles.wrapButton}>
-        <Button text="약속 확정하기" size="lg" onClick={handleNextButton} />
-      </div>
 
       {/* ✅ 모달 구현 */}
       {isModalOpen && (

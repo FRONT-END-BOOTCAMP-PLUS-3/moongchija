@@ -38,7 +38,7 @@
       .copyButton {
         width: 80%;
         border: none;
-        background: #fff;
+        background-color: var(--grey-2-color);
         color: var(--grey-5-color);
         font-size: var(--font-size-md);
         font-weight: bold;
@@ -57,9 +57,9 @@
         font-size: 14px;
       }
     }
-  }
-
-  .wrapButton {
-    margin-top: 6vh;
+    .wrapButton {
+      width: 100%;
+      margin-top: 6vh;
+    }
   }
 }
