@@ -7,6 +7,7 @@ import Modal from "@/components/modal/Modal";
 import DeleteAccountModalContent from "./components/DeleteAccountModalContent";
 import UserProfile from "./components/UserProfile";
 import MyCalendar from "./components/MyCalendar";
+import IconHeader from "@/components/header/IconHeader";
 
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -34,28 +35,31 @@ const MyPagePage = () => {
   };
 
   return (
-    <div className={styles.myPagecontainer}>
-      <div className={styles.profileWrapper}>
-        <UserProfile />
-      </div>
+    <>
+      <IconHeader />
+      <div className={styles.myPagecontainer}>
+        <div className={styles.profileWrapper}>
+          <UserProfile />
+        </div>
 
-      <div className={styles.calendarWrapper}>
-        <MyCalendar />
-      </div>
+        <div className={styles.calendarWrapper}>
+          <MyCalendar />
+        </div>
 
-      <div className={styles.deleteAccountButton}>
-        <Button
-          text="탈퇴하기"
-          size="sm"
-          color="--exit-red"
-          onClick={handleopenModal}
-        />
-        <Button text="로그 아웃" size="sm" onClick={handleLogout} />
-        <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
-          <DeleteAccountModalContent />
-        </Modal>
+        <div className={styles.deleteAccountButton}>
+          <Button
+            text="탈퇴하기"
+            size="sm"
+            color="--exit-red"
+            onClick={handleopenModal}
+          />
+          <Button text="로그 아웃" size="sm" onClick={handleLogout} />
+          <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
+            <DeleteAccountModalContent />
+          </Modal>
+        </div>
       </div>
-    </div>
+    </>
   );
 };
 
