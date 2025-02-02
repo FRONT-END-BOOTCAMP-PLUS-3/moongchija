@@ -198,13 +198,13 @@ const VoteTimePage: React.FC = () => {
             </div>
           </div>
         </div>
-      </div>
-      <div className={styles.wrapButton}>
-        <Button
-          text="장소투표 하러가기"
-          size="lg"
-          onClick={saveSelectedTimes}
-        />
+        <div className={styles.wrapButton}>
+          <Button
+            text="장소투표 하러가기"
+            size="lg"
+            onClick={saveSelectedTimes}
+          />
+        </div>
       </div>
     </div>
   );

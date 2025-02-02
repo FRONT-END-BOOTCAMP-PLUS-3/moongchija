@@ -108,13 +108,13 @@ const VoteResultPage = () => {
         ) : (
           <PlaceResult placeProps={resultData.place} />
         )}
-      </div>
-      <div className={styles.wrapButton}>
-        <Button
-          text="약속 확정하러 가기"
-          size="lg"
-          onClick={() => router.push(`/user/appointments/${id}/confirm`)}
-        />
+        <div className={styles.wrapButton}>
+          <Button
+            text="약속 확정하러 가기"
+            size="lg"
+            onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+          />
+        </div>
       </div>
     </div>
   );
