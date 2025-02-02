@@ -29,10 +29,19 @@ export async function GET(request: NextRequest) {
       `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`
     );
 
-    response.headers.set(
-      "Set-Cookie",
-      `token=${accessToken}; Path=/; HttpOnly; SameSite=Strict; Max-Age=3600`
-    );
+    if (accessToken) {
+      response.cookies.set("token", accessToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
+        sameSite: "strict",
+        maxAge: 60 * 60,
+      });
+    } else {
+      return NextResponse.json(
+        { error: "Access Token is missing or invalid" },
+        { status: 400 }
+      );
+    }
 
     return response;
   } catch (error) {
