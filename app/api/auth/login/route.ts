@@ -10,7 +10,17 @@ export const POST = async (request: NextRequest) => {
     const loginUsecase = new LoginUsecase(authRepository);
 
     const { token, user } = await loginUsecase.execute(user_email, password);
-    return NextResponse.json({ user, token }, { status: 200 });
+
+    const response = NextResponse.json({ user }, { status: 200 });
+
+    response.cookies.set("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
+      sameSite: "strict",
+      maxAge: 60 * 60,
+    });
+
+    return response;
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("로그인 실패: " + error.message);
