@@ -32,4 +32,24 @@ export class SbTimeVoteRepository implements TimeVoteRepository {
 
     return data || [];
   }
+  async findTimeIdByTimestamp(
+    appointmentId: number,
+    time: string
+  ): Promise<number | null> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("time_vote")
+      .select("id")
+      .eq("appointment_id", appointmentId)
+      .eq("time", time)
+      .single(); // ✅ 단일 결과 조회
+
+    if (error) {
+      console.error(`Error finding time_id for ${time}:`, error);
+      return null;
+    }
+
+    return data?.id || null;
+  }
 }
