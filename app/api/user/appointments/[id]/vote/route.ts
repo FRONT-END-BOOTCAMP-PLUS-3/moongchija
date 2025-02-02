@@ -1,58 +1,44 @@
-import { NextRequest, NextResponse } from "next/server";
-import { createClient } from "@/utils/supabase/server";
+import { NextResponse } from "next/server";
 import { SbTimeVoteUserRepository } from "@/infrastructure/repositories/SbTimeVoteUserRepository";
 import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlaceVoteUserRepository";
+import { DfSubmitVoteUsecase } from "@/application/usecases/appointment/DfSubmitVoteUsecase";
 
 export async function POST(
-  req: NextRequest,
+  request: Request,
   { params }: { params: { id: string } }
 ) {
   try {
-    const supabase = await createClient();
-    if (!supabase) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    // ✅ 현재 로그인된 유저 가져오기
-    const {
-      data: { session },
-    } = await supabase.auth.getSession();
-
-    if (!session) {
-      return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    }
-
-    const userId = session.user.id;
     const appointmentId = parseInt(params.id);
-
     if (isNaN(appointmentId)) {
       return NextResponse.json(
-        { error: "Invalid appointment ID" },
+        { error: "잘못된 약속 ID입니다." },
         { status: 400 }
       );
     }
 
-    const { timeVotes, placeVotes } = await req.json();
-
-    const timeVoteRepo = new SbTimeVoteUserRepository();
-    const placeVoteRepo = new SbPlaceVoteUserRepository();
-
-    // ✅ 시간 투표 저장
-    for (const timeVote of timeVotes) {
-      await timeVoteRepo.voteForTime(userId, timeVote.time);
+    const { userId, timeVotes, placeVotes } = await request.json(); // ✅ userId 클라이언트에서 받아오기
+    if (!userId) {
+      return NextResponse.json(
+        { error: "로그인이 필요합니다." },
+        { status: 401 }
+      );
     }
 
-    // ✅ 장소 투표 저장
-    for (const placeVote of placeVotes) {
-      await placeVoteRepo.voteForPlace(userId, placeVote.place);
-    }
-
-    return NextResponse.json({ message: "Vote submitted successfully!" });
-  } catch (error) {
-    console.error("Error submitting vote:", error);
-    return NextResponse.json(
-      { error: "Internal server error" },
-      { status: 500 }
+    const voteUsecase = new DfSubmitVoteUsecase(
+      new SbTimeVoteUserRepository(),
+      new SbPlaceVoteUserRepository()
     );
+
+    await voteUsecase.execute({
+      userId, // ✅ userId를 여기에서 포함
+      appointmentId,
+      timeVotes,
+      placeVotes,
+    });
+
+    return NextResponse.json({ message: "투표가 성공적으로 저장되었습니다." });
+  } catch (error) {
+    console.error("❌ 투표 저장 중 오류 발생:", error);
+    return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }

@@ -6,8 +6,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
-import { useTimeVote } from "@/context/TimeVoteContext";
-import { getUserIdClient } from "@/utils/supabase/client"; // ✅ 로그인된 유저 ID 가져오기
+import { useTimeVote } from "@/context/TimeVoteContext"; // ✅ 시간 투표 저장된 context 사용
+import { getUserIdClient } from "@/utils/supabase/client"; // ✅ 사용자 ID 가져오기
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 
 const VotePlacePage: React.FC = () => {
@@ -20,31 +20,29 @@ const VotePlacePage: React.FC = () => {
   const [selectedPlace, setSelectedPlace] = useState<string>("");
   const [userId, setUserId] = useState<string | null>(null);
 
-  // ✅ 로그인된 유저 ID 가져오기
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const user = await getUserIdClient();
-      if (user) {
-        setUserId(user);
-      } else {
-        console.warn("❌ 유저 정보 없음, 로그인 필요");
-        // router.push("/login"); // 🚀 로그인 안 된 경우 로그인 페이지로 이동
-      }
-    };
-    fetchUserId();
-  }, [router]);
+  // useEffect(() => {
+  //   const fetchUserId = async () => {
+  //     try {
+  //       const user = await getUserIdClient();
+  //       if (!user) throw new Error("❌ 유저 정보를 가져올 수 없음");
+  //       setUserId(user);
+  //     } catch (error) {
+  //       console.error("❌ 유저 정보 가져오기 실패:", error);
+  //     }
+  //   };
+  //   fetchUserId();
+  // }, []);
 
-  // ✅ 서버에서 약속 장소 리스트 가져오기
   useEffect(() => {
     const fetchPlaces = async () => {
       try {
         const response = await fetch(`/api/user/appointments/${id}/place-vote`);
-        if (!response.ok) throw new Error("Failed to fetch place votes");
+        if (!response.ok) throw new Error("❌ 장소 투표 리스트 가져오기 실패");
 
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
-        console.error("Error fetching place votes:", error);
+        console.error("❌ 장소 투표 리스트 가져오기 실패:", error);
       }
     };
 
@@ -57,17 +55,17 @@ const VotePlacePage: React.FC = () => {
 
   const handleSubmit = async () => {
     if (!selectedPlace) {
-      alert("장소를 선택해주세요.");
+      alert("❌ 장소를 선택해주세요.");
       return;
     }
-    if (!userId) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
+    // if (!userId) {
+    //   alert("❌ 로그인이 필요합니다.");
+    //   return;
+    // }
 
     const voteData = {
       appointmentId: parseInt(id),
-      userId, // ✅ 실제 로그인된 사용자 ID 포함
+      // userId,
       timeVotes: selectedTimes.map((time) => ({ time })),
       placeVotes: [{ place: selectedPlace }],
     };
@@ -80,15 +78,15 @@ const VotePlacePage: React.FC = () => {
       });
 
       if (response.ok) {
-        alert("투표가 완료되었습니다!");
+        alert("✅ 투표가 완료되었습니다!");
         router.push(`/user/appointments/${id}/vote-result`);
       } else {
         const error = await response.json();
-        alert(`투표 저장 실패: ${error.message}`);
+        alert(`❌ 투표 저장 실패: ${error.message}`);
       }
     } catch (error) {
-      console.error("Error submitting vote:", error);
-      alert("투표 저장 중 오류 발생");
+      console.error("❌ 투표 저장 중 오류 발생:", error);
+      alert("❌ 투표 저장 중 오류 발생");
     }
   };
 
@@ -127,13 +125,15 @@ const VotePlacePage: React.FC = () => {
                     ></div>
                   </div>
                 </div>
-                <a
-                  href={item.place_url}
-                  target="_blank"
-                  className={styles.placeLink}
-                >
-                  자세히 보기
-                </a>
+                {item.place_url && (
+                  <a
+                    href={item.place_url}
+                    target="_blank"
+                    className={styles.placeLink}
+                  >
+                    위치 보기
+                  </a>
+                )}
               </div>
             ))
           )}
