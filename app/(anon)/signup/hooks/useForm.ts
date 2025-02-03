@@ -10,22 +10,26 @@ import {
 const useForm = () => {
   const {
     value: email,
+    setValue: setEmail,
     error: emailError,
     onChange: handleChangeEmail,
   } = useInput("", validateEmail);
   const {
     value: nickname,
+    setValue: setNickname,
     error: nicknameError,
     onChange: handleChangeNickname,
   } = useInput("", validateNickname);
   const {
     value: password,
+    setValue: setPassword,
     error: passwordError,
-    onChange: habdleChangePassword,
+    onChange: handleChangePassword,
   } = useInput("", validatePassword);
 
   const {
     value: passwordCheck,
+    setValue: setPasswordCheck,
     error: passwordCheckError,
     onChange: habdleChangePasswordCheck,
   } = useInput(
@@ -49,9 +53,10 @@ const useForm = () => {
   ].every((error) => !error);
 
   return {
-    email: { email, emailError, handleChangeEmail },
+    email: { email, setEmail, emailError, handleChangeEmail },
     nickname: {
       nickname,
+      setNickname,
       nicknameError,
       handleChangeNickname,
       isNicknameAvailable,
@@ -59,11 +64,13 @@ const useForm = () => {
     },
     password: {
       password,
+      setPassword,
       passwordError,
-      habdleChangePassword,
+      handleChangePassword,
     },
     passwordCheck: {
       passwordCheck,
+      setPasswordCheck,
       passwordCheckError,
       habdleChangePasswordCheck,
     },
