@@ -35,8 +35,13 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <FaMapMarkerAlt className={styles.markerIcon} />
           <span>장소</span>
           <div className={styles.divider}></div>
-          <Link href={String(informationData.place.link)}>{String(informationData.place.name)}</Link>
-          {/* 장소 */}
+          {informationData.place.link ? (
+            <Link href={String(informationData.place.link)}>
+              {String(informationData.place.name)}
+            </Link>
+          ) : (
+            <span>{String(informationData.place.name)}</span>
+          )}
         </div>
 
         {/* 일자 */}
@@ -53,7 +58,6 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <span>참여 인원</span>
           <div className={styles.divider}></div>
           <span>{informationData.participants.length}명</span>
-          {/* 참여 인원 */}
         </div>
 
         {/* 참여 인원 하단 박스 */}

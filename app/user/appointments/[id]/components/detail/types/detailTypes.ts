@@ -1,6 +1,6 @@
 export interface Place {
   name: string;
-  link: string;
+  link?: string;
 }
 
 export interface Information {
