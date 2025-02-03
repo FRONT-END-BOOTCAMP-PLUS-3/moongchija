@@ -1,5 +1,3 @@
-import { jwtDecode } from "jwt-decode"; // ✅ JWT 디코딩 라이브러리
-
 export const getUserIdClient = async (): Promise<string | null> => {
   try {
     const response = await fetch("/api/auth/user-id", {
