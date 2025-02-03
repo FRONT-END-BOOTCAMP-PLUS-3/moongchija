@@ -193,7 +193,7 @@ export const appointments: AppointmentInfo[] = [
   {
     id: 3,
     title: "확정된 저녁 약속",
-    confirmDate: new Date(2025, 0, 31, 19, 0),
+    confirmDate: new Date(2025, 1, 3, 19, 0),
     confirmPlace: "홍대입구역",
     participants: ["😀", "😀", "😀"],
     isCreator: true,

@@ -25,7 +25,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
 
   const getCountdownClass = (countdown: string) => {
     if (countdown === "종료") return styles.end;
-    if (countdown === "D-Day") return styles.dDay;
+    if (countdown === "D-DAY") return styles.dDay;
     else return styles.count;
   };
 
