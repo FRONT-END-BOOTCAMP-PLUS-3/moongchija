@@ -24,11 +24,14 @@ const VotePlacePage: React.FC = () => {
     const fetchUserId = async () => {
       try {
         const user = await getUserIdClient();
-        if (!user) throw new Error("❌ 유저 정보를 가져올 수 없음");
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
         setUserId(user);
       } catch (error) {
         console.error("❌ 유저 정보 가져오기 실패:", error);
-        router.push("/login");
       }
     };
     fetchUserId();
