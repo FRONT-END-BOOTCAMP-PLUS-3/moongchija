@@ -5,6 +5,7 @@ import { FaPlus } from "react-icons/fa6";
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
 import { banks } from "../../const/banks";
+import { FaMinus } from "react-icons/fa";
 
 type SettlementItem = {
   place: string;
@@ -63,6 +64,11 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
     });
   };
 
+    // 마지막 장소&금액 세트 삭제
+    const removeLastSet = () => {
+      setInputSets((prevInputSets) => prevInputSets.slice(0, -1)); // 마지막 세트 삭제
+    };
+
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalWrapper}>
@@ -98,9 +104,15 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
                   원
                 </div>
               ))}
-              <button className={styles.inputPlusButton} onClick={addNewSet}>
-                <FaPlus className={styles.icon} />
-              </button>
+               <div className={styles.buttonContainer}>
+                {/* + 버튼과 - 버튼을 나란히 배치 */}
+                <button className={styles.inputPlusButton} onClick={addNewSet}>
+                  <FaPlus className={styles.icon} />
+                </button>
+                <button className={styles.inputMinusButton} onClick={removeLastSet}>
+                  <FaMinus className={styles.icon} />
+                </button>
+              </div>
             </div>
 
             <div className={styles.modalResultBox}>

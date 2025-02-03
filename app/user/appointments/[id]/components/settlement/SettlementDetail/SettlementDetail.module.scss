@@ -179,8 +179,14 @@
   gap: 5px;
 }
 
+.buttonContainer{
+  display: flex;
+  gap:5px;
+}
+
 .inputPlusButton {
   height: 35px;
+  width: 46%;
   background-color: #aaaaaa;
   border: none;
   border-radius: 5px;
@@ -199,6 +205,27 @@
 .icon {
   font-size: 20px;
 }
+
+.inputMinusButton {
+  height: 35px;
+  width: 46%;
+  background-color: #aaaaaa;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background-color: #888888;
+  }
+}
+
+
+
 
 .modalAccountTitle {
   font-size: 20px;

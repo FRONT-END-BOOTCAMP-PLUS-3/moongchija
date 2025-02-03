@@ -1,7 +1,5 @@
-"use client";
-
 import { useState, useEffect } from "react";
-import { FaPlus } from "react-icons/fa6";
+import { FaPlus, FaMinus } from "react-icons/fa6"; // Import FaMinus for the - button
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
 import { Settlement } from "../../detail/types/detailTypes";
@@ -65,6 +63,11 @@ const SettlementModalContent = ({
     setInputSets(updatedSets); // inputSets 상태 업데이트
   };
 
+  // 마지막 장소&금액 세트 삭제
+  const removeLastSet = () => {
+    setInputSets((prevInputSets) => prevInputSets.slice(0, -1)); // 마지막 세트 삭제
+  };
+
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalWrapper}>
@@ -98,9 +101,15 @@ const SettlementModalContent = ({
                 </div>
               ))}
 
-              <button className={styles.inputPlusButton} onClick={addNewSet}>
-                <FaPlus className={styles.icon} />
-              </button>
+              <div className={styles.buttonContainer}>
+                {/* + 버튼과 - 버튼을 나란히 배치 */}
+                <button className={styles.inputPlusButton} onClick={addNewSet}>
+                  <FaPlus className={styles.icon} />
+                </button>
+                <button className={styles.inputMinusButton} onClick={removeLastSet}>
+                  <FaMinus className={styles.icon} />
+                </button>
+              </div>
             </div>
 
             {/* 결과 */}
