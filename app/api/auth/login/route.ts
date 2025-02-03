@@ -37,7 +37,6 @@ export const POST = async (request: NextRequest) => {
       return response;
     }
   } catch (error: unknown) {
-    console.error("로그인 오류:", error);
     if (
       error instanceof Error &&
       error.message.includes("Invalid login credentials")
