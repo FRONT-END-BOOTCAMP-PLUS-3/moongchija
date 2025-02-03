@@ -7,7 +7,6 @@ import EmailInputField from "./EmailInputField";
 import useForm from "../hooks/useForm";
 import Link from "next/link";
 import { useState } from "react";
-import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -18,8 +17,6 @@ const AuthForm = () => {
   const [nicknameCheckSuccess, setNicknameCheckSuccess] = useState<
     string | null
   >(null);
-
-  const router = useRouter();
 
   const {
     email: { email, emailError, handleChangeEmail },
@@ -60,18 +57,10 @@ const AuthForm = () => {
           nickname: nickname,
         }),
       });
-
       const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "회원가입에 실패하였습니다.");
+      if (data.redirectUrl) {
+        window.location.href = data.redirectUrl;
       }
-
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-      }
-
-      router.push("/user/appointments");
     } catch (error) {
       setSubmitError(
         error instanceof Error
