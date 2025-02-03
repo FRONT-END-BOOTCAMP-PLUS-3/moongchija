@@ -1,38 +1,61 @@
 import { User } from "@/domain/entities/User";
 import { UserRepository } from "@/domain/repositories/UserRepository";
 import { createClient } from "@/utils/supabase/server";
+import jwt from "jsonwebtoken";
 
 export class SbUserRepository implements UserRepository {
   async createUser(
     user_email: string,
-    password: string,
+    hashedPassword: string,
     nickname: string,
-    emoji: string
-  ): Promise<Omit<User, "password"> & { access_token: string }> {
+    emoji: string,
+    provider: string
+  ): Promise<User & { access_token: string }> {
     const supabase = await createClient();
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: user_email,
-      password,
-      options: {
-        data: {
+    const { data, error } = await supabase
+      .from("user")
+      .insert([
+        {
+          user_email,
+          password: hashedPassword,
           nickname,
           emoji,
+          provider,
         },
-      },
-    });
+      ])
+      .select();
 
-    if (authError) {
-      throw authError;
+    if (error) {
+      throw new Error("회원가입 실패: " + error.message);
     }
 
+    const userId = data[0].id;
+
+    if (!process.env.JWT_SECRET_KEY) {
+      throw new Error("JWT_SECRET_KEY 환경 변수가 설정되지 않았습니다.");
+    }
+    const secretKey = process.env.JWT_SECRET_KEY; // 환경 변수로 비밀 키 설정
+    const expiresIn = "1h"; // 토큰 만료 시간 설정 (1시간)
+
+    const payload = {
+      userId,
+      email: user_email,
+      nickname,
+      emoji,
+    };
+
+    const access_token = jwt.sign(payload, secretKey, { expiresIn });
+
     return {
-      id: authData.user!.id,
+      id: userId,
       user_email: user_email,
       nickname: nickname,
+      password: hashedPassword,
       emoji: emoji,
       created_at: new Date(),
-      access_token: authData.session!.access_token,
+      access_token,
+      provider,
     };
   }
 
@@ -55,6 +78,7 @@ export class SbUserRepository implements UserRepository {
       nickname: user.nickname,
       emoji: user.emoji,
       created_at: new Date(user.created_at),
+      provider: user.provider,
     };
   }
 
