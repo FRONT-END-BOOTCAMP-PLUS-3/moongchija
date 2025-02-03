@@ -24,4 +24,13 @@
     cursor: pointer;
     color: white;
   }
+
+  .logoutButton {
+    border: none;
+    background-color: transparent;
+    font-family: var(--font-sub);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    color: #fff;
+  }
 }
