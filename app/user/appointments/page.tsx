@@ -31,6 +31,12 @@ const AppointmentsPage: React.FC = () => {
     console.log(roomNumber);
   };
 
+  // 투표중인 약속 데이터
+  const inProgressAppointments = appointments.filter(
+    (appointment) => appointment.startDate && appointment.endDate
+  );
+
+  // 확정된 약속 데이터
   const confirmedAppointments = appointments.filter(
     (appointment) => appointment.confirmDate
   );
@@ -51,12 +57,7 @@ const AppointmentsPage: React.FC = () => {
     setSelectedOption(e.target.value);
   };
 
-  // 투표중인 약속 데이터
-  const inProgressAppointments = appointments.filter(
-    (appointment) => appointment.startDate && appointment.endDate
-  );
-
-  // 확정된 약속 데이터
+  // 검색
   const filteredAppointments = (appointments: AppointmentInfo[]) => {
     return appointments
       .filter((appointment) => {
@@ -192,7 +193,7 @@ export const appointments: AppointmentInfo[] = [
   {
     id: 3,
     title: "확정된 저녁 약속",
-    confirmDate: new Date(2025, 0, 31, 19, 0),
+    confirmDate: new Date(2025, 1, 3, 19, 0),
     confirmPlace: "홍대입구역",
     participants: ["😀", "😀", "😀"],
     isCreator: true,
@@ -244,5 +245,3 @@ export const appointments: AppointmentInfo[] = [
     extraParticipants: 1,
   },
 ];
-
-

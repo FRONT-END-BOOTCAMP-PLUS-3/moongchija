@@ -1,5 +1,6 @@
-import { SocialLoginUseCase } from "@/application/usecases/auth/SocialLoginUseCase";
+import { DfSocialLoginUseCase } from "@/application/usecases/auth/DfSocialLoginUseCase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
+import { jwtDecode } from "jwt-decode";
 
 import { NextRequest, NextResponse } from "next/server";
 
@@ -18,32 +19,38 @@ export async function GET(request: NextRequest) {
     }
 
     const authRepository = new SbAuthRepository();
-    const socialLoginUseCase = new SocialLoginUseCase(authRepository);
+    const socialLoginUseCase = new DfSocialLoginUseCase(authRepository);
 
     const accessToken = await socialLoginUseCase.execute(
       "kakao",
       code as string
     );
 
-    const response = NextResponse.redirect(
-      `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`
-    );
-
     if (accessToken) {
-      response.cookies.set("token", accessToken, {
-        httpOnly: true,
-        secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
-        sameSite: "strict",
-        maxAge: 60 * 60,
-      });
+      const decodedToken = jwtDecode(accessToken);
+
+      const userId = decodedToken.sub;
+
+      const response = NextResponse.redirect(
+        `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`
+      );
+
+      if (userId) {
+        response.cookies.set("userId", userId, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
+          sameSite: "strict",
+          maxAge: 60 * 60,
+        });
+      }
+
+      return response;
     } else {
       return NextResponse.json(
         { error: "Access Token is missing or invalid" },
         { status: 400 }
       );
     }
-
-    return response;
   } catch (error) {
     console.error("카카오 로그인 오류:", error);
 

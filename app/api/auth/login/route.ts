@@ -1,5 +1,6 @@
-import { LoginUsecase } from "@/application/usecases/auth/LoginUsecase";
+import { DfLoginUsecase } from "@/application/usecases/auth/DfLoginUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
+import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -7,20 +8,27 @@ export const POST = async (request: NextRequest) => {
     const { user_email, password } = await request.json();
 
     const authRepository = new SbAuthRepository();
-    const loginUsecase = new LoginUsecase(authRepository);
+    const loginUsecase = new DfLoginUsecase(authRepository);
 
     const { token, user } = await loginUsecase.execute(user_email, password);
 
-    const response = NextResponse.json({ user }, { status: 200 });
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      const userId = decodedToken.sub;
 
-    response.cookies.set("token", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
-      sameSite: "strict",
-      maxAge: 60 * 60,
-    });
+      const response = NextResponse.json({ user }, { status: 200 });
 
-    return response;
+      if (userId) {
+        response.cookies.set("userId", userId, {
+          httpOnly: true,
+          secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
+          sameSite: "strict",
+          maxAge: 60 * 60,
+        });
+      }
+
+      return response;
+    }
   } catch (error: unknown) {
     if (error instanceof Error) {
       throw new Error("로그인 실패: " + error.message);
