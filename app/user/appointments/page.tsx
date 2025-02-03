@@ -12,6 +12,7 @@ import InputField from "@/components/input-filed/InputFiled";
 import Button from "@/components/button/Button";
 import IconHeader from "@/components/header/IconHeader";
 import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
+import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 
 const AppointmentsPage: React.FC = () => {
   const tabs = ["투표 진행중", "약속 리스트"];
@@ -58,7 +59,7 @@ const AppointmentsPage: React.FC = () => {
   };
 
   // 검색
-  const filteredAppointments = (appointments: AppointmentInfo[]) => {
+  const filteredAppointments = (appointments: AppointmentCardDto[]) => {
     return appointments
       .filter((appointment) => {
         if (selectedOption === "방장" && !appointment.isCreator) {
@@ -157,21 +158,7 @@ const AppointmentsPage: React.FC = () => {
 export default AppointmentsPage;
 
 // 더미 데이터
-// types.ts
-export interface AppointmentInfo {
-  id: number;
-  title: string;
-  startDate?: Date; // 시작 날짜 (투표 진행 중에서만 사용)
-  endDate?: Date; // 종료 날짜 (투표 진행 중에서만 사용)
-  confirmDate?: Date; // 확정된 날짜 (약속 리스트에서만 사용)
-  confirmPlace?: string; // 확정된 장소 (약속 리스트에서만 사용)
-  participants: string[];
-  isCreator: boolean;
-  extraParticipants: number;
-}
-
-// data.ts
-export const appointments: AppointmentInfo[] = [
+export const appointments: AppointmentCardDto[] = [
   {
     id: 1,
     title: "저녁에 치맥",

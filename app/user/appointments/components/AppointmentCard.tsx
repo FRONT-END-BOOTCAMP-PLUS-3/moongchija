@@ -2,11 +2,11 @@
 
 import styles from "./AppointmentCard.module.scss";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
-import { AppointmentInfo } from "../page";
 import { calculateCountdown, formatDate, formatTime } from "@/utils/dateUtils/dateUtils";
+import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 
 interface AppointmentCardProps {
-  appointment: AppointmentInfo;
+  appointment: AppointmentCardDto;
 }
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
