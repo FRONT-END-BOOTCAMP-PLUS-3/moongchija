@@ -15,7 +15,7 @@ export const POST = async () => {
 
     response.headers.set(
       "Set-Cookie",
-      "token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
+      "userId=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0"
     );
 
     return response;
