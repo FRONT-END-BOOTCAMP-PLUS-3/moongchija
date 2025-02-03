@@ -84,8 +84,8 @@ const VotePlacePage: React.FC = () => {
 
       const responseData = await response.json();
       if (response.ok) {
-        alert("✅ 투표가 완료되었습니다!");
-        // router.push(`/user/appointments/${id}/vote-result`);
+        alert("✅ 투표가 완료되었습니다! 투표결과페이지로 이동합니다.");
+        router.push(`/user/appointments/${id}/vote-result`);
       } else {
         alert(`❌ 투표 저장 실패: ${responseData.error || "알 수 없는 오류"}`);
       }

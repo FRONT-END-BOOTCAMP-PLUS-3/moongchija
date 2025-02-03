@@ -1,8 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SbTimeVoteUserRepository } from "@/infrastructure/repositories/SbTimeVoteUserRepository";
 import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlaceVoteUserRepository";
-import { DfSubmitVoteUsecase } from "@/application/usecases/appointment/DfSubmitVoteUsecase";
+import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUsecase";
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
+import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
 export async function POST(request: NextRequest) {
   try {
@@ -11,7 +12,8 @@ export async function POST(request: NextRequest) {
     const timeVoteRepo = new SbTimeVoteRepository();
     const voteUsecase = new DfSubmitVoteUsecase(
       new SbTimeVoteUserRepository(),
-      new SbPlaceVoteUserRepository()
+      new SbPlaceVoteUserRepository(),
+      new SbMemberRepository()
     );
 
     // ✅ `timeVotes`에서 `timeId`를 찾고, 없으면 생성하는 최적화된 코드
