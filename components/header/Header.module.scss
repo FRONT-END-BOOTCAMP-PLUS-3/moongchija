@@ -1,6 +1,6 @@
 .header {
   width: 100%;
-  height: 65px;
+  padding: 13px;
   background: var(--primary-color);
   display: flex;
   align-items: center;
@@ -23,5 +23,14 @@
     font-size: var(--font-size-md);
     cursor: pointer;
     color: white;
+  }
+
+  .logoutButton {
+    border: none;
+    background-color: transparent;
+    font-family: var(--font-sub);
+    font-size: var(--font-size-md);
+    cursor: pointer;
+    color: #fff;
   }
 }

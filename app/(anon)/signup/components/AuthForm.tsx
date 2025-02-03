@@ -29,7 +29,7 @@ const AuthForm = () => {
       handleChangeNickname,
       setIsNicknameAvailable,
     },
-    password: { password, passwordError, habdleChangePassword },
+    password: { password, passwordError, handleChangePassword },
     passwordCheck: {
       passwordCheck,
       passwordCheckError,
@@ -161,7 +161,7 @@ const AuthForm = () => {
           type="password"
           label="비밀번호"
           value={password}
-          onChange={habdleChangePassword}
+          onChange={handleChangePassword}
           placeholder="비밀번호를 입력해주세요"
           error={passwordError}
         />

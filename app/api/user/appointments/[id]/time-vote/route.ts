@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
-import { DfAppointmentTimeUsecase } from "@/application/usecases/appointment/DfGetAppointmentTimeUsecase.ts";
+import { DfAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
 export async function GET(
   req: Request,

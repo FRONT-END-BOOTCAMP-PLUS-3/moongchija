@@ -7,6 +7,13 @@ export const POST = async (request: NextRequest) => {
   try {
     const { user_email, password } = await request.json();
 
+    if (!user_email || !password) {
+      return NextResponse.json(
+        { error: "이메일과 비밀번호를 모두 입력해주세요." },
+        { status: 400 }
+      );
+    }
+
     const authRepository = new SbAuthRepository();
     const loginUsecase = new DfLoginUsecase(authRepository);
 
@@ -17,6 +24,9 @@ export const POST = async (request: NextRequest) => {
       const userId = decodedToken.sub;
 
       const response = NextResponse.json({ user }, { status: 200 });
+
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.0");
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.1");
 
       if (userId) {
         response.cookies.set("userId", userId, {
@@ -30,10 +40,19 @@ export const POST = async (request: NextRequest) => {
       return response;
     }
   } catch (error: unknown) {
-    if (error instanceof Error) {
-      throw new Error("로그인 실패: " + error.message);
+    if (
+      error instanceof Error &&
+      error.message.includes("Invalid login credentials")
+    ) {
+      return NextResponse.json(
+        { error: "유효하지 않은 이메일 또는 비밀번호입니다." },
+        { status: 401 }
+      );
     }
 
-    throw new Error("알 수 없는 에러가 발생했습니다.");
+    return NextResponse.json(
+      { error: "알 수 없는 에러가 발생했습니다." },
+      { status: 500 }
+    );
   }
 };
