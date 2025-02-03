@@ -23,8 +23,6 @@ export class SbUserRepository implements UserRepository {
     });
 
     if (authError) {
-      console.log("AuthError :", authError);
-
       throw authError;
     }
 
