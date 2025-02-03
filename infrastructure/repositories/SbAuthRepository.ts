@@ -67,6 +67,7 @@ export class SbAuthRepository implements AuthRepository {
         await supabase.auth.exchangeCodeForSession(code);
 
       if (error || !session) {
+        console.error("세션 오류:", error);
         throw new Error("카카오 로그인 처리 중 오류가 발생했습니다.");
       }
 
@@ -79,22 +80,19 @@ export class SbAuthRepository implements AuthRepository {
       let existingUser = await userRepository.findUserByEmail(email);
 
       if (existingUser) {
-        const nickname = email.split("@")[0];
-        const uniqueNickname = await userRepository.generateUniqueNickname(
-          nickname
-        );
-        const randomEmoji = await userEmojiRepository.createUserRandomEmoji();
+        if (!existingUser.nickname || !existingUser.emoji) {
+          const nickname = email.split("@")[0];
+          const uniqueNickname = await userRepository.generateUniqueNickname(
+            nickname
+          );
+          const randomEmoji = await userEmojiRepository.createUserRandomEmoji();
 
-        console.log("업데이트할 정보:", {
-          userId: existingUser.id,
-          nickname: uniqueNickname,
-          emoji: randomEmoji,
-        });
-        const updatedUser = await userRepository.updateUser(existingUser.id, {
-          nickname: uniqueNickname,
-          emoji: randomEmoji,
-        });
-        existingUser = updatedUser;
+          const updatedUser = await userRepository.updateUser(existingUser.id, {
+            nickname: uniqueNickname,
+            emoji: randomEmoji,
+          });
+          existingUser = updatedUser;
+        }
       } else {
         throw new Error("❌ 기존 사용자 정보를 찾을 수 없습니다.");
       }
