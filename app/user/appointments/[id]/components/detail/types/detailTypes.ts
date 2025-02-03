@@ -5,8 +5,8 @@ export interface Place {
 
 export interface Information {
   title: string;
-  place: Place; 
-  date: string;
+  place: Place;
+  date: Date; 
   participants: string[];
 }
 

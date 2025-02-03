@@ -9,18 +9,33 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { Information } from "../../detail/types/detailTypes";
+import { calculateCountdown, formatTime } from "@/utils/dateUtils/dateUtils";
 
 interface InformationDetailProps {
   informationData: Information;
 }
 
+
+
 const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
+ 
+  const formattedTime = formatTime(informationData.date);
+  const countdown = calculateCountdown(informationData.date);
+
+  const getCountdownClass = (countdown: string) => {
+    if (countdown === "종료") return styles.end;
+    if (countdown === "D-DAY") return styles.dDay;
+    else return styles.count;
+  };
+
   return (
     <div className={styles.container}>
       {/* 남은 날짜 박스 */}
-      <div className={styles.dDay}>
-        <span>D-1</span>
-      </div>
+      {/* <div className={styles.dDay}> */}
+      <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
+          {countdown}
+        </div>
+      {/* </div> */}
 
       {/* 약속명 */}
       <div className={styles.name}>
@@ -49,7 +64,7 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <FaCalendarAlt className={styles.calendarIcon} />
           <span>일자</span>
           <div className={styles.divider}></div>
-          <span>{informationData.date}</span> 
+          <span>{formattedTime}</span> 
         </div>
 
         {/* 참여 인원 */}
