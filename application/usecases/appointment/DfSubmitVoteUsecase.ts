@@ -9,13 +9,11 @@ export class DfSubmitVoteUsecase {
   ) {}
 
   async execute(voteData: VoteSubmissionDto): Promise<void> {
-    // ✅ appointmentId 추가됨!
     const { userId, appointmentId, timeVotes, placeVotes } = voteData;
 
     // ✅ 1. 사용자가 시간 투표한 데이터 저장 (time_vote_user 테이블)
     await Promise.all(
       timeVotes.map(async (timeVote: TimeVoteDto) => {
-        // ✅ 타입 명시!
         await this.timeVoteUserRepo.voteForTime(userId, timeVote.timeId);
       })
     );
@@ -23,7 +21,6 @@ export class DfSubmitVoteUsecase {
     // ✅ 2. 사용자가 장소 투표한 데이터 저장 (place_vote_user 테이블)
     await Promise.all(
       placeVotes.map(async (placeVote: PlaceVoteDto) => {
-        // ✅ 타입 명시!
         await this.placeVoteUserRepo.voteForPlace(userId, placeVote.placeId);
       })
     );

@@ -6,8 +6,8 @@ import { FaMapMarkerAlt } from "react-icons/fa";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
-import { useTimeVote } from "@/context/TimeVoteContext"; // ✅ 시간 투표 저장된 context 사용
-import { getUserIdClient } from "@/utils/supabase/client"; // ✅ 사용자 ID 가져오기
+import { useTimeVote } from "@/context/TimeVoteContext";
+import { getUserIdClient } from "@/utils/supabase/client"; // ✅ `userId` 가져오는 함수
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 
 const VotePlacePage: React.FC = () => {
@@ -17,21 +17,22 @@ const VotePlacePage: React.FC = () => {
 
   const { selectedTimes } = useTimeVote();
   const [places, setPlaces] = useState<PlaceVote[]>([]);
-  const [selectedPlace, setSelectedPlace] = useState<string>("");
+  const [selectedPlace, setSelectedPlace] = useState<number>();
   const [userId, setUserId] = useState<string | null>(null);
 
-  // useEffect(() => {
-  //   const fetchUserId = async () => {
-  //     try {
-  //       const user = await getUserIdClient();
-  //       if (!user) throw new Error("❌ 유저 정보를 가져올 수 없음");
-  //       setUserId(user);
-  //     } catch (error) {
-  //       console.error("❌ 유저 정보 가져오기 실패:", error);
-  //     }
-  //   };
-  //   fetchUserId();
-  // }, []);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) throw new Error("❌ 유저 정보를 가져올 수 없음");
+        setUserId(user);
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+        router.push("/login");
+      }
+    };
+    fetchUserId();
+  }, []);
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -49,8 +50,8 @@ const VotePlacePage: React.FC = () => {
     if (id) fetchPlaces();
   }, [id]);
 
-  const handleSelect = (place: string) => {
-    setSelectedPlace(place);
+  const handleSelect = (placeId: number) => {
+    setSelectedPlace(placeId);
   };
 
   const handleSubmit = async () => {
@@ -58,16 +59,17 @@ const VotePlacePage: React.FC = () => {
       alert("❌ 장소를 선택해주세요.");
       return;
     }
-    // if (!userId) {
-    //   alert("❌ 로그인이 필요합니다.");
-    //   return;
-    // }
+    if (!userId) {
+      alert("❌ 로그인이 필요합니다.");
+      router.push("/login");
+      return;
+    }
 
     const voteData = {
       appointmentId: parseInt(id),
-      // userId,
-      timeVotes: selectedTimes.map((time) => ({ time })),
-      placeVotes: [{ place: selectedPlace }],
+      userId,
+      timeVotes: selectedTimes.map((time) => ({ time })), // 시간만 포함
+      placeVotes: [{ placeId: selectedPlace }], // ✅ 장소 ID 포함
     };
 
     try {
@@ -77,12 +79,12 @@ const VotePlacePage: React.FC = () => {
         body: JSON.stringify(voteData),
       });
 
+      const responseData = await response.json();
       if (response.ok) {
         alert("✅ 투표가 완료되었습니다!");
-        router.push(`/user/appointments/${id}/vote-result`);
+        // router.push(`/user/appointments/${id}/vote-result`);
       } else {
-        const error = await response.json();
-        alert(`❌ 투표 저장 실패: ${error.message}`);
+        alert(`❌ 투표 저장 실패: ${responseData.error || "알 수 없는 오류"}`);
       }
     } catch (error) {
       console.error("❌ 투표 저장 중 오류 발생:", error);
@@ -104,9 +106,9 @@ const VotePlacePage: React.FC = () => {
               <div
                 key={index}
                 className={`${styles.placeItem} ${
-                  selectedPlace === item.place ? styles.selected : ""
+                  selectedPlace === item.id ? styles.selected : ""
                 }`}
-                onClick={() => handleSelect(item.place)}
+                onClick={() => handleSelect(item.id)}
               >
                 <div className={styles.itemTop}>
                   <div className={styles.placeName}>
@@ -115,12 +117,12 @@ const VotePlacePage: React.FC = () => {
                   </div>
                   <div
                     className={`${styles.radioButton} ${
-                      selectedPlace === item.place ? styles.checked : ""
+                      selectedPlace === item.id ? styles.checked : ""
                     }`}
                   >
                     <div
                       className={`${styles.innerButton} ${
-                        selectedPlace === item.place ? styles.checked : ""
+                        selectedPlace === item.id ? styles.checked : ""
                       }`}
                     ></div>
                   </div>

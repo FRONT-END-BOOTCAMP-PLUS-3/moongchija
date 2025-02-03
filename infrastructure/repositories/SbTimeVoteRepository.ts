@@ -3,7 +3,10 @@ import { TimeVoteRepository } from "@/domain/repositories/TimeVoteRepository";
 import { TimeVote } from "@/domain/entities/TimeVote";
 
 export class SbTimeVoteRepository implements TimeVoteRepository {
-  async createTimeVotes(appointmentId: number, times: string[]): Promise<void> {
+  async createTimeVotes(
+    appointmentId: number,
+    times: string[]
+  ): Promise<number[]> {
     const supabase = await createClient();
 
     const newTimeVotes = times.map((time) => ({
@@ -11,11 +14,15 @@ export class SbTimeVoteRepository implements TimeVoteRepository {
       time: time,
     }));
 
-    const { error } = await supabase.from("time_vote").insert(newTimeVotes);
+    const { data, error } = await supabase
+      .from("time_vote")
+      .insert(newTimeVotes)
+      .select("id"); // ✅ 새로 생성된 ID 반환
 
     if (error) {
       throw new Error(`Failed to insert time votes: ${error.message}`);
     }
+    return data?.map((item) => item.id) || [];
   }
 
   async getTimeVotesByAppointment(appointmentId: number): Promise<TimeVote[]> {
@@ -43,13 +50,11 @@ export class SbTimeVoteRepository implements TimeVoteRepository {
       .select("id")
       .eq("appointment_id", appointmentId)
       .eq("time", time)
-      .single(); // ✅ 단일 결과 조회
+      .single();
 
     if (error) {
-      console.error(`Error finding time_id for ${time}:`, error);
       return null;
     }
-
     return data?.id || null;
   }
 }
