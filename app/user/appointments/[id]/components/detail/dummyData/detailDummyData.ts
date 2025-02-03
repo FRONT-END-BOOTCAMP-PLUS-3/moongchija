@@ -56,16 +56,7 @@ const detailDummyData: detailTypes[] = [
         content: "늦을 사람들은 미리 말해주기!",
       },
     ],
-    settlement: {
-      items: [
-        { id: 1, place: "브런치 카페", price: 35000 },
-        { id: 2, place: "디저트 카페", price: 20000 },
-      ],
-      numberOfPeople: 3,
-      accountNumber: "987654321987654",
-      bank: "신한",
-      depositor: "안중근",
-    },
+    settlement: null,
     gallery: [
       { id: 1, src: "/images/고뭉치.png", user: "이순신" },
       { id: 2, src: "/images/고뭉치.png", user: "안중근" },

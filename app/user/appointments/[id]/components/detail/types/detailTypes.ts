@@ -39,6 +39,6 @@ export interface detailTypes {
   id: number;
   information: Information;
   notice: Notice[];
-  settlement: Settlement;
+  settlement: Settlement | null;  
   gallery: GalleryItem[];
 }

@@ -136,13 +136,24 @@
   font-size: 20px;
 }
 
+
+.modalContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+}
+
 .modalWrapper {
   width: 360px;
-  font-size: 15px;
+  font-size: 16px;
   padding: 10px;
   resize: none;
   outline: none;
   margin-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+
 }
 
 .modalListContainer {
@@ -289,7 +300,6 @@
 .modalEditButton {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 
 
@@ -299,3 +309,21 @@
   margin-top: 20px;
   margin-right: 10px;
 }
+
+.noSettlementContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  margin: 0 auto; 
+  height: 100%; 
+}
+
+
+.noSettlement{
+  color: #888; 
+  font-size: 18px; 
+  text-align: center; 
+  margin-bottom: 20px;
+}
+

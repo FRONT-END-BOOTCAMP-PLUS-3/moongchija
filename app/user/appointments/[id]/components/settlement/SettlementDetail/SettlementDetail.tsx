@@ -1,31 +1,44 @@
-"use client";
-
 import { FC, useState } from "react";
 import Button from "@/components/button/Button";
 import styles from "./SettlementDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import SettlementModalContent from "../SettlementModalContent/SettlementModalContent";
 import { Settlement } from "../../detail/types/detailTypes";
+import CircleButton from "@/components/circleButton/CircleButton";
+import SettlementModalNew from "../SettlementModalNew/SettlementModalNew";
 
 interface SettlementDetailProps {
-  settlementData: Settlement;
+  settlementData: Settlement | null; // 정산이 없을 수도 있으므로 null 허용
 }
 
 const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
 
   const handleCopy = () => {
-    navigator.clipboard.writeText(settlementData.accountNumber).then(() => {
-      alert("복사되었습니다");
-    });
+    if (settlementData) {
+      navigator.clipboard.writeText(settlementData.accountNumber).then(() => {
+        alert("복사되었습니다");
+      });
+    }
   };
 
   const openModal = () => {
     setIsModalOpen(true);
   };
 
+  const openNewModal = () => {
+    setIsNewModalOpen(true);
+    console.log("open");
+    console.log(isNewModalOpen);
+  };
+
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+
+  const closeNewModal = () => {
+    setIsNewModalOpen(false);
   };
 
   const handleRegister = () => {
@@ -33,12 +46,33 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
     closeModal();
   };
 
+  if (!settlementData) {
+    return (
+      <>
+        <div className={styles.noSettlementContainer}>
+          <div className={styles.noSettlement}>등록된 정산이 없습니다</div>
+
+          <div className={styles.editButton}>
+            <CircleButton onClick={openNewModal} />
+          </div>
+        </div>
+
+        {/* 새로운 정산 작성 모달 컴포넌트 */}
+        <Modal isOpen={isNewModalOpen} onClose={closeNewModal}>
+          <SettlementModalNew handleRegister={handleRegister} />
+        </Modal>
+      </>
+    );
+  }
+
   // 총액 계산
   const totalAmount = settlementData.items.reduce(
     (sum, item) => sum + item.price,
     0
   );
-  const perPersonAmount = Math.floor(totalAmount / settlementData.numberOfPeople);
+  const perPersonAmount = Math.floor(
+    totalAmount / settlementData.numberOfPeople
+  );
 
   return (
     <div className={styles.container}>
@@ -95,7 +129,9 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
             <div className={styles.row}>
               <span>계좌번호</span>
               <div>
-               <div className={styles.accountNumber}> {settlementData.accountNumber}</div>
+                <div className={styles.accountNumber}>
+                  {settlementData.accountNumber}
+                </div>
                 <button className={styles.copyButton} onClick={handleCopy}>
                   복사
                 </button>
@@ -124,7 +160,7 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
         />
       </div>
 
-      {/* 모달 컴포넌트 */}
+      {/* 정산 수정 모달 컴포넌트 */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <SettlementModalContent
           initialData={settlementData}

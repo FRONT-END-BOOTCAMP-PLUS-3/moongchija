@@ -74,9 +74,7 @@ const GalleryPage = () => {
         <GalleryDetail galleryData={detail.gallery} />
       </div>
 
-      <div className={styles.circleButtonWrapper}>
-        <CircleButton onClick={openModal} />
-      </div>
+    
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className={styles.modalContainer}>
@@ -132,6 +130,9 @@ const GalleryPage = () => {
           </div>
         </div>
       </Modal>
+ 
+        <CircleButton onClick={openModal} />
+  
     </div>
   );
 };
