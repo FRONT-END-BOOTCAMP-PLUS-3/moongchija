@@ -37,7 +37,11 @@ const LoginForm = () => {
         return;
       }
 
-      router.push("/user/appointments");
+      const { redirectUrl } = await response.json();
+
+      if (redirectUrl) {
+        router.push(redirectUrl);
+      }
     } catch (error) {
       console.log(error);
     }
