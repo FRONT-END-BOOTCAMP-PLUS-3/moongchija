@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styles from "./Appointments.module.scss";
 import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
@@ -85,6 +85,23 @@ const AppointmentsPage: React.FC = () => {
           .includes(searchText.toLowerCase());
       });
   };
+
+  async function fetchAppointments() {
+    try {
+      const response = await fetch('/api/user/appointments');
+      if (!response.ok) {
+        throw new Error('Failed to fetch appointments');
+      }
+      const appointments = await response.json();
+      console.log(appointments);
+    } catch (error) {
+      console.error('Error:', error);
+    }
+  }
+
+  useEffect(() => {
+    fetchAppointments();
+  }, [])
 
   return (
     <>

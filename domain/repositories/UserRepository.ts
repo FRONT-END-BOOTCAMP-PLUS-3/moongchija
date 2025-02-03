@@ -7,6 +7,8 @@ export interface UserRepository {
     nickname: string,
     emoji: string
   ): Promise<Omit<User, "password">>;
+  findById(id: string): Promise<User>;
+  findByIds(id: string[]): Promise<User[]>;
   findUserByEmail(user_email: string): Promise<Omit<User, "password"> | null>;
   findUserByNickname(nickname: string): Promise<boolean>;
   generateUniqueNickname(baseNickname: string): Promise<string>;
