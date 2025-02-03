@@ -12,6 +12,8 @@ import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
 import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
+import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading"; // 로딩 컴포넌트 추가
 
 const GalleryPage = () => {
   const { id } = useParams(); 
@@ -54,18 +56,25 @@ const GalleryPage = () => {
     }
   }, [id]);
 
-  if (!detail) return <div>Loading...</div>;
-
-  return (
-    <div>
+  if (!detail) return (
+    <div className={styles.pageContainer}>
+      <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
-        <GalleryDetail galleryData={detail.gallery}  />
+        <Loading /> {/* 로딩 컴포넌트 표시 */}
+      </div>
+    </div>
+  );
+
+  return (
+    <div className={styles.pageContainer}>
+      <IconHeader />
+      <DetailTabMenu />
+      <div className={styles.container}>
+        <GalleryDetail galleryData={detail.gallery} />
       </div>
 
-      <div className={styles.circleButtonWrapper}>
-        <CircleButton onClick={openModal} />
-      </div>
+    
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <div className={styles.modalContainer}>
@@ -121,6 +130,9 @@ const GalleryPage = () => {
           </div>
         </div>
       </Modal>
+ 
+        <CircleButton onClick={openModal} />
+  
     </div>
   );
 };

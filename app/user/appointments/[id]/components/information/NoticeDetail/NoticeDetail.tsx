@@ -37,11 +37,14 @@ const NoticeDetail = ({ noticeData }: NoticeDetailProps) => {
           <FaPlus className={styles.plusIcon} onClick={openModal} />
         </div>
 
-        {/* 공지사항 개별 박스 */}
         <div className={styles.wrapper}>
-          {noticeData.map((noticeItem, index) => (
-            <NoticeBox key={index} content={noticeItem.content} />
-          ))}
+          {noticeData.length > 0 ? (
+            noticeData.map((noticeItem, index) => (
+              <NoticeBox key={index} content={noticeItem.content} />
+            ))
+          ) : (
+            <div className={styles.noNotice}>공지사항이 없습니다.</div>
+          )}
         </div>
       </div>
 
