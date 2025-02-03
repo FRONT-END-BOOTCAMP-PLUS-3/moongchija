@@ -7,6 +7,7 @@ import EmailInputField from "./EmailInputField";
 import useForm from "../hooks/useForm";
 import Link from "next/link";
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 
 const AuthForm = () => {
   const [isLoading, setIsLoading] = useState(false);
@@ -17,6 +18,7 @@ const AuthForm = () => {
   const [nicknameCheckSuccess, setNicknameCheckSuccess] = useState<
     string | null
   >(null);
+  const router = useRouter();
 
   const {
     email: { email, emailError, handleChangeEmail },
@@ -57,9 +59,11 @@ const AuthForm = () => {
           nickname: nickname,
         }),
       });
-      const data = await response.json();
-      if (data.redirectUrl) {
-        window.location.href = data.redirectUrl;
+      if (response.ok) {
+        const { redirectUrl } = await response.json();
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        }
       }
     } catch (error) {
       setSubmitError(

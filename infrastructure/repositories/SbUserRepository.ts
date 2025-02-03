@@ -88,9 +88,7 @@ export class SbUserRepository implements UserRepository {
     };
   }
 
-  async findUserByEmail(
-    user_email: string
-  ): Promise<Omit<User, "password"> | null> {
+  async findUserByEmail(user_email: string): Promise<User | null> {
     const supabase = await createClient();
     const { data: user, error } = await supabase
       .from("user")
@@ -105,6 +103,7 @@ export class SbUserRepository implements UserRepository {
       id: user.id,
       user_email: user.user_email,
       nickname: user.nickname,
+      password: user.password,
       emoji: user.emoji,
       created_at: new Date(user.created_at),
       provider: user.provider,

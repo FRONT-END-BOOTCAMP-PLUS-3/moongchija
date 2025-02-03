@@ -11,7 +11,9 @@ export const POST = async () => {
 
     const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/login`;
 
-    const response = NextResponse.redirect(redirectUrl);
+    const response = NextResponse.json({
+      redirectUrl,
+    });
 
     response.headers.set(
       "Set-Cookie",
