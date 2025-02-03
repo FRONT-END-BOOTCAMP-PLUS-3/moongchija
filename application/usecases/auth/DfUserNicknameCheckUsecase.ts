@@ -1,6 +1,6 @@
 import { UserRepository } from "@/domain/repositories/UserRepository";
 
-export class UserNicknameCheckUsecase {
+export class DfUserNicknameCheckUsecase {
   constructor(private userRepository: UserRepository) {}
 
   async excute(nickname: string) {

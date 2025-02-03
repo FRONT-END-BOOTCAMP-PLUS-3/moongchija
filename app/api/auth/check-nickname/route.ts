@@ -1,4 +1,4 @@
-import { UserNicknameCheckUsecase } from "@/application/usecases/auth/UserNicknameCheckUsecase";
+import { DfUserNicknameCheckUsecase } from "@/application/usecases/auth/DfUserNicknameCheckUsecase";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
 
@@ -14,7 +14,7 @@ export const POST = async (request: NextRequest) => {
     }
 
     const userRepository = new SbUserRepository();
-    const userNicknameCheckUsecase = new UserNicknameCheckUsecase(
+    const userNicknameCheckUsecase = new DfUserNicknameCheckUsecase(
       userRepository
     );
 
