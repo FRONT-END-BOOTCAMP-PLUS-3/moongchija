@@ -14,8 +14,10 @@ import IconHeader from "@/components/header/IconHeader";
 import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 
+const tabs = ["투표 진행중", "약속 리스트"];
+
 const AppointmentsPage: React.FC = () => {
-  const tabs = ["투표 진행중", "약속 리스트"];
+  const [appointments, setAppointments] = useState<AppointmentCardDto[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
@@ -92,8 +94,17 @@ const AppointmentsPage: React.FC = () => {
       if (!response.ok) {
         throw new Error('Failed to fetch appointments');
       }
-      const appointments = await response.json();
-      console.log(appointments);
+      const appointments: AppointmentCardDto[] = await response.json();
+
+      const parseAppointments: AppointmentCardDto[] = appointments.map((appointment) => ({
+        ...appointment,
+        startDate: appointment.startDate ? new Date(appointment.startDate) : undefined,
+        endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
+        confirmDate: appointment.confirmDate ? new Date(appointment.confirmDate) : undefined,
+      }));
+      console.log(appointments)
+      setAppointments(parseAppointments);
+      
     } catch (error) {
       console.error('Error:', error);
     }
@@ -173,79 +184,3 @@ const AppointmentsPage: React.FC = () => {
 };
 
 export default AppointmentsPage;
-
-// 더미 데이터
-export const appointments: AppointmentCardDto[] = [
-  {
-    id: 1,
-    title: "저녁에 치맥",
-    startDate: new Date(2025, 0, 30, 18, 0),
-    endDate: new Date(2025, 0, 31),
-    participants: ["😀", "😀", "😀", "😀", "😀"],
-    isCreator: true,
-    extraParticipants: 3,
-  },
-  {
-    id: 2,
-    title: "영화 관람",
-    startDate: new Date(2025, 0, 27, 18, 0),
-    endDate: new Date(2025, 0, 28),
-    participants: ["😊", "😎"],
-    isCreator: false,
-    extraParticipants: 0,
-  },
-  {
-    id: 3,
-    title: "확정된 저녁 약속",
-    confirmDate: new Date(2025, 1, 3, 19, 0),
-    confirmPlace: "홍대입구역",
-    participants: ["😀", "😀", "😀"],
-    isCreator: true,
-    extraParticipants: 0,
-  },
-  {
-    id: 4,
-    title: "확정된 영화 약속",
-    confirmDate: new Date(2025, 0, 28, 18, 0),
-    confirmPlace: "강남역",
-    participants: ["😊", "😎", "🙂", "😎", "🙂"],
-    isCreator: false,
-    extraParticipants: 1,
-  },
-  {
-    id: 5,
-    title: "확정된 영화 약속",
-    confirmDate: new Date(2025, 0, 25, 18, 0),
-    confirmPlace: "강남역",
-    participants: ["😊", "😎", "🙂", "😎", "🙂"],
-    isCreator: false,
-    extraParticipants: 1,
-  },
-  {
-    id: 6,
-    title: "확정된 저녁 약속",
-    confirmDate: new Date(2025, 0, 31, 19, 0),
-    confirmPlace: "홍대입구역",
-    participants: ["😀", "😀", "😀"],
-    isCreator: true,
-    extraParticipants: 0,
-  },
-  {
-    id: 7,
-    title: "확정된 영화 약속",
-    confirmDate: new Date(2025, 0, 27, 18, 0),
-    confirmPlace: "강남역",
-    participants: ["😊", "😎", "🙂", "😎", "🙂"],
-    isCreator: false,
-    extraParticipants: 1,
-  },
-  {
-    id: 8,
-    title: "확정된 영화 약속",
-    confirmDate: new Date(2025, 0, 25, 18, 0),
-    confirmPlace: "강남역",
-    participants: ["😊", "😎", "🙂", "😎", "🙂"],
-    isCreator: false,
-    extraParticipants: 1,
-  },
-];

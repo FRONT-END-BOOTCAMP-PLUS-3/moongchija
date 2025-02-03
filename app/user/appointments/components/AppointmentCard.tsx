@@ -4,6 +4,7 @@ import styles from "./AppointmentCard.module.scss";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { calculateCountdown, formatDate, formatTime } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
+import Image from "next/image";
 
 interface AppointmentCardProps {
   appointment: AppointmentCardDto;
@@ -54,7 +55,10 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         </div>
         {/* 참여 인원 */}
         <div className={styles.participantWrapper}>
-          <span className={styles.participants}>{participants.join("")}</span>
+          {participants.map((participant, index) => (
+            <Image src={participant} alt={`Participant ${index + 1}`} key={index} width={20} height={20}/>
+          ))}
+          
           {extraParticipants > 0 && (
             <span className={styles.extraParticipants}>
               외 {extraParticipants}명
