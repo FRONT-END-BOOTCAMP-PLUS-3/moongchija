@@ -8,6 +8,8 @@ export interface UserRepository {
     emoji: string,
     provider: string
   ): Promise<User & { access_token: string }>;
+  findById(id: string): Promise<User>;
+  findByIds(id: string[]): Promise<User[]>;
   findUserByEmail(user_email: string): Promise<Omit<User, "password"> | null>;
   findUserByNickname(nickname: string): Promise<boolean>;
   generateUniqueNickname(baseNickname: string): Promise<string>;

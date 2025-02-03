@@ -1,12 +1,12 @@
 "use client";
 
-import { AppointmentInfo } from "../page";
 import styles from "./AppointmentList.module.scss";
 import AppointmentCard from "./AppointmentCard";
 import Link from "next/link";
+import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 
 interface AppointmentListProps {
-  appointments: AppointmentInfo[];
+  appointments: AppointmentCardDto[];
 }
 
 const AppointmentList: React.FC<AppointmentListProps> = ({ appointments }) => {

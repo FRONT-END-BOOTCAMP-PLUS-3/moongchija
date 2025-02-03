@@ -4,6 +4,35 @@ import { createClient } from "@/utils/supabase/server";
 import jwt from "jsonwebtoken";
 
 export class SbUserRepository implements UserRepository {
+  async findByIds(id: string[]): Promise<User[]> {
+    const supabase = await createClient();
+    const { data: users, error } = await supabase
+      .from("user")
+      .select()
+      .in("id", id);
+
+    if (error || !users) {
+      throw new Error("Users not found");
+    }
+
+    return users;
+  }
+
+  async findById(id: string): Promise<User> {
+    const supabase = await createClient();
+    const { data: user, error } = await supabase
+      .from("user")
+      .select()
+      .eq("id", id)
+      .single();
+
+    if (error || !user) {
+      throw new Error("User not found");
+    }
+
+    return user;
+  }
+
   async createUser(
     user_email: string,
     hashedPassword: string,

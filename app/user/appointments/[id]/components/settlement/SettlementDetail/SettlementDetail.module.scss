@@ -1,6 +1,5 @@
 .container {
-  padding: 20px;
-  background-color: #f9f9f9;
+  padding: 20px 40px;
   border-radius: 10px;
 }
 
@@ -83,6 +82,8 @@
     align-items: center;
     margin-bottom: 18px;
     width: 100%;
+    white-space: nowrap;
+    gap: 10px;
   }
 
   .row span {
@@ -93,11 +94,12 @@
   }
 
   .row div {
-    text-align: left;
-    flex-grow: 2;
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
+   display: flex;
+  align-items: center;
+  justify-content: space-between;
+  // gap: 10px;
+  width: 100%;
+    
   }
 
   .row input {
@@ -105,14 +107,25 @@
   }
 }
 
+.accountNumber {
+  width: 80%;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+ 
+  display: block; 
+  margin-right: 5px;
+}
+
 .copyButton {
+  width: 20%;
   background: #aaaaaa;
   color: white;
   border: none;
-  padding: 5px 10px;
+  padding: 2px 4px;
   border-radius: 4px;
   cursor: pointer;
-  margin-left: 15px;
+
 
   &:hover {
     background: var(--primary-color);
@@ -123,13 +136,24 @@
   font-size: 20px;
 }
 
+
+.modalContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+}
+
 .modalWrapper {
   width: 360px;
-  font-size: 15px;
+  font-size: 16px;
   padding: 10px;
   resize: none;
   outline: none;
   margin-bottom: 20px;
+  flex: 1;
+  overflow-y: auto;
+
 }
 
 .modalListContainer {
@@ -155,8 +179,14 @@
   gap: 5px;
 }
 
+.buttonContainer{
+  display: flex;
+  gap:5px;
+}
+
 .inputPlusButton {
   height: 35px;
+  width: 46%;
   background-color: #aaaaaa;
   border: none;
   border-radius: 5px;
@@ -175,6 +205,27 @@
 .icon {
   font-size: 20px;
 }
+
+.inputMinusButton {
+  height: 35px;
+  width: 46%;
+  background-color: #aaaaaa;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.4s ease;
+
+  &:hover {
+    background-color: #888888;
+  }
+}
+
+
+
 
 .modalAccountTitle {
   font-size: 20px;
@@ -276,7 +327,6 @@
 .modalEditButton {
   display: flex;
   justify-content: center;
-  margin-top: 20px;
 }
 
 
@@ -286,3 +336,21 @@
   margin-top: 20px;
   margin-right: 10px;
 }
+
+.noSettlementContainer {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; 
+  align-items: center;
+  margin: 0 auto; 
+  height: 100%; 
+}
+
+
+.noSettlement{
+  color: #888; 
+  font-size: 18px; 
+  text-align: center; 
+  margin-bottom: 20px;
+}
+

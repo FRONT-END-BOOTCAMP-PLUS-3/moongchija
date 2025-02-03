@@ -1,79 +1,79 @@
+"use client";
+
 import { useState, useEffect } from "react";
-import { FaPlus, FaMinus } from "react-icons/fa6"; // Import FaMinus for the - button
+import { FaPlus } from "react-icons/fa6";
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
-import { Settlement } from "../../detail/types/detailTypes";
 import { banks } from "../../const/banks";
+import { FaMinus } from "react-icons/fa";
 
-type ModalContentProps = {
-  initialData: Settlement;
-  handleRegister: () => void;
+type SettlementItem = {
+  place: string;
+  price: number;
 };
 
-const SettlementModalContent = ({
-  initialData,
-  handleRegister,
-}: ModalContentProps) => {
+type ModalProps = {
+  handleRegister: (data: {
+    items: SettlementItem[];
+    numberOfPeople: number;
+    accountNumber: string;
+    bank: string;
+    depositor: string;
+  }) => void;
+};
+
+const SettlementModalNew = ({ handleRegister }: ModalProps) => {
   const [totalPrice, setTotalPrice] = useState(0); // 총액
-  const [numberOfPeople, setNumberOfPeople] = useState(
-    initialData.numberOfPeople
-  ); // 인원 수
+  const [numberOfPeople, setNumberOfPeople] = useState(1); // 인원 수 (기본값 1)
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
-  const [accountNumber, setAccountNumber] = useState(initialData.accountNumber); // 계좌번호 상태 추가
-  const [selectedBank, setSelectedBank] = useState(
-    banks.find(
-      (bank) => bank.replace(/\s/g, "") === initialData.bank.replace(/\s/g, "")
-    ) || banks[0]
-  ); // 은행사 상태 추가
-  const [depositor, setDepositor] = useState(initialData.depositor); // 예금주 상태 추가
+  const [accountNumber, setAccountNumber] = useState(""); // 계좌번호
+  const [selectedBank, setSelectedBank] = useState(banks[0]); // 기본 은행 선택
+  const [depositor, setDepositor] = useState(""); // 예금주
 
-  // 장소&금액 input
-  const [inputSets, setInputSets] = useState(
-    initialData.items.map((item) => ({ place: item.place, price: item.price }))
-  );
+  // 장소 & 금액 입력 필드
+  const [inputSets, setInputSets] = useState<SettlementItem[]>([{ place: "", price: 0 }]);
 
-  // 인원 수가 변경될 때마다 인당 금액을 계산
   useEffect(() => {
     if (numberOfPeople > 0) {
-      setDividedPrice(Math.floor(totalPrice / numberOfPeople)); // 소수점 제거
+      setDividedPrice(Math.floor(totalPrice / numberOfPeople));
     }
   }, [totalPrice, numberOfPeople]);
 
-  // inputSets의 price가 변경될 때마다 totalPrice를 업데이트
   useEffect(() => {
-    const updatedTotalPrice = inputSets.reduce(
-      (acc, set) => acc + set.price,
-      0
-    );
+    const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.price, 0);
     setTotalPrice(updatedTotalPrice);
-  }, [inputSets]); // inputSets가 변경될 때마다 실행
+  }, [inputSets]);
 
-  // 새로운 장소&금액 세트 추가
   const addNewSet = () => {
-    setInputSets((prevInputSets) => {
-      const newSet = { place: "", price: 0 };
-      return [...prevInputSets, newSet]; // 새로운 세트를 추가
+    setInputSets((prev) => [...prev, { place: "", price: 0 }]);
+  };
+
+  const handlePriceChange = (index: number, newPrice: number) => {
+    setInputSets((prev) =>
+      prev.map((set, idx) => (idx === index ? { ...set, price: newPrice } : set))
+    );
+  };
+
+  const handleSubmit = () => {
+    handleRegister({
+      items: inputSets,
+      numberOfPeople,
+      accountNumber,
+      bank: selectedBank,
+      depositor,
     });
   };
 
-  // 가격을 입력할 때마다 totalPrice를 갱신하는 코드
-  const handlePriceChange = (index: number, newPrice: number) => {
-    const updatedSets = [...inputSets];
-    updatedSets[index].price = newPrice;
-    setInputSets(updatedSets); // inputSets 상태 업데이트
-  };
-
-  // 마지막 장소&금액 세트 삭제
-  const removeLastSet = () => {
-    setInputSets((prevInputSets) => prevInputSets.slice(0, -1)); // 마지막 세트 삭제
-  };
+    // 마지막 장소&금액 세트 삭제
+    const removeLastSet = () => {
+      setInputSets((prevInputSets) => prevInputSets.slice(0, -1)); // 마지막 세트 삭제
+    };
 
   return (
     <div className={styles.modalContainer}>
       <div className={styles.modalWrapper}>
-        <span className={styles.modalTitle}>정산 내역</span>
+        <span className={styles.modalTitle}>새 정산 추가</span>
         <div className={styles.modalBox}>
-          {/* 내역 목록 */}
           <div className={styles.modalListContainer}>
             <div className={styles.modalListWrapper}>
               {inputSets.map((set, index) => (
@@ -83,25 +83,28 @@ const SettlementModalContent = ({
                     type="text"
                     placeholder="장소"
                     value={set.place}
-                    readOnly
+                    onChange={(e) => {
+                      const newPlace = e.target.value;
+                      setInputSets((prev) =>
+                        prev.map((s, idx) => (idx === index ? { ...s, place: newPlace } : s))
+                      );
+                    }}
                   />
                   <input
                     className={styles.price}
-                    type="text" // type을 text로 변경하여 숫자 외 입력을 막음
+                    type="text"
                     placeholder="금액"
-                    value={set.price.toString().replace(/^0+/, "")} // 숫자 앞의 0을 제거
+                    value={set.price.toString().replace(/^0+/, "")}
                     onChange={(e) => {
                       const value = e.target.value;
-                      // 한글이나 숫자가 아닌 문자가 입력되면 무시
                       if (/[^0-9]/.test(value)) return;
-                      handlePriceChange(index, Number(value)); // 가격을 변경하면 총액을 갱신
+                      handlePriceChange(index, Number(value));
                     }}
                   />
                   원
                 </div>
               ))}
-
-              <div className={styles.buttonContainer}>
+               <div className={styles.buttonContainer}>
                 {/* + 버튼과 - 버튼을 나란히 배치 */}
                 <button className={styles.inputPlusButton} onClick={addNewSet}>
                   <FaPlus className={styles.icon} />
@@ -112,7 +115,6 @@ const SettlementModalContent = ({
               </div>
             </div>
 
-            {/* 결과 */}
             <div className={styles.modalResultBox}>
               <div className={styles.totalPrice}>
                 <span>총 액</span>
@@ -130,9 +132,8 @@ const SettlementModalContent = ({
                     value={numberOfPeople}
                     onChange={(e) => {
                       const value = e.target.value;
-                      // 마이너스 기호가 포함되면 무시
                       if (value.includes("-")) return;
-                      setNumberOfPeople(Number(value));
+                      setNumberOfPeople(Number(value) || 1);
                     }}
                   />
                   <span>명</span>
@@ -154,21 +155,18 @@ const SettlementModalContent = ({
               <span>계좌 번호</span>
               <input
                 type="text"
-                value={accountNumber} // 계좌번호 상태 값 사용
+                placeholder="-를 제외하고 입력"
+                value={accountNumber}
                 onChange={(e) => {
                   const value = e.target.value;
-                  // 숫자만 입력 가능하도록 필터링
                   if (/[^0-9]/.test(value)) return;
-                  setAccountNumber(value); // 계좌번호 상태 업데이트
+                  setAccountNumber(value);
                 }}
               />
             </div>
             <div className={styles.bank}>
               <span>은행사</span>
-              <select
-                value={selectedBank} // 선택된 은행 상태 값 사용
-                onChange={(e) => setSelectedBank(e.target.value)}
-              >
+              <select value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)}>
                 {banks.map((bank, index) => (
                   <option key={index} value={bank}>
                     {bank}
@@ -180,26 +178,20 @@ const SettlementModalContent = ({
               <span>예금주</span>
               <input
                 type="text"
-                value={depositor} // 예금주 상태 값 사용
-                onChange={(e) => setDepositor(e.target.value)} // 예금주 값 업데이트
+                placeholder="홍길동"
+                value={depositor}
+                onChange={(e) => setDepositor(e.target.value)}
               />
             </div>
           </div>
         </div>
       </div>
 
-      {/* 모달 내 수정하기 버튼 */}
       <div className={styles.modalEditButton}>
-        <Button
-          text="수정하기"
-          size="sm"
-          color="--primary-color"
-          active={true}
-          onClick={handleRegister}
-        />
+        <Button text="추가하기" size="sm" color="--primary-color" active={true} onClick={handleSubmit} />
       </div>
     </div>
   );
 };
 
-export default SettlementModalContent;
+export default SettlementModalNew;
