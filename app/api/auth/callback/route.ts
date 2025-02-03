@@ -1,4 +1,4 @@
-import { SocialLoginUseCase } from "@/application/usecases/auth/SocialLoginUseCase";
+import { DfSocialLoginUseCase } from "@/application/usecases/auth/DfSocialLoginUseCase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
 import { jwtDecode } from "jwt-decode";
 
@@ -19,7 +19,7 @@ export async function GET(request: NextRequest) {
     }
 
     const authRepository = new SbAuthRepository();
-    const socialLoginUseCase = new SocialLoginUseCase(authRepository);
+    const socialLoginUseCase = new DfSocialLoginUseCase(authRepository);
 
     const accessToken = await socialLoginUseCase.execute(
       "kakao",

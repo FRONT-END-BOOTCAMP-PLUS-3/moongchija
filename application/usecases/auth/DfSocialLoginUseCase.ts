@@ -1,6 +1,6 @@
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
 
-export class SocialLoginUseCase {
+export class DfSocialLoginUseCase {
   constructor(private authRepository: SbAuthRepository) {}
 
   async execute(provider: string, code: string) {
