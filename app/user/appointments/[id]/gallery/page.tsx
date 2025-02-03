@@ -13,6 +13,7 @@ import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
 import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading"; // 로딩 컴포넌트 추가
 
 const GalleryPage = () => {
   const { id } = useParams(); 
@@ -55,14 +56,22 @@ const GalleryPage = () => {
     }
   }, [id]);
 
-  if (!detail) return <div>Loading...</div>;
+  if (!detail) return (
+    <div className={styles.pageContainer}>
+      <IconHeader />
+      <DetailTabMenu />
+      <div className={styles.container}>
+        <Loading /> {/* 로딩 컴포넌트 표시 */}
+      </div>
+    </div>
+  );
 
   return (
     <div className={styles.pageContainer}>
-       <IconHeader />
+      <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
-        <GalleryDetail galleryData={detail.gallery}  />
+        <GalleryDetail galleryData={detail.gallery} />
       </div>
 
       <div className={styles.circleButtonWrapper}>

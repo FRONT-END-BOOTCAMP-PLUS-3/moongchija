@@ -10,8 +10,11 @@ import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
 import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading";
 
 const InformationPage = () => {
+
+
   const { id } = useParams();
   const [detail, setDetail] = useState<detailTypes | null>(null);
 
@@ -23,6 +26,7 @@ const InformationPage = () => {
       setDetail(appointmentDetail || null);
     }
   }, [id]);
+
 
   const handleCopyRoomNumber = () => {
     alert("방 번호가 복사 되었습니다.");
@@ -44,50 +48,55 @@ const InformationPage = () => {
     }
   };
 
-  if (!detail) return <div>Loading...</div>;
 
   return (
     <div className={styles.pageContainer}>
       <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
-        <InformationDetail informationData={detail.information} />
-
-        <NoticeDetail noticeData={detail.notice} />
-
-        <div className={styles.buttonWrapper}>
-          <div className={styles.copyButton}>
-            <Button
-              text="방 번호 복사"
-              size="sm"
-              color="--primary-color"
-              active={true}
-              onClick={handleCopyRoomNumber}
-            />
+        { !detail ? (
+          <div className={styles.loadingWrapper}>
+            <Loading />
           </div>
+        ) : (
+          <>
+            <InformationDetail informationData={detail.information} />
+            <NoticeDetail noticeData={detail.notice} />
+            <div className={styles.buttonWrapper}>
+              <div className={styles.copyButton}>
+                <Button
+                  text="방 번호 복사"
+                  size="sm"
+                  color="--primary-color"
+                  active={true}
+                  onClick={handleCopyRoomNumber}
+                />
+              </div>
 
-          <div className={styles.redButtonWrapper}>
-            <div className={styles.deleteButton}>
-              <Button
-                text="삭제하기"
-                size="sm"
-                color="--exit-red"
-                active={true}
-                onClick={handleDeleteRoom}
-              />
-            </div>
+              <div className={styles.redButtonWrapper}>
+                <div className={styles.deleteButton}>
+                  <Button
+                    text="삭제하기"
+                    size="sm"
+                    color="--exit-red"
+                    active={true}
+                    onClick={handleDeleteRoom}
+                  />
+                </div>
 
-            <div className={styles.exitButton}>
-              <Button
-                text="나가기"
-                size="sm"
-                color="--exit-red"
-                active={true}
-                onClick={handleExitRoom}
-              />
+                <div className={styles.exitButton}>
+                  <Button
+                    text="나가기"
+                    size="sm"
+                    color="--exit-red"
+                    active={true}
+                    onClick={handleExitRoom}
+                  />
+                </div>
+              </div>
             </div>
-          </div>
-        </div>
+          </>
+        )}
       </div>
     </div>
   );
