@@ -6,14 +6,30 @@ import Link from "next/link";
 
 
 const DropdownMenu: React.FC = () => {
-  const handleLogout = () => {
-    // TODO: 실제 로그아웃 로직 추가
-    console.log("로그아웃");
+  
+  const handleLogout = async () => {
+    try {
+      const response = await fetch("/api/auth/logout", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
+
+      if (response.redirected) {
+        window.location.href = response.url;
+      } else {
+        const data = await response.json();
+        console.log("로그아웃 성공:", data.message);
+      }
+    } catch (error) {
+      console.error(error);
+    }
   };
 
   return (
     <div className={styles.dropdown}>
-      <Link href="/mypage" className={styles.dropdownItem}>
+      <Link href="/user" className={styles.dropdownItem}>
         마이페이지
       </Link>
       <button onClick={handleLogout} className={styles.dropdownItem}>

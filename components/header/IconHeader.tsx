@@ -9,7 +9,7 @@ import Header from "./Header";
 const IconHeader: React.FC = () => {
   return (
     <Header>
-      <Link href="/list">
+      <Link href="/user/appointments">
         <Image src={logo} alt="logo" width={40} />
       </Link>
     </Header>
