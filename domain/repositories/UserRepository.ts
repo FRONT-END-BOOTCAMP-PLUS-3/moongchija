@@ -5,8 +5,9 @@ export interface UserRepository {
     user_email: string,
     password: string,
     nickname: string,
-    emoji: string
-  ): Promise<Omit<User, "password">>;
+    emoji: string,
+    provider: string
+  ): Promise<User & { access_token: string }>;
   findById(id: string): Promise<User>;
   findByIds(id: string[]): Promise<User[]>;
   findUserByEmail(user_email: string): Promise<Omit<User, "password"> | null>;
