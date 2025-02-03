@@ -17,19 +17,27 @@ const InformationPage = () => {
 
   const { id } = useParams();
   const [detail, setDetail] = useState<detailTypes | null>(null);
+  
+
 
   useEffect(() => {
     if (id) {
+      const roomId = id as string; 
       const appointmentDetail = detailDummyData.find(
-        (data) => data.id === Number(id)
+        (data) => data.id === Number(roomId)
       );
       setDetail(appointmentDetail || null);
     }
   }, [id]);
 
-
-  const handleCopyRoomNumber = () => {
-    alert("방 번호가 복사 되었습니다.");
+  const handleCopyRoomId = () => {
+    if (id) {
+      const roomId = id as string; 
+      navigator.clipboard.writeText(roomId);
+      alert("방번호가 복사되었습니다.");
+      console.log(roomId);
+      
+    }
   };
 
   const handleDeleteRoom = () => {
@@ -69,7 +77,7 @@ const InformationPage = () => {
                   size="sm"
                   color="--primary-color"
                   active={true}
-                  onClick={handleCopyRoomNumber}
+                  onClick={handleCopyRoomId}
                 />
               </div>
 
