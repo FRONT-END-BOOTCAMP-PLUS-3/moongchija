@@ -1,5 +1,5 @@
 import { AuthRepository } from "@/domain/repositories/AuthRepository";
-import { LoginResponseDto } from "./dto/LoginResponseDTO";
+import { LoginResponseDto } from "./dto/LoginResponseDto";
 
 export class DfLoginUsecase {
   constructor(private authRepository: AuthRepository) {}
