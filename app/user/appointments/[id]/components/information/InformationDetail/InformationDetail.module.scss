@@ -74,11 +74,16 @@
 
 .participantsBox {
   display: flex;
+  height: 156px;
   flex-direction: column;
   padding: 15px;
   border-radius: 5px;
   gap: 20px;
   border: 1px solid var(--grey-6-color);
+  overflow-y: auto; /* 스크롤 가능하도록 설정 */
+  scrollbar-width: thin; /* Firefox용 스크롤바 크기 조정 */
+  scrollbar-color: var(--grey-6-color) transparent; /* Firefox용 스크롤 색상 설정 */
+  
 }
 
 .participants {
