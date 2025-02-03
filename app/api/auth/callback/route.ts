@@ -35,6 +35,9 @@ export async function GET(request: NextRequest) {
         `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`
       );
 
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.0");
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.1");
+
       if (userId) {
         response.cookies.set("userId", userId, {
           httpOnly: true,
