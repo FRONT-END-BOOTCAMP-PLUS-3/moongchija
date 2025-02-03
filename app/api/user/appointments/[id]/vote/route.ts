@@ -3,40 +3,10 @@ import { SbTimeVoteUserRepository } from "@/infrastructure/repositories/SbTimeVo
 import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlaceVoteUserRepository";
 import { DfSubmitVoteUsecase } from "@/application/usecases/appointment/DfSubmitVoteUsecase";
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
-import { cookies } from "next/headers";
-import { jwtDecode } from "jwt-decode";
 
 export async function POST(request: NextRequest) {
   try {
     let { appointmentId, userId, timeVotes, placeVotes } = await request.json();
-
-    // ✅ JWT 검증
-    const cookieStore = cookies();
-    const token = (await cookieStore).get("token")?.value || null;
-
-    if (!token) {
-      return NextResponse.json(
-        { error: "로그인이 필요합니다." },
-        { status: 401 }
-      );
-    }
-
-    try {
-      const decoded: any = jwtDecode(token);
-      const decodedUserId = decoded?.sub || decoded?.user_id || null;
-
-      if (userId !== decodedUserId) {
-        return NextResponse.json(
-          { error: "유효하지 않은 사용자 정보입니다." },
-          { status: 401 }
-        );
-      }
-    } catch (error) {
-      return NextResponse.json(
-        { error: "유효하지 않은 토큰입니다." },
-        { status: 401 }
-      );
-    }
 
     const timeVoteRepo = new SbTimeVoteRepository();
     const voteUsecase = new DfSubmitVoteUsecase(
