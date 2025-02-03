@@ -25,6 +25,9 @@ export const POST = async (request: NextRequest) => {
 
       const response = NextResponse.json({ user }, { status: 200 });
 
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.0");
+      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.1");
+
       if (userId) {
         response.cookies.set("userId", userId, {
           httpOnly: true,
