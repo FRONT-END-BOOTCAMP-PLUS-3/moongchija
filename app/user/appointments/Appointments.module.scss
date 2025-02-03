@@ -1,8 +1,8 @@
 .container {
-  flex: 1;
   position: relative;
   display: flex;
   flex-direction: column;
+  height: calc(100vh - 120px);
 }
 
 .searchBox {
@@ -19,11 +19,15 @@
     width: 100%;
     background: white;
     border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
   }
 
   input {
-    padding: 10px;
-    width: 90%;
+    padding: 10px 0;
+    width: 80%;
 
     &:focus {
       outline: none;
@@ -42,7 +46,6 @@
 .listBox {
   flex: 1;
   overflow-y: auto;
-  max-height: 77vh;
   padding: 0 40px;
 }
 
