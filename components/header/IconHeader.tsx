@@ -6,9 +6,11 @@ import Link from "next/link";
 import React from "react";
 import Header from "./Header";
 
-const IconHeader: React.FC = () => {
+const IconHeader: React.FC<{ showUsername?: boolean }> = ({
+  showUsername = true,
+}) => {
   return (
-    <Header>
+    <Header showUsername={showUsername}>
       <Link href="/user/appointments">
         <Image src={logo} alt="logo" width={40} />
       </Link>

@@ -14,29 +14,9 @@ const MyPagePage = () => {
   const handleopenModal = () => setIsModalOpen(true);
   const handlecloseModal = () => setIsModalOpen(false);
 
-  const handleLogout = async () => {
-    try {
-      const response = await fetch("/api/auth/logout", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-      });
-
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        const data = await response.json();
-        console.log("로그아웃 성공:", data.message);
-      }
-    } catch (error) {
-      console.error(error);
-    }
-  };
-
   return (
     <>
-      <IconHeader />
+      <IconHeader showUsername={false} />
       <div className={styles.myPagecontainer}>
         <div className={styles.profileWrapper}>
           <UserProfile />
@@ -53,12 +33,12 @@ const MyPagePage = () => {
             color="--exit-red"
             onClick={handleopenModal}
           />
-          <Button text="로그 아웃" size="sm" onClick={handleLogout} />
-          <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
-            <DeleteAccountModalContent />
-          </Modal>
         </div>
       </div>
+
+      <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
+        <DeleteAccountModalContent />
+      </Modal>
     </>
   );
 };
