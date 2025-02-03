@@ -7,6 +7,7 @@ import SettlementDetail from "../components/settlement/SettlementDetail/Settleme
 import styles from "./settlement.module.scss";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
+import IconHeader from "@/components/header/IconHeader";
 
 const SettlementPage = () => {
 
@@ -23,7 +24,8 @@ const SettlementPage = () => {
   if (!detail) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
+       <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}  >
         <SettlementDetail settlementData={detail.settlement} />

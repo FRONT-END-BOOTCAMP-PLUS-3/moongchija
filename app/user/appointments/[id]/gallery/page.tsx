@@ -12,6 +12,7 @@ import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
 import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
+import IconHeader from "@/components/header/IconHeader";
 
 const GalleryPage = () => {
   const { id } = useParams(); 
@@ -57,7 +58,8 @@ const GalleryPage = () => {
   if (!detail) return <div>Loading...</div>;
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
+       <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
         <GalleryDetail galleryData={detail.gallery}  />

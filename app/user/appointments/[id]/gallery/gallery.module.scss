@@ -1,6 +1,14 @@
+.pageContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh);
+}
+
 .container {
-  // height: 675px;
-  // overflow-y: scroll;
+  flex: 1;
+  overflow-y: auto;
+padding: 0 40px;
 }
 
 .circleButtonWrapper {

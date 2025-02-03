@@ -95,7 +95,7 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
             <div className={styles.row}>
               <span>계좌번호</span>
               <div>
-                {settlementData.accountNumber}
+               <div className={styles.accountNumber}> {settlementData.accountNumber}</div>
                 <button className={styles.copyButton} onClick={handleCopy}>
                   복사
                 </button>
