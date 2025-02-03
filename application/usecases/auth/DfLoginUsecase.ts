@@ -1,9 +1,13 @@
 import { AuthRepository } from "@/domain/repositories/AuthRepository";
+import { LoginResponseDto } from "./dto/LoginResponseDTO";
 
-export class LoginUsecase {
+export class DfLoginUsecase {
   constructor(private authRepository: AuthRepository) {}
 
-  async execute(user_email: string, password: string) {
+  async execute(
+    user_email: string,
+    password: string
+  ): Promise<LoginResponseDto> {
     try {
       const { token, ...user } =
         await this.authRepository.signInWithEmailPassword(user_email, password);

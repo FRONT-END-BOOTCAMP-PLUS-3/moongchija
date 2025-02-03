@@ -1,4 +1,4 @@
-import { LoginUsecase } from "@/application/usecases/auth/LoginUsecase";
+import { DfLoginUsecase } from "@/application/usecases/auth/DfLoginUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
 import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
@@ -8,7 +8,7 @@ export const POST = async (request: NextRequest) => {
     const { user_email, password } = await request.json();
 
     const authRepository = new SbAuthRepository();
-    const loginUsecase = new LoginUsecase(authRepository);
+    const loginUsecase = new DfLoginUsecase(authRepository);
 
     const { token, user } = await loginUsecase.execute(user_email, password);
 

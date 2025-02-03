@@ -1,11 +1,11 @@
-import { LogoutUsecase } from "@/application/usecases/auth/LogoutUsecase";
+import { DfLogoutUsecase } from "@/application/usecases/auth/DfLogoutUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
 import { NextResponse } from "next/server";
 
 export const POST = async () => {
   try {
     const authRepository = new SbAuthRepository();
-    const logoutUsecase = new LogoutUsecase(authRepository);
+    const logoutUsecase = new DfLogoutUsecase(authRepository);
 
     await logoutUsecase.execute();
 

@@ -1,4 +1,4 @@
-import { SignUpUsecase } from "@/application/usecases/auth/SignUpUseCase";
+import { DfSignUpUsecase } from "@/application/usecases/auth/DfSignUpUseCase";
 
 import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
@@ -10,7 +10,7 @@ export const POST = async (request: NextRequest) => {
 
     const userRepository = new SbUserRepository();
     const userEmojiRepository = new SbUserEmojiRepository();
-    const signupUsecase = new SignUpUsecase(
+    const signupUsecase = new DfSignUpUsecase(
       userRepository,
       userEmojiRepository
     );
