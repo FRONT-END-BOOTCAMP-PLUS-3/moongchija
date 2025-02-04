@@ -1,18 +1,16 @@
 .completeContainer {
   width: 100%;
   height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
 
   .mainBox {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
     padding: 0 20px;
-
-    .logo {
+    .wrapLogo {
       margin-top: 7vh;
     }
-
     .title {
       font-family: var(--font-sub);
       font-size: 42px;
