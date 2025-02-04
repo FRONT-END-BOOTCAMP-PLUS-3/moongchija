@@ -26,6 +26,8 @@ export class DfAppointmentCardUsecase {
           const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointment_id(appointment.id);
           const memberIds: string[] = membersByAppointmentId.map(member => member.user_id);
           const participants: User[] = await this.userRepository.findByIds(memberIds);
+
+          
   
           return {
             id: appointment.id,
