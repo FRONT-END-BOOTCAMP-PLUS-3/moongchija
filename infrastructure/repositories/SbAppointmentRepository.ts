@@ -103,7 +103,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
     // ✅ 1. member 테이블에서 user_id 목록 가져오기
     const { data: members, error: memberError } = await supabase
       .from("member")
-      .select("id, appointment_id, user_id")
+      .select("id, appointment_id, user_id, created_at")
       .eq("appointment_id", appointmentId);
 
     if (memberError) {
@@ -128,29 +128,30 @@ export class SbAppointmentRepository implements AppointmentRepository {
       id: member.id, // ✅ Member 타입 필수 속성 추가
       appointment_id: member.appointment_id, // ✅ Member 타입 필수 속성 추가
       user_id: member.user_id, // ✅ Member 타입 필수 속성 추가
+      created_at: member.created_at, // ✅ Member 타입 필수 속성 추가
       nickname:
         users.find((u) => u.id === member.user_id)?.nickname || "Unknown", // ✅ nickname 추가
     }));
   }
 
-  async confirm(
+  async confirmAppointment(
     appointmentId: number,
-    confirmTime: string,
-    confirmPlace: string,
-    confirmPlaceUrl: string
+    confirmData: {
+      confirm_time: string;
+      confirm_place: string;
+      confirm_place_url: string;
+      status: string;
+    }
   ): Promise<void> {
-    const supabase = await this.getClient();
+    const supabase = await createClient();
+
     const { error } = await supabase
       .from("appointment")
-      .update({
-        confirm_time: confirmTime,
-        confirm_place: confirmPlace,
-        confirm_place_url: confirmPlaceUrl,
-      })
+      .update(confirmData)
       .eq("id", appointmentId);
 
     if (error) {
-      throw new Error(`약속 확정 실패: ${error.message}`);
+      throw new Error(`Failed to confirm appointment: ${error.message}`);
     }
   }
 
