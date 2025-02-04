@@ -54,10 +54,10 @@ export class DfGetVoteResultUseCase {
       })
     );
 
-    // 약속 정보에서 start_time, end_time 가져오기 위함
+    // ✅ 6. 약속 정보에서 start_time, end_time 가져오기 위함
     const appointmentInfo = await this.appointmentRepo.findById(appointmentId);
 
-    // ✅ 6. 최종 결과 데이터 반환
+    // ✅ 7. 최종 결과 데이터 반환
     return {
       time: {
         start_time: appointmentInfo ? appointmentInfo.start_time : null,
