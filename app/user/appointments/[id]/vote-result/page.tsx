@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import { getUserIdClient } from "@/utils/supabase/client";
+import Loading from "@/components/loading/Loading";
 
 interface TimeVoteResult {
   start_time: string | null;
@@ -80,7 +81,7 @@ const VoteResultPage = () => {
     fetchUserId();
   }, []);
 
-  if (!resultData) return <p>로딩 중...</p>;
+  if (!resultData) return <Loading />;
 
   return (
     <div className={styles.voteResultContainer}>

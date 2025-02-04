@@ -6,6 +6,7 @@ import Button from "@/components/button/Button";
 import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import { useTimeVote } from "@/context/TimeVoteContext";
+import Loading from "@/components/loading/Loading";
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter();
@@ -133,7 +134,7 @@ const VoteTimePage: React.FC = () => {
   };
 
   if (!dateList.length || !timeList.length) {
-    return <p>📌 Loading... (날짜 또는 시간이 비어 있음)</p>; // 데이터 로딩 전 UI
+    return <Loading />; // 데이터 로딩 전 UI
   }
 
   return (
