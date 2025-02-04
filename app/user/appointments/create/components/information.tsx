@@ -1,13 +1,11 @@
 "use client";
 
+import styles from "./information.module.scss";
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
-import {
-  useCreateAppointment
-} from "@/context/CreateAppointmentContext";
+import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { useEffect, useState } from "react";
 import CircleIndicator from "./CircleIndicator";
-import styles from "./information.module.scss";
 
 const quizList = [
   "내 MBTI는?",
@@ -41,14 +39,14 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
   const handleQuizChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
 
-    handleSetQuiz(selectedValue)
+    handleSetQuiz(selectedValue);
 
     setIsCustomQuiz(selectedValue === "직접 입력하기");
 
     if (selectedValue !== "직접 입력하기") {
-      handleSetQuiz(selectedValue)
+      handleSetQuiz(selectedValue);
     } else {
-      handleSetQuiz("")
+      handleSetQuiz("");
     }
   };
 
@@ -64,7 +62,7 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
   };
 
   const handleNextButton = () => {
-    onPageChange(1);
+    onPageChange(2);
   };
 
   const handleSetTitle = (title: string) => {
@@ -72,21 +70,21 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
       ...prev,
       title: title,
     }));
-  }
+  };
 
   const handleSetQuiz = (quiz: string) => {
     setAppointment((prev) => ({
       ...prev,
       quiz: quiz,
     }));
-  }
+  };
 
   const handleSetAnswer = (answer: string) => {
     setAppointment((prev) => ({
       ...prev,
       answer: answer,
     }));
-  }
+  };
 
   useEffect(() => {
     // 모든 필드가 유효한지 확인하여 버튼 활성화 상태 설정
@@ -146,12 +144,14 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
         />
       </section>
 
-      <Button
-        size="lg"
-        text="다음"
-        active={isButtonActive}
-        onClick={handleNextButton}
-      />
+      <div className={styles.buttonWrapper}>
+        <Button
+          size="lg"
+          text="다음"
+          active={isButtonActive}
+          onClick={handleNextButton}
+        />
+      </div>
     </div>
   );
 };

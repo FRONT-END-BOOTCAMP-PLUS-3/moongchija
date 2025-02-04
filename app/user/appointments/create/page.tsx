@@ -8,7 +8,7 @@ import { CreateAppointmentProvider } from "@/context/CreateAppointmentContext";
 import ArrowHeader from "@/components/header/ArrowHeader";
 
 const CreatePage: React.FC = () => {
-  const [currentPage, setCurrentPage] = useState<number>(0);
+  const [currentPage, setCurrentPage] = useState<number>(1);
 
   const handlePageChange = (index: number) => {
     setCurrentPage(index);
@@ -16,10 +16,10 @@ const CreatePage: React.FC = () => {
 
   return (
     <CreateAppointmentProvider>
-        <ArrowHeader />
-      {currentPage === 0 && (<CreateInformation onPageChange={handlePageChange} />)}
-      {currentPage === 1 && <CreateTime onPageChange={handlePageChange} />}
-      {currentPage === 2 && <CreatePlace />}
+        <ArrowHeader setValue={setCurrentPage}/>
+      {currentPage === 1 && (<CreateInformation onPageChange={handlePageChange} />)}
+      {currentPage === 2 && <CreateTime onPageChange={handlePageChange} />}
+      {currentPage === 3 && <CreatePlace />}
     </CreateAppointmentProvider>
   );
 };

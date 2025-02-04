@@ -1,9 +1,9 @@
 "use client";
 
+import styles from "./time.module.scss";
 import Button from "@/components/button/Button";
 import { useState } from "react";
 import CircleIndicator from "./CircleIndicator";
-import styles from "./time.module.scss";
 
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { DateRange } from "react-date-range";
@@ -38,7 +38,7 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
     const range = ranges.selection;
     const differenceInDays =
       (range.endDate - range.startDate) / (1000 * 60 * 60 * 24);
-  
+
     if (differenceInDays <= 7) {
       setSelectedRange([
         {
@@ -92,10 +92,10 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
     setAppointment((prev) => ({
       ...prev,
       start_time: selectedRange[0].startDate.toISOString(),
-      end_time: selectedRange[0].endDate.toISOString()
+      end_time: selectedRange[0].endDate.toISOString(),
     }));
 
-    onPageChange(2);
+    onPageChange(3);
   };
 
   return (
@@ -107,7 +107,9 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
 
         <div className={styles.datePickerWrapper}>
           <p>기간 선택</p>
-          <span className={styles.message}>최대 7일까지 선택할 수 있습니다.</span>
+          <span className={styles.message}>
+            최대 7일까지 선택할 수 있습니다.
+          </span>
           <DateRange
             ranges={selectedRange}
             onChange={handleDateChange}
@@ -139,7 +141,9 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
         </div>
       </section>
 
-      <Button size="lg" text="다음" onClick={handleNextButton} />
+      <div className={styles.buttonWrapper}>
+        <Button size="lg" text="다음" onClick={handleNextButton} />
+      </div>
     </div>
   );
 };

@@ -1,13 +1,12 @@
 "use client";
 
+import styles from "./place.module.scss";
 import Button from "@/components/button/Button";
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { useEffect, useState } from "react";
 import CircleIndicator from "./CircleIndicator";
-import styles from "./place.module.scss";
 
 const MAX_PLACES = 5;
-
 
 const CreatePlace: React.FC = () => {
   const { createAppointment } = useCreateAppointment();
@@ -87,13 +86,15 @@ const CreatePlace: React.FC = () => {
           ))}
         </div>
       </section>
-
+        
+      <div className={styles.buttonWrapper}>
       <Button
         size="lg"
         text="약속 생성하기"
         active={isButtonActive}
         onClick={handleNextButton}
       />
+      </ div>
     </div>
   );
 };

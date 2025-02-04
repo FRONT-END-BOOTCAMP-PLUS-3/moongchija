@@ -22,7 +22,7 @@ const CompletePage = () => {
       );
       setIsCopiedLink(true);
       setTimeout(() => setIsCopiedLink(false), 2000);
-    } catch (error) {
+    } catch {
       alert("초대링크 복사에 실패했습니다.");
     }
   };
@@ -32,7 +32,7 @@ const CompletePage = () => {
       await navigator.clipboard.writeText(appointmentId);
       setIsCopiedRoomId(true);
       setTimeout(() => setIsCopiedRoomId(false), 2000);
-    } catch (error) {
+    } catch {
       alert("방번호 복사에 실패했습니다.");
     }
   };
@@ -70,7 +70,8 @@ const CompletePage = () => {
             {isCopiedRoomId ? "✅ 방번호가 복사되었습니다!" : ""}
           </p>
         </div>
-        <div className={styles.wrapButton}>
+
+        <div className={styles.buttonWrapper}>
           <Button
             text="약속 페이지 가기"
             size="lg"
