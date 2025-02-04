@@ -1,13 +1,16 @@
 "use client";
 
 import Button from "@/components/button/Button";
-import { useState, useEffect } from "react";
+import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import { useEffect, useState } from "react";
 import CircleIndicator from "../components/CircleIndicator";
 import styles from "./place.module.scss";
 
 const MAX_PLACES = 5;
 
-const CreatePlacePage = () => {
+const CreatePlacePage: React.FC = () => {
+  const { createAppointment } = useCreateAppointment();
+
   const [places, setPlaces] = useState([{ name: "", url: "" }]);
   const [isButtonActive, setIsButtonActive] = useState(false);
 
@@ -15,11 +18,6 @@ const CreatePlacePage = () => {
     const allNamesFilled = places.every((place) => place.name.trim() !== "");
     setIsButtonActive(allNamesFilled);
   }, [places]);
-
-  const handleNextButton = () => {
-    // console.log(places);
-    window.location.href = "/user/appointments/create/complete"
-  };
 
   const handleAddPlace = () => {
     if (places.length < MAX_PLACES) {
@@ -37,6 +35,12 @@ const CreatePlacePage = () => {
     const updatedPlaces = [...places];
     updatedPlaces[index][key] = value;
     setPlaces(updatedPlaces);
+  };
+
+  const handleNextButton = () => {
+    createAppointment();
+    // console.log(places);
+    // window.location.href = "/user/appointments/create/complete"
   };
 
   return (
