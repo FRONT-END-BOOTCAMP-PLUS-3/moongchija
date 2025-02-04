@@ -6,6 +6,7 @@ import PlaceResult from "./components/PlaceResult";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 interface TimeVoteResult {
   start_time: string | null;
@@ -27,6 +28,7 @@ interface PlaceVoteResult {
 }
 
 interface VoteResultType {
+  ownerId: string;
   time: TimeVoteResult;
   place: PlaceVoteResult;
 }
@@ -38,6 +40,7 @@ const VoteResultPage = () => {
   const [page, setPage] = useState(1);
 
   const [resultData, setResultData] = useState<VoteResultType | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
 
   // ✅ API 호출하여 투표 결과 가져오기
   useEffect(() => {
@@ -61,6 +64,22 @@ const VoteResultPage = () => {
 
     fetchVoteResult();
   }, [id]);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
+        setUserId(user);
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
 
   if (!resultData) return <p>로딩 중...</p>;
 
@@ -106,11 +125,19 @@ const VoteResultPage = () => {
         )}
 
         <div className={styles.wrapButton}>
-          <Button
-            text="약속 확정하러 가기"
-            size="lg"
-            onClick={() => router.push(`/user/appointments/${id}/confirm`)}
-          />
+          {resultData.ownerId === userId ? (
+            <Button
+              text="약속 확정하러 가기"
+              size="lg"
+              onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+            />
+          ) : (
+            <Button
+              text="홈으로 가기"
+              size="lg"
+              onClick={() => router.push(`/user/appointments`)}
+            />
+          )}
         </div>
       </div>
     </div>
