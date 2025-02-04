@@ -6,7 +6,7 @@ import {
   useCreateAppointment
 } from "@/context/CreateAppointmentContext";
 import { useEffect, useState } from "react";
-import CircleIndicator from "../components/CircleIndicator";
+import CircleIndicator from "./CircleIndicator";
 import styles from "./information.module.scss";
 
 const quizList = [
@@ -23,7 +23,11 @@ const quizList = [
   "직접 입력하기",
 ];
 
-const CreateInformationPage: React.FC = () => {
+interface Props {
+  onPageChange: (index: number) => void;
+}
+
+const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
   const { appointment, setAppointment } = useCreateAppointment();
 
   const [isCustomQuiz, setIsCustomQuiz] = useState<boolean>(false);
@@ -60,7 +64,7 @@ const CreateInformationPage: React.FC = () => {
   };
 
   const handleNextButton = () => {
-    window.location.href = "/user/appointments/create/time";
+    onPageChange(1);
   };
 
   const handleSetTitle = (title: string) => {
@@ -152,4 +156,4 @@ const CreateInformationPage: React.FC = () => {
   );
 };
 
-export default CreateInformationPage;
+export default CreateInformation;

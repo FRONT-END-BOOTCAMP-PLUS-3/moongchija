@@ -2,7 +2,7 @@
 
 import Button from "@/components/button/Button";
 import { useState } from "react";
-import CircleIndicator from "../components/CircleIndicator";
+import CircleIndicator from "./CircleIndicator";
 import styles from "./time.module.scss";
 
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
@@ -10,7 +10,11 @@ import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 
-const CreateTimePage: React.FC = () => {
+interface Props {
+  onPageChange: (index: number) => void;
+}
+
+const CreateTime: React.FC<Props> = ({ onPageChange }) => {
   const { setAppointment } = useCreateAppointment();
 
   const [startTime, setStartTime] = useState("오전 9시");
@@ -91,7 +95,7 @@ const CreateTimePage: React.FC = () => {
       end_time: selectedRange[0].endDate.toISOString()
     }));
 
-    // window.location.href = "/user/appointments/create/place";
+    onPageChange(2);
   };
 
   return (
@@ -140,7 +144,7 @@ const CreateTimePage: React.FC = () => {
   );
 };
 
-export default CreateTimePage;
+export default CreateTime;
 
 const times = [
   "오전 12시",

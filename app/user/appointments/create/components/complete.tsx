@@ -3,10 +3,10 @@
 import styles from "./complete.module.scss";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
-import { useState } from "react";
+import React, { useState } from "react";
 import Button from "@/components/button/Button";
 
-const CreateCompletePage = () => {
+const CreateComplete: React.FC = () => {
   const [copyActive, setCopyActive] = useState<boolean>(false);
   const router = useRouter();
   const appointmentId = 1; // TODO: 상태 관리로 동적 ID 가져오기
@@ -85,4 +85,4 @@ const CreateCompletePage = () => {
   );
 };
 
-export default CreateCompletePage;
+export default CreateComplete;

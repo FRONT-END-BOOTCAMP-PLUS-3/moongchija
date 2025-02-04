@@ -1,5 +1,5 @@
-import { TimeVoteProvider } from "@/context/TimeVoteContext";
 import "./globals.css";
+import { CreateAppointmentProvider } from "@/context/CreateAppointmentContext";
 
 export const metadata = {
   title: "Moongchija",
@@ -18,9 +18,9 @@ export default function RootLayout({
         <title>뭉치자</title>
       </head>
       <body>
-        <TimeVoteProvider>
+        <CreateAppointmentProvider>
           <div className="container">{children}</div>
-        </TimeVoteProvider>
+        </CreateAppointmentProvider>
       </body>
     </html>
   );

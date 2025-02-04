@@ -22,7 +22,7 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
     confirm_time: null,
     confirm_place: null,
     confirm_place_url: null,
-    status: "",
+    status: "voting",
     result_time: null,
     result_place: null,
     title: "",

@@ -3,12 +3,13 @@
 import Button from "@/components/button/Button";
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { useEffect, useState } from "react";
-import CircleIndicator from "../components/CircleIndicator";
+import CircleIndicator from "./CircleIndicator";
 import styles from "./place.module.scss";
 
 const MAX_PLACES = 5;
 
-const CreatePlacePage: React.FC = () => {
+
+const CreatePlace: React.FC = () => {
   const { createAppointment } = useCreateAppointment();
 
   const [places, setPlaces] = useState([{ name: "", url: "" }]);
@@ -39,8 +40,6 @@ const CreatePlacePage: React.FC = () => {
 
   const handleNextButton = () => {
     createAppointment();
-    // console.log(places);
-    // window.location.href = "/user/appointments/create/complete"
   };
 
   return (
@@ -99,4 +98,4 @@ const CreatePlacePage: React.FC = () => {
   );
 };
 
-export default CreatePlacePage;
+export default CreatePlace;
