@@ -6,28 +6,37 @@ import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
 import { useEffect, useState } from "react";
-import detailDummyData from "../components/detail/dummyData/detailDummyData";
+// import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
-import { detailTypes } from "../components/detail/types/detailTypes";
+// import { detailTypes } from "../components/detail/types/detailTypes";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
+import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 
 const InformationPage = () => {
 
 
   const { id } = useParams();
-  const [detail, setDetail] = useState<detailTypes | null>(null);
+  const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   
 
 
   useEffect(() => {
-    if (id) {
-      const roomId = id as string; 
-      const appointmentDetail = detailDummyData.find(
-        (data) => data.id === Number(roomId)
-      );
-      setDetail(appointmentDetail || null);
-    }
+    const fetchPlaces = async () => {
+      try {
+        const response = await fetch(`/api/user/appointments/${id}/information`);
+        if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
+
+        const data = await response.json();
+        setInfoData(data);
+        console.log(data);
+        
+      } catch (error) {
+        console.error(error);
+      }
+    };
+
+    if (id) fetchPlaces();
   }, [id]);
 
   const handleCopyRoomId = () => {
@@ -62,14 +71,14 @@ const InformationPage = () => {
       <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
-        { !detail ? (
+        { !infoData ? (
           <div className={styles.loadingWrapper}>
             <Loading />
           </div>
         ) : (
           <>
-            <InformationDetail informationData={detail.information} />
-            <NoticeDetail noticeData={detail.notice} />
+            <InformationDetail informationData={infoData} />
+            <NoticeDetail noticeData={infoData.notices} />
             <div className={styles.buttonWrapper}>
               <div className={styles.copyButton}>
                 <Button

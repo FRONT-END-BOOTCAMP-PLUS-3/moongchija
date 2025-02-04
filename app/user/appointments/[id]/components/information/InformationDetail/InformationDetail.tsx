@@ -8,19 +8,25 @@ import {
   FaUserFriends,
 } from "react-icons/fa";
 import Link from "next/link";
-import { Information } from "../../detail/types/detailTypes";
 import { calculateCountdown, formatTime } from "@/utils/dateUtils/dateUtils";
+import { AppointmentInformationDto } from "../../../../../../../application/usecases/appointment/dto/AppointmentInformationDto";
 
 interface InformationDetailProps {
-  informationData: Information;
+  informationData: AppointmentInformationDto;
 }
 
-
-
 const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
- 
-  const formattedTime = formatTime(informationData.date);
-  const countdown = calculateCountdown(informationData.date);
+  const safeParseDate = (date: Date | undefined): Date | undefined => {
+    if (!date) return undefined;
+    return date instanceof Date ? date : new Date(date);
+  };
+
+  const formattedTime = formatTime(
+    safeParseDate(informationData.confirmDate) ?? new Date()
+  );
+  const countdown = calculateCountdown(
+    safeParseDate(informationData.confirmDate) ?? new Date()
+  );
 
   const getCountdownClass = (countdown: string) => {
     if (countdown === "종료") return styles.end;
@@ -33,14 +39,14 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
       {/* 남은 날짜 박스 */}
       {/* <div className={styles.dDay}> */}
       <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
-          {countdown}
-        </div>
+        {countdown}
+      </div>
       {/* </div> */}
 
       {/* 약속명 */}
       <div className={styles.name}>
         <FaCrown className={styles.crownIcon} />
-        <span>{informationData.title}</span> 
+        <span>{informationData.title}</span>
       </div>
 
       {/* 장소 + 일자 + 참여인원 */}
@@ -50,12 +56,12 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <FaMapMarkerAlt className={styles.markerIcon} />
           <span>장소</span>
           <div className={styles.divider}></div>
-          {informationData.place.link ? (
-            <Link href={String(informationData.place.link)}>
-              {String(informationData.place.name)}
+          {informationData.confirmPlaceUrl ? (
+            <Link href={String(informationData.confirmPlaceUrl)}>
+              {String(informationData.confirmPlace)}
             </Link>
           ) : (
-            <span>{String(informationData.place.name)}</span>
+            <span>{String(informationData.title)}</span>
           )}
         </div>
 
@@ -64,7 +70,7 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <FaCalendarAlt className={styles.calendarIcon} />
           <span>일자</span>
           <div className={styles.divider}></div>
-          <span>{formattedTime}</span> 
+          <span>{formattedTime}</span>
         </div>
 
         {/* 참여 인원 */}
@@ -78,7 +84,7 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
         {/* 참여 인원 하단 박스 */}
         <div className={styles.participantsBox}>
           {informationData.participants.map((participant, index) => (
-            <Participants key={index} name={participant} /> 
+            <Participants key={index} participant={participant} />
           ))}
         </div>
       </div>

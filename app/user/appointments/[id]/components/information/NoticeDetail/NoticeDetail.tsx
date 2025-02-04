@@ -6,11 +6,12 @@ import { FaPlus } from "react-icons/fa";
 import { useState } from "react";
 import Button from "@/components/button/Button";
 import NoticeBox from "../NoticeBox/NoticeBox";
-import { Notice } from "../../detail/types/detailTypes";
+// import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 
 interface NoticeDetailProps {
-  noticeData: Notice[];  
+  noticeData?: { id: number; descript: string; createdAt: Date }[];
 }
+
 
 const NoticeDetail = ({ noticeData }: NoticeDetailProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -38,9 +39,9 @@ const NoticeDetail = ({ noticeData }: NoticeDetailProps) => {
         </div>
 
         <div className={styles.wrapper}>
-          {noticeData.length > 0 ? (
+          {noticeData && noticeData.length > 0 ? (
             noticeData.map((noticeItem, index) => (
-              <NoticeBox key={index} content={noticeItem.content} />
+              <NoticeBox key={index} content={noticeItem.descript} />
             ))
           ) : (
             <div className={styles.noNotice}>공지사항이 없습니다.</div>
