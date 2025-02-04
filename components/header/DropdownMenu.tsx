@@ -3,10 +3,10 @@
 import React from "react";
 import styles from "./DropdownMenu.module.scss";
 import Link from "next/link";
-
+import { useRouter } from "next/navigation";
 
 const DropdownMenu: React.FC = () => {
-  
+  const router = useRouter();
   const handleLogout = async () => {
     try {
       const response = await fetch("/api/auth/logout", {
@@ -16,11 +16,10 @@ const DropdownMenu: React.FC = () => {
         },
       });
 
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        const data = await response.json();
-        console.log("로그아웃 성공:", data.message);
+      const { redirectUrl } = await response.json();
+
+      if (redirectUrl) {
+        router.push(redirectUrl);
       }
     } catch (error) {
       console.error(error);

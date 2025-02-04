@@ -1,6 +1,7 @@
 import { User } from "@/domain/entities/User";
 import { UserRepository } from "@/domain/repositories/UserRepository";
 import { createClient } from "@/utils/supabase/server";
+import jwt from "jsonwebtoken";
 
 export class SbUserRepository implements UserRepository {
   async findByIds(id: string[]): Promise<User[]> {
@@ -32,42 +33,92 @@ export class SbUserRepository implements UserRepository {
     return user;
   }
 
-  async createUser(
-    user_email: string,
-    password: string,
-    nickname: string,
-    emoji: string
-  ): Promise<Omit<User, "password"> & { access_token: string }> {
+  async findByKakaoId(
+    kakao_id: number
+  ): Promise<Omit<User, "password" | "created_at"> | null> {
     const supabase = await createClient();
+    const { data: user, error } = await supabase
+      .from("user")
+      .select()
+      .eq("kakao_id", kakao_id.toString())
+      .maybeSingle();
 
-    const { data: authData, error: authError } = await supabase.auth.signUp({
-      email: user_email,
-      password,
-      options: {
-        data: {
-          nickname,
-          emoji,
-        },
-      },
-    });
-
-    if (authError) {
-      throw authError;
+    if (error) {
+      console.error("🚨 Supabase 에러:", error);
+      throw new Error("Database error");
     }
 
+    return user
+      ? {
+          id: user.id,
+          user_email: user.user_email,
+          nickname: user.nickname,
+          emoji: user.emoji,
+          provider: user.provider,
+          kakao_id: user.kakao_id,
+        }
+      : null;
+  }
+
+  async createUser(
+    user_email: string,
+    nickname: string,
+    emoji: string,
+    provider: string,
+    kakao_id?: number,
+    hashedPassword?: string
+  ): Promise<User & { access_token: string }> {
+    const supabase = await createClient();
+
+    const { data, error } = await supabase
+      .from("user")
+      .insert([
+        {
+          user_email,
+          password: hashedPassword ? hashedPassword : null,
+          nickname,
+          emoji,
+          kakao_id,
+          provider,
+        },
+      ])
+      .select();
+
+    if (error) {
+      throw new Error("회원가입 실패: " + error.message);
+    }
+
+    const userId = data[0].id;
+
+    if (!process.env.JWT_SECRET_KEY) {
+      throw new Error("JWT_SECRET_KEY 환경 변수가 설정되지 않았습니다.");
+    }
+    const secretKey = process.env.JWT_SECRET_KEY; // 환경 변수로 비밀 키 설정
+    const expiresIn = "1h"; // 토큰 만료 시간 설정 (1시간)
+
+    const payload = {
+      userId,
+      email: user_email,
+      nickname,
+      emoji,
+    };
+
+    const access_token = jwt.sign(payload, secretKey, { expiresIn });
+
     return {
-      id: authData.user!.id,
+      id: userId,
       user_email: user_email,
       nickname: nickname,
       emoji: emoji,
       created_at: new Date(),
-      access_token: authData.session!.access_token,
+      access_token,
+      provider,
+      kakao_id,
+      password: hashedPassword ?? "",
     };
   }
 
-  async findUserByEmail(
-    user_email: string
-  ): Promise<Omit<User, "password"> | null> {
+  async findUserByEmail(user_email: string): Promise<User | null> {
     const supabase = await createClient();
     const { data: user, error } = await supabase
       .from("user")
@@ -82,8 +133,10 @@ export class SbUserRepository implements UserRepository {
       id: user.id,
       user_email: user.user_email,
       nickname: user.nickname,
+      password: user.password,
       emoji: user.emoji,
       created_at: new Date(user.created_at),
+      provider: user.provider,
     };
   }
 
@@ -111,49 +164,5 @@ export class SbUserRepository implements UserRepository {
     }
 
     return newNickname;
-  }
-
-  async updateUser(
-    userId: string,
-    updateData: { nickname?: string; emoji?: string }
-  ): Promise<User> {
-    const supabase = await createClient();
-
-    const { data: existingData, error: findError } = await supabase
-      .from("user")
-      .select()
-      .eq("id", userId)
-      .single();
-
-    if (findError || !existingData) {
-      console.error("사용자를 찾을 수 없음:", userId, findError);
-      throw new Error("업데이트할 사용자를 찾을 수 없습니다.");
-    }
-
-    const { data, error } = await supabase
-      .from("user")
-      .update(updateData)
-      .eq("id", userId)
-      .select()
-      .single();
-
-    if (error) {
-      console.error("사용자 정보 업데이트 중 오류:", error);
-      console.log("업데이트 시도한 데이터:", { userId, updateData });
-      throw new Error("사용자 정보를 업데이트하는 데 실패했습니다.");
-    }
-
-    if (!data) {
-      throw new Error("업데이트된 사용자 정보를 찾을 수 없습니다.");
-    }
-
-    return {
-      id: data.id,
-      user_email: data.user_email,
-      password: data.password,
-      nickname: data.nickname,
-      emoji: data.emoji,
-      created_at: new Date(data.created_at),
-    };
   }
 }

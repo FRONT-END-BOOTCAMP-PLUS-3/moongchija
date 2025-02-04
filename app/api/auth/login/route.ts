@@ -1,6 +1,5 @@
 import { DfLoginUsecase } from "@/application/usecases/auth/DfLoginUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
-import { jwtDecode } from "jwt-decode";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -17,41 +16,41 @@ export const POST = async (request: NextRequest) => {
     const authRepository = new SbAuthRepository();
     const loginUsecase = new DfLoginUsecase(authRepository);
 
-    const { token, user } = await loginUsecase.execute(user_email, password);
+    const { userId } = await loginUsecase.execute(user_email, password);
 
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.sub;
+    const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
+    const response = NextResponse.json({
+      redirectUrl,
+    });
 
-      const response = NextResponse.json({ user }, { status: 200 });
+    if (userId) {
+      response.cookies.set("userId", userId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60,
+      });
+    }
 
-      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.0");
-      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.1");
-
-      if (userId) {
-        response.cookies.set("userId", userId, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
-          sameSite: "strict",
-          maxAge: 60 * 60,
-        });
+    return response;
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message.includes("유효하지 않은 이메일 또는 비밀번호입니다.")) {
+        return NextResponse.json(
+          { error: "유효하지 않은 이메일 또는 비밀번호입니다." },
+          { status: 401 }
+        );
       }
 
-      return response;
-    }
-  } catch (error: unknown) {
-    if (
-      error instanceof Error &&
-      error.message.includes("Invalid login credentials")
-    ) {
+      console.error("❌ 로그인 API 오류:", error.message);
       return NextResponse.json(
-        { error: "유효하지 않은 이메일 또는 비밀번호입니다." },
-        { status: 401 }
+        { error: "로그인 중 예상치 못한 오류가 발생했습니다." },
+        { status: 500 }
       );
     }
 
     return NextResponse.json(
-      { error: "알 수 없는 에러가 발생했습니다." },
+      { error: "서버 내부 오류가 발생했습니다." },
       { status: 500 }
     );
   }

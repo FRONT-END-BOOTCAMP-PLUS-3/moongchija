@@ -3,10 +3,13 @@ import { DfSignUpUsecase } from "@/application/usecases/auth/DfSignUpUseCase";
 import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 export const POST = async (request: NextRequest) => {
   try {
     const { user_email, password, nickname } = await request.json();
+
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const userRepository = new SbUserRepository();
     const userEmojiRepository = new SbUserEmojiRepository();
@@ -17,11 +20,26 @@ export const POST = async (request: NextRequest) => {
 
     const userWithToken = await signupUsecase.execute(
       user_email,
-      password,
+      hashedPassword,
       nickname
     );
+    const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
+    const response = NextResponse.json({
+      redirectUrl,
+    });
 
-    return NextResponse.json(userWithToken);
+    const userId = userWithToken.access_token;
+
+    if (userId) {
+      response.cookies.set("userId", userId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60,
+      });
+    }
+
+    return response;
   } catch (error: unknown) {
     if (error instanceof Error) {
       console.error("Error in signup:", error.message);

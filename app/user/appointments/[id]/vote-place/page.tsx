@@ -9,6 +9,7 @@ import Button from "@/components/button/Button";
 import { useTimeVote } from "@/context/TimeVoteContext";
 import { getUserIdClient } from "@/utils/supabase/client"; // ✅ `userId` 가져오는 함수
 import { PlaceVote } from "@/domain/entities/PlaceVote";
+import Loading from "@/components/loading/Loading";
 
 const VotePlacePage: React.FC = () => {
   const router = useRouter();
@@ -50,7 +51,7 @@ const VotePlacePage: React.FC = () => {
       }
     };
 
-    if (id) fetchPlaces();
+    fetchPlaces();
   }, [id]);
 
   const handleSelect = (placeId: number) => {
@@ -95,6 +96,9 @@ const VotePlacePage: React.FC = () => {
     }
   };
 
+  if (!places.length) {
+    return <Loading />; // 데이터 로딩 전 UI
+  }
   return (
     <div className={styles.placeVoteContainer}>
       <ArrowHeader />
@@ -102,46 +106,42 @@ const VotePlacePage: React.FC = () => {
         <p className={styles.subtitle}>원하는 약속 장소를 선택해주세요.</p>
 
         <div className={styles.placeList}>
-          {places.length === 0 ? (
-            <p>장소를 불러오는 중...</p>
-          ) : (
-            places.map((item, index) => (
-              <div
-                key={index}
-                className={`${styles.placeItem} ${
-                  selectedPlace === item.id ? styles.selected : ""
-                }`}
-                onClick={() => handleSelect(item.id)}
-              >
-                <div className={styles.itemTop}>
-                  <div className={styles.placeName}>
-                    <FaMapMarkerAlt className={styles.markerIcon} />
-                    {item.place}
-                  </div>
+          {places.map((item, index) => (
+            <div
+              key={index}
+              className={`${styles.placeItem} ${
+                selectedPlace === item.id ? styles.selected : ""
+              }`}
+              onClick={() => handleSelect(item.id)}
+            >
+              <div className={styles.itemTop}>
+                <div className={styles.placeName}>
+                  <FaMapMarkerAlt className={styles.markerIcon} />
+                  {item.place}
+                </div>
+                <div
+                  className={`${styles.radioButton} ${
+                    selectedPlace === item.id ? styles.checked : ""
+                  }`}
+                >
                   <div
-                    className={`${styles.radioButton} ${
+                    className={`${styles.innerButton} ${
                       selectedPlace === item.id ? styles.checked : ""
                     }`}
-                  >
-                    <div
-                      className={`${styles.innerButton} ${
-                        selectedPlace === item.id ? styles.checked : ""
-                      }`}
-                    ></div>
-                  </div>
+                  ></div>
                 </div>
-                {item.place_url && (
-                  <a
-                    href={item.place_url}
-                    target="_blank"
-                    className={styles.placeLink}
-                  >
-                    위치 보기
-                  </a>
-                )}
               </div>
-            ))
-          )}
+              {item.place_url && (
+                <a
+                  href={item.place_url}
+                  target="_blank"
+                  className={styles.placeLink}
+                >
+                  위치 보기
+                </a>
+              )}
+            </div>
+          ))}
         </div>
         <div className={styles.wrapButton}>
           <Button text="투표 완료" size="lg" onClick={handleSubmit} />

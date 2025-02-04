@@ -18,7 +18,6 @@ const AuthForm = () => {
   const [nicknameCheckSuccess, setNicknameCheckSuccess] = useState<
     string | null
   >(null);
-
   const router = useRouter();
 
   const {
@@ -60,18 +59,12 @@ const AuthForm = () => {
           nickname: nickname,
         }),
       });
-
-      const data = await response.json();
-
-      if (!response.ok) {
-        throw new Error(data.error || "회원가입에 실패하였습니다.");
+      if (response.ok) {
+        const { redirectUrl } = await response.json();
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        }
       }
-
-      if (data.access_token) {
-        localStorage.setItem("access_token", data.access_token);
-      }
-
-      router.push("/user/appointments");
     } catch (error) {
       setSubmitError(
         error instanceof Error

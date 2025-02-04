@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/button/Button";
+import Moongchi from "@/components/moongchi/Moongchi";
 
 const CreateCompletePage = () => {
   const [copyActive, setCopyActive] = useState<boolean>(false);
@@ -18,7 +19,7 @@ const CreateCompletePage = () => {
       await navigator.clipboard.writeText(text);
       setCopiedText(type);
       setTimeout(() => setCopiedText(null), 2000);
-      setCopyActive(true)
+      setCopyActive(true);
     } catch {
       alert(type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
     }
@@ -26,14 +27,9 @@ const CreateCompletePage = () => {
 
   return (
     <div className={styles.completeContainer}>
-      <Image
-        src="/images/logos/main-logo.svg"
-        alt="메인 로고"
-        width={270}
-        height={270}
-        className={styles.logo}
-      />
-
+      <div className={styles.logo}>
+        <Moongchi />
+      </div>
       <h2 className={styles.title}>약속이 생성되었어요</h2>
       <p className={styles.description}>
         투표를 완료하고, <br />

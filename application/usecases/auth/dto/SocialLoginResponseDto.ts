@@ -1,10 +1,9 @@
-export interface User {
+export interface SocialLoginResponseDto {
   id: string;
   user_email: string;
-  password: string | "";
   nickname: string;
   emoji: string;
-  created_at: Date;
   provider: string;
   kakao_id?: number;
+  access_token: string | null;
 }

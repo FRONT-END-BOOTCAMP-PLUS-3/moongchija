@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import DropdownMenu from "./DropdownMenu";
 import styles from "./Header.module.scss";
+import { useRouter } from "next/navigation";
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -12,7 +13,7 @@ interface HeaderProps {
 const Header: React.FC<HeaderProps> = ({ children, showUsername = true }) => {
   const [username, setUsername] = useState<string>("고뭉치");
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
-
+  const router = useRouter();
   const toggleDropdown = () => {
     setIsDropdownOpen((prev) => !prev);
   };
@@ -26,11 +27,10 @@ const Header: React.FC<HeaderProps> = ({ children, showUsername = true }) => {
         },
       });
 
-      if (response.redirected) {
-        window.location.href = response.url;
-      } else {
-        const data = await response.json();
-        console.log("로그아웃 성공:", data.message);
+      const { redirectUrl } = await response.json();
+
+      if (redirectUrl) {
+        router.push(redirectUrl);
       }
     } catch (error) {
       console.error(error);

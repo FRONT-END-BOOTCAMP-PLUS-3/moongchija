@@ -3,9 +3,36 @@ import Button from "@/components/button/Button";
 import styles from "./voteResult.module.scss";
 import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
+import { getUserIdClient } from "@/utils/supabase/client";
+import Loading from "@/components/loading/Loading";
+
+interface TimeVoteResult {
+  start_time: string | null;
+  end_time: string | null;
+  member: string[]; // 전체 멤버 ID 목록
+  result: {
+    date: string; // 투표한 날짜 및 시간
+    user: string[]; // 해당 시간에 투표한 유저 ID 목록
+  }[];
+}
+
+interface PlaceVoteResult {
+  member: string[]; // 전체 멤버 ID 목록
+  result: {
+    place: string; // 장소 이름
+    place_url: string; // 장소 URL
+    user: string[]; // 해당 장소에 투표한 유저 ID 목록
+  }[];
+}
+
+interface VoteResultType {
+  ownerId: string;
+  time: TimeVoteResult;
+  place: PlaceVoteResult;
+}
 
 const VoteResultPage = () => {
   const router = useRouter(); // useRouter 훅 사용 -> router.push로 페이지 이동을위해 사용
@@ -13,67 +40,49 @@ const VoteResultPage = () => {
   const id = params.id as string; // ID값 추출
   const [page, setPage] = useState(1);
 
-  const [resultData, setResultData] = useState({
-    time: {
-      start_time: "2025-01-01 12:00:00",
-      end_time: "2025-01-06 22:00:00",
-      member: ["고뭉치", "김뭉치", "심뭉치", "이뭉치", "황뭉치", "빈뭉치"],
-      result: [
-        { date: "2025-01-01 12:00:00", user: [] },
-        { date: "2025-01-01 13:00:00", user: ["고뭉치"] },
-        { date: "2025-01-01 14:00:00", user: ["고뭉치", "심뭉치"] },
-        { date: "2025-01-01 15:00:00", user: ["고뭉치", "김뭉치", "심뭉치"] },
-        {
-          date: "2025-01-01 16:00:00",
-          user: ["고뭉치", "김뭉치", "심뭉치", "이뭉치"],
-        },
-      ],
-    },
-    place: {
-      member: [
-        "고뭉치",
-        "김뭉치",
-        "심뭉치",
-        "이뭉치",
-        "황뭉치",
-        "빈뭉치",
-        "가뭉치",
-        "나뭉치",
-      ],
-      result: [
-        {
-          place: "동대문역사문화공원역",
-          place_url: "https://naver.me/xEABuNEP",
-          user: ["고뭉치", "김뭉치", "심뭉치"],
-        },
-        {
-          place: "홍대입구",
-          place_url: "https://naver.me/xEABuNEP",
-          user: ["김뭉치", "심뭉치"],
-        },
-        {
-          place: "서울역",
-          place_url: "https://naver.me/xEABuNEP",
-          user: ["심뭉치"],
-        },
-        { place: "우리집", place_url: "https://naver.me/xEABuNEP", user: [] },
-        {
-          place: "롯데월드",
-          place_url: "https://naver.me/xEABuNEP",
-          user: [
-            "고뭉치",
-            "김뭉치",
-            "심뭉치",
-            "이뭉치",
-            "황뭉치",
-            "빈뭉치",
-            "가뭉치",
-            "나뭉치",
-          ],
-        },
-      ],
-    },
-  });
+  const [resultData, setResultData] = useState<VoteResultType | null>(null);
+  const [userId, setUserId] = useState<string | null>(null);
+
+  // ✅ API 호출하여 투표 결과 가져오기
+  useEffect(() => {
+    if (!id) return;
+
+    const fetchVoteResult = async () => {
+      try {
+        const response = await fetch(
+          `/api/user/appointments/${id}/vote-result`
+        );
+        if (!response.ok)
+          throw new Error("❌ 투표 결과를 가져오는 데 실패했습니다.");
+
+        const data = await response.json();
+        setResultData(data);
+      } catch (error) {
+        console.error("❌ [ERROR] 투표 결과 로드 실패:", error);
+      }
+    };
+
+    fetchVoteResult();
+  }, [id]);
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
+        setUserId(user);
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
+
+  if (!resultData) return <Loading />;
+
   return (
     <div className={styles.voteResultContainer}>
       <ArrowHeader />
@@ -104,16 +113,31 @@ const VoteResultPage = () => {
           </div>
         </div>
         {page === 1 ? (
-          <TimeResult timeProps={resultData.time} />
-        ) : (
-          <PlaceResult placeProps={resultData.place} />
-        )}
-        <div className={styles.wrapButton}>
-          <Button
-            text="약속 확정하러 가기"
-            size="lg"
-            onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+          <TimeResult
+            timeProps={{
+              ...resultData!.time,
+              start_time: resultData!.time.start_time ?? "",
+              end_time: resultData!.time.end_time ?? "",
+            }}
           />
+        ) : (
+          <PlaceResult placeProps={resultData!.place} />
+        )}
+
+        <div className={styles.wrapButton}>
+          {resultData.ownerId === userId ? (
+            <Button
+              text="약속 확정하러 가기"
+              size="lg"
+              onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+            />
+          ) : (
+            <Button
+              text="홈으로 가기"
+              size="lg"
+              onClick={() => router.push(`/user/appointments`)}
+            />
+          )}
         </div>
       </div>
     </div>

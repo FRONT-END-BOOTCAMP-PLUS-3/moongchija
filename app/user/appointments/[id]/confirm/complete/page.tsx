@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/button/Button";
 import ArrowHeader from "@/components/header/ArrowHeader";
+import Moongchi from "@/components/moongchi/Moongchi";
 
 const CompletePage = () => {
   const params = useParams();
@@ -41,13 +42,9 @@ const CompletePage = () => {
     <div className={styles.completeContainer}>
       <ArrowHeader />
       <div className={styles.mainBox}>
-        <Image
-          src="/images/logos/main-logo.svg"
-          alt="메인 로고"
-          width={260}
-          height={260}
-          className={styles.logo}
-        />
+        <div className={styles.wrapLogo}>
+          <Moongchi />
+        </div>
 
         <h2 className={styles.title}>약속이 확정 됐어요</h2>
         <p className={styles.description}>
