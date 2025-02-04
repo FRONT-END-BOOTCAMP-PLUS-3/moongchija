@@ -1,4 +1,12 @@
 import jwt from "jsonwebtoken";
+import { jwtDecode, JwtPayload } from "jwt-decode";
+
+interface CustomJwtPayload extends JwtPayload {
+  id: string;
+  email: string;
+  nickname: string;
+  emoji: string;
+}
 
 export const generateJwtToken = (
   id: string,
@@ -15,5 +23,8 @@ export const generateJwtToken = (
   const payload = { id, email, nickname, emoji };
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
-  return token;
+  const decodedToken = jwtDecode<CustomJwtPayload>(token);
+  const userId = decodedToken.id;
+
+  return userId;
 };
