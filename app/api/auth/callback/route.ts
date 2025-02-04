@@ -66,11 +66,13 @@ export async function GET(request: NextRequest) {
 
     const user = await socialLoginUsecase.execute(userInfo);
 
-    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`;
+    const userId = user.access_token;
+
+    const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
     const response = NextResponse.redirect(redirectUrl);
 
-    if (user.access_token) {
-      response.cookies.set("userId", user.access_token, {
+    if (userId) {
+      response.cookies.set("userId", userId, {
         httpOnly: true,
         secure: process.env.NODE_ENV === "production",
         sameSite: "strict",
