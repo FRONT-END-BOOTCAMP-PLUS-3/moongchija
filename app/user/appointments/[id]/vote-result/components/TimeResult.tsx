@@ -58,23 +58,25 @@ const TimeResult = ({ timeProps }: { timeProps: TimeResult }) => {
 
   // 투표 결과에 따른 셀 스타일 결정
   const getCellClass = (date: string, hour: number) => {
-    const fullDate = `${date} ${String(hour).padStart(2, "0")}:00:00`;
+    const fullDate = `${date}T${String(hour).padStart(2, "0")}:00:00`; // ✅ `T` 추가하여 API 형식과 일치
     const result = timeResult.result.find((item) => item.date === fullDate);
 
-    if (!result || result.user.length === 0) {
-      return styles.noVote; // 투표가 없는 경우
+    if (!result || !result.user || result.user.length === 0) {
+      return styles.noVote; // ✅ 투표자가 없으면 '불가능'
     }
 
     const percentage = result.user.length / timeResult.member.length;
-    if (percentage > 0.66) return styles.highVote; // 진한 파란색
-    if (percentage > 0.33) return styles.mediumVote; // 중간 파란색
-    return styles.lowVote; // 연한 파란색
+    if (percentage > 0.66) return styles.highVote;
+    if (percentage > 0.33) return styles.mediumVote;
+    return styles.lowVote;
   };
 
   // 선택된 시간에 해당하는 사용자 목록 가져오기
   const selectedResult =
     selectedTime &&
-    timeResult.result.find((item) => item.date === selectedTime);
+    timeResult.result.find(
+      (item) => item.date === selectedTime.replace(" ", "T")
+    ); // ✅ `T` 추가
 
   const possibleUsers = selectedResult ? selectedResult.user : [];
   const impossibleUsers = timeResult.member.filter(

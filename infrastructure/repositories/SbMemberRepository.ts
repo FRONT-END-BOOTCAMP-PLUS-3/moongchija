@@ -12,10 +12,6 @@ export class SbMemberRepository implements MemberRepository {
     const isMember = await this.isUserInAppointment(userId, appointmentId);
     if (isMember) return;
 
-    console.log(
-      `📌 [DEBUG] ${userId}를 appointment ${appointmentId}의 멤버로 추가`
-    );
-
     const { error } = await supabase.from("member").insert({
       user_id: userId,
       appointment_id: appointmentId,
