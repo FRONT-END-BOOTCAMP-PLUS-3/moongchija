@@ -3,7 +3,7 @@
 import { motion } from "framer-motion";
 import styles from "./Moongchi.module.scss";
 
-// 꽃잎 위치 (더 자연스럽게 퍼지도록 수정)
+// 흰색 원 위치 (더 자연스럽게 퍼지도록 수정)
 const petalPositions = [
   { x: -20, y: -25 },
   { x: 20, y: -25 },
@@ -49,7 +49,7 @@ const Moongchi = () => {
       initial="hidden"
       animate="visible"
     >
-      {/* 🌸 꽃잎 (6개) */}
+      {/* 원 (6개) */}
       {[...Array(6)].map((_, i) => (
         <motion.div
           key={i}
@@ -59,7 +59,7 @@ const Moongchi = () => {
         />
       ))}
 
-      {/* 🏵 얼굴 (눈 + 입) */}
+      {/* 얼굴 (눈 + 입) */}
       <motion.div className={styles.face} variants={faceVariants}>
         <div style={{ display: "flex", gap: "20px" }}>
           <div className={styles.eye}>
