@@ -1,6 +1,7 @@
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 
 export interface PlaceVoteDto {
+  id: number;
   place: string;
   place_url?: string;
 }
@@ -8,6 +9,7 @@ export interface PlaceVoteDto {
 export class PlaceVoteMapper {
   static toDto(placeVote: PlaceVote): PlaceVoteDto {
     return {
+      id: placeVote.id,
       place: placeVote.place,
       place_url: placeVote.place_url || "",
     };

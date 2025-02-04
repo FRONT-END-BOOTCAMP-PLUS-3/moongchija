@@ -55,7 +55,6 @@ const VoteResultPage = () => {
           throw new Error("❌ 투표 결과를 가져오는 데 실패했습니다.");
 
         const data = await response.json();
-        console.log("📌 [DEBUG] API에서 받은 투표 결과:", data); // ✅ 응답 확인
         setResultData(data);
       } catch (error) {
         console.error("❌ [ERROR] 투표 결과 로드 실패:", error);

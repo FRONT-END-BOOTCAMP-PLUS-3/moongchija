@@ -14,11 +14,6 @@ const VoteTimePage: React.FC = () => {
 
   const { selectedTimes, setSelectedTimes } = useTimeVote(); // Context 사용
 
-  const [timeRange, setTimeRange] = useState<{
-    id: number;
-    start_time: string;
-    end_time: string;
-  } | null>(null);
   const [dateList, setDateList] = useState<string[]>([]);
   const [timeList, setTimeList] = useState<number[]>([]);
   const [gridSelected, setGridSelected] = useState<boolean[][]>([]);
@@ -34,15 +29,13 @@ const VoteTimePage: React.FC = () => {
         if (!response.ok) throw new Error("Failed to fetch appointment time");
 
         const data = await response.json();
-        setTimeRange(data);
-
         const startDate = new Date(data.start_time);
         const endDate = new Date(data.end_time);
 
         const generatedDateList = getDateList(startDate, endDate);
         const generatedTimeList = getTimeList(
-          startDate.getUTCHours(),
-          endDate.getUTCHours()
+          startDate.getHours(),
+          endDate.getHours()
         );
 
         setDateList(generatedDateList);

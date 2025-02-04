@@ -50,7 +50,7 @@ const VotePlacePage: React.FC = () => {
       }
     };
 
-    if (id) fetchPlaces();
+    fetchPlaces();
   }, [id]);
 
   const handleSelect = (placeId: number) => {
