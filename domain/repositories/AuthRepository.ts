@@ -6,8 +6,4 @@ export interface AuthRepository {
     user_email: string,
     password: string
   ): Promise<Omit<User, "password"> & { access_token: string }>;
-  getKakaoLoginUrl(): Promise<string>;
-  handleKakaoLogin(
-    code: string
-  ): Promise<Omit<User, "password"> & { access_token: string }>;
 }
