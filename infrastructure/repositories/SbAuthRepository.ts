@@ -15,14 +15,13 @@ export class SbAuthRepository implements AuthRepository {
     const userData = await userRepository.findUserByEmail(user_email);
 
     if (!userData) {
-      throw new Error(
-        "로그인 실패: 이메일이 존재하지 않거나 오류가 발생했습니다."
-      );
+      throw new Error("유효하지 않은 이메일 또는 비밀번호입니다.");
     }
 
     const isPasswordValid = await comparePassword(password, userData.password);
+
     if (!isPasswordValid) {
-      throw new Error("로그인 실패: 비밀번호가 일치하지 않습니다.");
+      throw new Error("로그인 실패: 비밀번호가 일치하지 않음");
     }
 
     const token = generateJwtToken(
