@@ -9,6 +9,7 @@ import "react-date-range/dist/theme/default.css";
 import { Calendar } from "react-date-range";
 import Button from "@/components/button/Button";
 import ArrowHeader from "@/components/header/ArrowHeader";
+import Loading from "@/components/loading/Loading";
 
 const ConfirmPage = () => {
   const router = useRouter();
@@ -114,6 +115,10 @@ const ConfirmPage = () => {
       console.error("❌ 약속 확정 API 요청 실패:", error);
     }
   };
+
+  if (!placeList.length) {
+    return <Loading />; // 데이터 로딩 전 UI
+  }
 
   return (
     <div className={styles.container}>
