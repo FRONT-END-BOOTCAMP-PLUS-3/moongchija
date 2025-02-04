@@ -1,20 +1,57 @@
-import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
-
+import { generateJwtToken } from "@/utils/auth/auth-utils";
+import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
+import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
+import { SocialLoginResponseDto } from "./dto/SocialLoginResponseDto";
+interface KakaoUserInfo {
+  id: number;
+  kakao_account: {
+    email: string;
+  };
+}
 export class DfSocialLoginUseCase {
-  constructor(private authRepository: SbAuthRepository) {}
+  constructor(
+    private userRandomEmoji: SbUserEmojiRepository,
+    private userRepository: SbUserRepository
+  ) {}
 
-  async execute(provider: string, code: string) {
-    if (provider === "kakao") {
-      try {
-        const { access_token } = await this.authRepository.handleKakaoLogin(
-          code
-        );
+  async execute(userInfo: KakaoUserInfo): Promise<SocialLoginResponseDto> {
+    const kakao_id = userInfo.id;
+    const user_email = userInfo.kakao_account?.email;
+    const nickname = user_email.split("@")[0];
+    const emoji = await this.userRandomEmoji.createUserRandomEmoji();
+    const uniqueNickname = await this.userRepository.generateUniqueNickname(
+      nickname
+    );
 
-        return access_token;
-      } catch (error) {
-        console.error("소셜 로그인 실패:", error);
-        throw new Error("카카오 로그인 중 문제가 발생했습니다.");
-      }
+    const existingUser = await this.userRepository.findByKakaoId(kakao_id);
+
+    let user;
+    if (!existingUser) {
+      user = await this.userRepository.createUser(
+        user_email,
+        uniqueNickname,
+        emoji,
+        "kakao",
+        kakao_id
+      );
+    } else {
+      user = existingUser;
     }
+    const token = generateJwtToken(
+      user.id,
+      user.user_email,
+      user.nickname,
+      user.emoji
+    );
+
+    return {
+      id: user.id,
+      user_email: user.user_email,
+      nickname: user.nickname,
+      emoji: user.emoji,
+      provider: user.provider,
+      kakao_id: user.kakao_id,
+      access_token: token,
+    };
   }
 }
