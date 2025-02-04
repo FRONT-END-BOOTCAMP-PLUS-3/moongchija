@@ -1,4 +1,3 @@
-// import { Auth } from "../entities/Auth";
 import { User } from "../entities/User";
 
 export interface AuthRepository {
