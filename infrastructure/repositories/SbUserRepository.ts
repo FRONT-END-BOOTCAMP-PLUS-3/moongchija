@@ -43,9 +43,6 @@ export class SbUserRepository implements UserRepository {
       .eq("kakao_id", kakao_id.toString())
       .maybeSingle();
 
-    console.log("🔍 찾은 카카오 ID:", kakao_id, typeof kakao_id);
-    console.log("🔍 Supabase 결과:", user, error);
-
     if (error) {
       console.error("🚨 Supabase 에러:", error);
       throw new Error("Database error");

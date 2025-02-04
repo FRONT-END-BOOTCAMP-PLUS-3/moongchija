@@ -2,7 +2,7 @@ import { NextResponse } from "next/server";
 
 export const POST = async () => {
   try {
-    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}`;
+    const redirectUrl = `${process.env.SITE_URL}`;
 
     const response = NextResponse.json({
       redirectUrl,

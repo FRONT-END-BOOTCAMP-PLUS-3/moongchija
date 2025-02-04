@@ -9,12 +9,12 @@ export class DfLoginUsecase {
     password: string
   ): Promise<LoginResponseDto> {
     try {
-      const { access_token: token, ...user } = await this.authRepository.signIn(
+      const { userId, ...user } = await this.authRepository.signIn(
         user_email,
         password
       );
 
-      return { token, user };
+      return { userId, user };
     } catch (error: unknown) {
       if (error instanceof Error) {
         throw new Error("로그인 실패: " + error.message);

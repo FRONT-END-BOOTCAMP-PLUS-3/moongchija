@@ -4,5 +4,5 @@ export interface AuthRepository {
   signIn(
     user_email: string,
     password: string
-  ): Promise<Omit<User, "password"> & { access_token: string }>;
+  ): Promise<Omit<User, "password"> & { userId: string }>;
 }

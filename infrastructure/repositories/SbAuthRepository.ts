@@ -9,7 +9,7 @@ export class SbAuthRepository implements AuthRepository {
   async signIn(
     user_email: string,
     password: string
-  ): Promise<Omit<User, "password"> & { access_token: string }> {
+  ): Promise<Omit<User, "password"> & { userId: string }> {
     const userRepository = new SbUserRepository();
 
     const userData = await userRepository.findUserByEmail(user_email);
@@ -24,7 +24,7 @@ export class SbAuthRepository implements AuthRepository {
       throw new Error("로그인 실패: 비밀번호가 일치하지 않음");
     }
 
-    const token = generateJwtToken(
+    const userId = generateJwtToken(
       userData.id,
       userData.user_email,
       userData.nickname,
@@ -38,7 +38,7 @@ export class SbAuthRepository implements AuthRepository {
       emoji: userData.emoji,
       created_at: userData.created_at,
       provider: userData.provider,
-      access_token: token,
+      userId: userId,
     };
   }
 }

@@ -23,17 +23,21 @@ export const POST = async (request: NextRequest) => {
       hashedPassword,
       nickname
     );
-    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`;
+    const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
     const response = NextResponse.json({
       redirectUrl,
     });
 
-    response.cookies.set("userId", userWithToken.access_token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV === "production",
-      sameSite: "strict",
-      maxAge: 60 * 60,
-    });
+    const userId = userWithToken.access_token;
+
+    if (userId) {
+      response.cookies.set("userId", userId, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "strict",
+        maxAge: 60 * 60,
+      });
+    }
 
     return response;
   } catch (error: unknown) {
