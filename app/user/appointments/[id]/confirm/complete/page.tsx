@@ -47,6 +47,7 @@ const CompletePage = () => {
           width={260}
           height={260}
           className={styles.logo}
+          priority
         />
 
         <h2 className={styles.title}>약속이 확정 됐어요</h2>
