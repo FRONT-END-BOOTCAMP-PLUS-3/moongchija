@@ -1,6 +1,6 @@
 import { DfLoginUsecase } from "@/application/usecases/auth/DfLoginUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
-import { jwtDecode } from "jwt-decode";
+
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -17,28 +17,21 @@ export const POST = async (request: NextRequest) => {
     const authRepository = new SbAuthRepository();
     const loginUsecase = new DfLoginUsecase(authRepository);
 
-    const { token, user } = await loginUsecase.execute(user_email, password);
+    const { token } = await loginUsecase.execute(user_email, password);
 
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      const userId = decodedToken.sub;
+    const redirectUrl = `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments`;
+    const response = NextResponse.json({
+      redirectUrl,
+    });
 
-      const response = NextResponse.json({ user }, { status: 200 });
+    response.cookies.set("userId", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      maxAge: 60 * 60,
+    });
 
-      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.0");
-      response.cookies.delete("sb-yswjnlalguzoxdcmydxr-auth-token.1");
-
-      if (userId) {
-        response.cookies.set("userId", userId, {
-          httpOnly: true,
-          secure: process.env.NODE_ENV === "production", // 배포 환경에서만 secure 설정
-          sameSite: "strict",
-          maxAge: 60 * 60,
-        });
-      }
-
-      return response;
-    }
+    return response;
   } catch (error: unknown) {
     if (
       error instanceof Error &&

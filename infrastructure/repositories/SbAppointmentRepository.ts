@@ -5,6 +5,20 @@ import { AppointmentRepository } from "@/domain/repositories/AppointmentReposito
 import { Member } from "@/domain/entities/Member";
 
 export class SbAppointmentRepository implements AppointmentRepository {
+  async findByIds(appointmentIds: number[]): Promise<Appointment[] | null> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment")
+      .select("*")
+      .in("id", appointmentIds);
+
+    if (error) {
+      console.error("Error fetching appointments by IDs:", error.message);
+      return null;
+    }
+    return data || null;
+  }
+
   private async getClient(): Promise<SupabaseClient> {
     return await createClient();
   }
@@ -42,7 +56,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("appointment")
-      .select("id, start_time, end_time") // 필요한 필드만 선택
+      .select("id, start_time, end_time")
       .eq("id", appointmentId)
       .single();
 

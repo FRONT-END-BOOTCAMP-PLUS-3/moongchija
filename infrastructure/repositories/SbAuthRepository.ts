@@ -1,41 +1,48 @@
-import { Auth } from "@/domain/entities/Auth";
 import { AuthRepository } from "@/domain/repositories/AuthRepository";
 import { createClient } from "@/utils/supabase/server";
 import { SbUserRepository } from "./SbUserRepository";
 import { SbUserEmojiRepository } from "./SbUserEmojiRepository";
 import { User } from "@/domain/entities/User";
 
+import { generateJwtToken } from "@/utils/auth/auth-utils";
+import { comparePassword } from "@/utils/auth/comparePassword";
+
 export class SbAuthRepository implements AuthRepository {
-  async signInWithEmailPassword(
+  async signIn(
     user_email: string,
     password: string
-  ): Promise<Auth> {
-    const supabase = await createClient();
+  ): Promise<Omit<User, "password"> & { access_token: string }> {
+    const userRepository = new SbUserRepository();
 
-    const { data, error } = await supabase.auth.signInWithPassword({
-      email: user_email,
-      password,
-    });
+    const userData = await userRepository.findUserByEmail(user_email);
 
-    if (error) {
-      throw new Error("로그인 실패: " + error.message);
+    if (!userData) {
+      throw new Error(
+        "로그인 실패: 이메일이 존재하지 않거나 오류가 발생했습니다."
+      );
     }
 
-    const user = data.user;
-    const session = data.session;
+    const isPasswordValid = await comparePassword(password, userData.password);
+    if (!isPasswordValid) {
+      throw new Error("로그인 실패: 비밀번호가 일치하지 않습니다.");
+    }
+
+    const token = generateJwtToken(
+      userData.id,
+      userData.user_email,
+      userData.nickname,
+      userData.emoji
+    );
 
     return {
-      id: user?.id,
-      user_email: user.email!,
-      nickname: user?.user_metadata?.nickname,
-      emoji: user?.user_metadata?.emoji,
-      token: session?.access_token,
+      id: userData.id,
+      user_email: userData.user_email,
+      nickname: userData.nickname,
+      emoji: userData.emoji,
+      created_at: userData.created_at,
+      provider: userData.provider,
+      access_token: token,
     };
-  }
-
-  async signOut(): Promise<void> {
-    const supabase = await createClient();
-    await supabase.auth.signOut();
   }
 
   async getKakaoLoginUrl(): Promise<string> {

@@ -9,8 +9,10 @@ export class DfLoginUsecase {
     password: string
   ): Promise<LoginResponseDto> {
     try {
-      const { token, ...user } =
-        await this.authRepository.signInWithEmailPassword(user_email, password);
+      const { access_token: token, ...user } = await this.authRepository.signIn(
+        user_email,
+        password
+      );
 
       return { token, user };
     } catch (error: unknown) {

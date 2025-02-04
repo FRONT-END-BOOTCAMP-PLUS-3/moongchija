@@ -41,8 +41,8 @@ const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
               <Image
                 src={photo.src}
                 alt={`Photo by ${photo.user}`}
-                width={190}
-                height={190}
+                width={150}
+                height={150}
                 className={styles.image}
                 onClick={openModal}
               />

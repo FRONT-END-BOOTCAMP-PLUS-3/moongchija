@@ -1,13 +1,17 @@
-.container {
-  // height: 675px;
-  // overflow-y: scroll;
+.pageContainer{
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh);
 }
 
-.circleButtonWrapper {
-  position: fixed;
-  bottom: 5%;
-  right: 5%;
+.container {
+  flex: 1;
+  overflow-y: auto;
+padding: 0 40px;
 }
+
+
 
 .modalContainer {
   width: 100%;

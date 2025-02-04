@@ -1,12 +1,12 @@
 export interface Place {
   name: string;
-  link: string;
+  link?: string;
 }
 
 export interface Information {
   title: string;
-  place: Place; 
-  date: string;
+  place: Place;
+  date: Date; 
   participants: string[];
 }
 
@@ -39,6 +39,6 @@ export interface detailTypes {
   id: number;
   information: Information;
   notice: Notice[];
-  settlement: Settlement;
+  settlement: Settlement | null;  
   gallery: GalleryItem[];
 }

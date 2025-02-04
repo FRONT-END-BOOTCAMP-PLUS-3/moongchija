@@ -5,4 +5,5 @@ export interface User {
   nickname: string;
   emoji: string;
   created_at: Date;
+  provider: string;
 }

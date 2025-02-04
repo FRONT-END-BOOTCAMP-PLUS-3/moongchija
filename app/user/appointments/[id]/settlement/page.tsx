@@ -7,25 +7,36 @@ import SettlementDetail from "../components/settlement/SettlementDetail/Settleme
 import styles from "./settlement.module.scss";
 import { useParams } from "next/navigation";
 import { detailTypes } from "../components/detail/types/detailTypes";
+import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading"; // 로딩 컴포넌트 추가
 
 const SettlementPage = () => {
 
   const { id } = useParams(); 
-  const [detail, setDetail] =  useState<detailTypes | null>(null);
+  const [detail, setDetail] = useState<detailTypes | null>(null);
 
   useEffect(() => {
     if (id) {
       const appointmentDetail = detailDummyData.find((data) => data.id === Number(id));
-      setDetail(appointmentDetail|| null);
+      setDetail(appointmentDetail || null);
     }
   }, [id]);
 
-  if (!detail) return <div>Loading...</div>;
+  if (!detail) return (
+    <div className={styles.pageContainer}>
+      <IconHeader />
+      <DetailTabMenu />
+      <div className={styles.container}>
+        <Loading />
+      </div>
+    </div>
+  ); 
 
   return (
-    <div>
+    <div className={styles.pageContainer}>
+      <IconHeader />
       <DetailTabMenu />
-      <div className={styles.container}  >
+      <div className={styles.container}>
         <SettlementDetail settlementData={detail.settlement} />
       </div>
     </div>
