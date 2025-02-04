@@ -1,4 +1,3 @@
-// import { Auth } from "@/domain/entities/Auth";
 import { AuthRepository } from "@/domain/repositories/AuthRepository";
 import { createClient } from "@/utils/supabase/server";
 import { SbUserRepository } from "./SbUserRepository";
@@ -44,11 +43,6 @@ export class SbAuthRepository implements AuthRepository {
       provider: userData.provider,
       access_token: token,
     };
-  }
-
-  async signOut(): Promise<void> {
-    const supabase = await createClient();
-    await supabase.auth.signOut();
   }
 
   async getKakaoLoginUrl(): Promise<string> {
