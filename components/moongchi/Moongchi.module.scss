@@ -1,0 +1,60 @@
+.mungchiContainer {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 250px;
+  height: 250px;
+  background-color: var(--primary-color); // 💜 보라색 원
+  border-radius: 50%;
+
+  .petal {
+    position: absolute;
+    width: 70px; // 🟡 꽃잎 크기 조금 조정
+    height: 70px;
+    background-color: white;
+    border-radius: 50%;
+  }
+
+  .face {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+
+    .eye {
+      width: 17px;
+      height: 17px;
+      background-color: black;
+      border-radius: 50%;
+      position: relative;
+
+      .eyeHighlightBig {
+        width: 6px;
+        height: 6px;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        bottom: 3px; // 반짝이를 더 위로 올려서 귀엽게
+        right: 3px;
+      }
+      .eyeHighlightSmall {
+        width: 5px;
+        height: 5px;
+        background-color: white;
+        border-radius: 50%;
+        position: absolute;
+        top: 4px; // 반짝이를 더 위로 올려서 귀엽게
+        left: 3px;
+      }
+    }
+
+    .mouth {
+      width: 10px;
+      height: 10px;
+      margin-top: 3px; // 입 위치 더 조정
+      background-color: #ff4081;
+      border-radius: 50%;
+    }
+  }
+}
