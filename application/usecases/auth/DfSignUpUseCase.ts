@@ -23,10 +23,11 @@ export class DfSignUpUsecase {
 
     const userWithToken = await this.userRepository.createUser(
       user_email,
-      hashedPassword,
       uniqueNickname,
       emoji,
-      provider
+      provider,
+      undefined,
+      hashedPassword
     );
 
     return userWithToken;
