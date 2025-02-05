@@ -223,8 +223,6 @@ export class SbUserRepository implements UserRepository {
         .select("id, nickname, emoji")
         .eq("id", userId)
         .single();
-      console.log("existingUser:", existingUser);
-      console.log("findError:", findError);
 
       if (findError || !existingUser) {
         throw new Error("사용자를 찾을 수 없습니다.");
