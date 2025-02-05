@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./Appointments.module.scss";
+import { useRouter } from 'next/navigation';
 import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
@@ -11,12 +12,17 @@ import Modal from "@/components/modal/Modal";
 import InputField from "@/components/input-filed/InputFiled";
 import Button from "@/components/button/Button";
 import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading";
 import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const tabs = ["투표 진행중", "약속 리스트"];
 
 const AppointmentsPage: React.FC = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [appointments, setAppointments] = useState<AppointmentCardDto[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [showButtons, setShowButtons] = useState<boolean>(false);
@@ -36,12 +42,12 @@ const AppointmentsPage: React.FC = () => {
 
   // 투표중인 약속 데이터
   const inProgressAppointments = appointments.filter(
-    (appointment) => appointment.startDate && appointment.endDate
+    (appointment) => appointment.status === 'voting'
   );
 
   // 확정된 약속 데이터
   const confirmedAppointments = appointments.filter(
-    (appointment) => appointment.confirmDate
+    (appointment) => appointment.status === 'confirmed'
   );
 
   const handleTabChange = (index: number) => {
@@ -90,7 +96,16 @@ const AppointmentsPage: React.FC = () => {
 
   async function fetchAppointments() {
     try {
-      const response = await fetch('/api/user/appointments');
+      setLoading(true);
+
+      const userId = await getUserIdClient();
+      if (!userId) {
+        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return;
+      }
+
+      const response = await fetch(`/api/user/appointments?userId=${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch appointments');
       }
@@ -106,7 +121,9 @@ const AppointmentsPage: React.FC = () => {
       setAppointments(parseAppointments);
       
     } catch (error) {
-      console.error('Error:', error);
+      alert(`❌오류가 발생했습니다. :, ${error}`);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -142,6 +159,7 @@ const AppointmentsPage: React.FC = () => {
         </section>
 
         <section className={styles.listBox}>
+          {loading && <Loading />}
           {currentTab === 0 && (
             <AppointmentList
               appointments={filteredAppointments(inProgressAppointments)}

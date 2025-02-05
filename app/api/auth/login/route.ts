@@ -1,5 +1,6 @@
 import { DfLoginUsecase } from "@/application/usecases/auth/DfLoginUsecase";
 import { SbAuthRepository } from "@/infrastructure/repositories/SbAuthRepository";
+import { extractUserIdFromToken } from "@/utils/auth/extractUserIdFromToken";
 import { NextRequest, NextResponse } from "next/server";
 
 export const POST = async (request: NextRequest) => {
@@ -16,12 +17,14 @@ export const POST = async (request: NextRequest) => {
     const authRepository = new SbAuthRepository();
     const loginUsecase = new DfLoginUsecase(authRepository);
 
-    const { userId } = await loginUsecase.execute(user_email, password);
+    const { token } = await loginUsecase.execute(user_email, password);
 
     const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
     const response = NextResponse.json({
       redirectUrl,
     });
+
+    const userId = extractUserIdFromToken(token);
 
     if (userId) {
       response.cookies.set("userId", userId, {

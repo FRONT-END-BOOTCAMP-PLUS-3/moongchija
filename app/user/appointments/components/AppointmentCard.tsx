@@ -2,7 +2,11 @@
 
 import styles from "./AppointmentCard.module.scss";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
-import { calculateCountdown, formatDate, formatTime } from "@/utils/dateUtils/dateUtils";
+import {
+  calculateCountdown,
+  formatDate,
+  formatTime,
+} from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 import Image from "next/image";
 
@@ -45,20 +49,26 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         {/* 일자 */}
         <div className={styles.dateWrapper}>
           <p>
-            {startDate
-              ? `${formatTime(startDate)} ~`
-              : confirmDate
+            {confirmDate
               ? `${formatTime(confirmDate)}`
+              : startDate
+              ? `${formatTime(startDate)} ~`
               : ""}
           </p>
-          <p>{endDate && `${formatDate(endDate)}`}</p>
+          <p>{confirmDate ? "" : `${formatDate(endDate!)}`}</p>
         </div>
         {/* 참여 인원 */}
         <div className={styles.participantWrapper}>
           {participants.map((participant, index) => (
-            <Image src={participant} alt={`Participant ${index + 1}`} key={index} width={20} height={20}/>
+            <Image
+              src={participant}
+              alt={`Participant ${index + 1}`}
+              key={index}
+              width={20}
+              height={20}
+            />
           ))}
-          
+
           {extraParticipants > 0 && (
             <span className={styles.extraParticipants}>
               외 {extraParticipants}명
