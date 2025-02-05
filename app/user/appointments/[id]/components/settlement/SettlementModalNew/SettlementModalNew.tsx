@@ -15,29 +15,29 @@ type SettlementItem = {
 type ModalProps = {
   handleRegister: (data: {
     items: SettlementItem[];
-    numberOfPeople: number;
+    memberCount: number;
     accountNumber: string;
     bank: string;
-    depositor: string;
+    accountHolderName: string;
   }) => void;
 };
 
 const SettlementModalNew = ({ handleRegister }: ModalProps) => {
   const [totalPrice, setTotalPrice] = useState(0); // 총액
-  const [numberOfPeople, setNumberOfPeople] = useState(1); // 인원 수 (기본값 1)
+  const [memberCount, setMemberCount] = useState(1); // 인원 수 (기본값 1)
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
   const [accountNumber, setAccountNumber] = useState(""); // 계좌번호
   const [selectedBank, setSelectedBank] = useState(banks[0]); // 기본 은행 선택
-  const [depositor, setDepositor] = useState(""); // 예금주
+  const [accountHolderName, setAccountHolderName] = useState(""); // 예금주
 
   // 장소 & 금액 입력 필드
   const [inputSets, setInputSets] = useState<SettlementItem[]>([{ place: "", price: 0 }]);
 
   useEffect(() => {
-    if (numberOfPeople > 0) {
-      setDividedPrice(Math.floor(totalPrice / numberOfPeople));
+    if (memberCount > 0) {
+      setDividedPrice(Math.floor(totalPrice / memberCount));
     }
-  }, [totalPrice, numberOfPeople]);
+  }, [totalPrice, memberCount]);
 
   useEffect(() => {
     const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.price, 0);
@@ -57,10 +57,10 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
   const handleSubmit = () => {
     handleRegister({
       items: inputSets,
-      numberOfPeople,
+      memberCount,
       accountNumber,
       bank: selectedBank,
-      depositor,
+      accountHolderName,
     });
   };
 
@@ -129,11 +129,11 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
                   <span className={styles.divide}>÷</span>
                   <input
                     type="number"
-                    value={numberOfPeople}
+                    value={memberCount}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (value.includes("-")) return;
-                      setNumberOfPeople(Number(value) || 1);
+                      setMemberCount(Number(value) || 1);
                     }}
                   />
                   <span>명</span>
@@ -179,8 +179,8 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
               <input
                 type="text"
                 placeholder="홍길동"
-                value={depositor}
-                onChange={(e) => setDepositor(e.target.value)}
+                value={accountHolderName}
+                onChange={(e) => setAccountHolderName(e.target.value)}
               />
             </div>
           </div>

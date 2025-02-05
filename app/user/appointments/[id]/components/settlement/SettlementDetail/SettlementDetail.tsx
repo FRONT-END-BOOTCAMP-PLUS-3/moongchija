@@ -3,76 +3,43 @@ import Button from "@/components/button/Button";
 import styles from "./SettlementDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import SettlementModalContent from "../SettlementModalContent/SettlementModalContent";
-import { Settlement } from "../../detail/types/detailTypes";
-import CircleButton from "@/components/circleButton/CircleButton";
-import SettlementModalNew from "../SettlementModalNew/SettlementModalNew";
+import { SettlementDto } from "@/application/usecases/appointment/dto/SettlementDto";
 
 interface SettlementDetailProps {
-  settlementData: Settlement | null; // 정산이 없을 수도 있으므로 null 허용
+  settlementData: SettlementDto | null; // 정산이 없을 수도 있으므로 null 허용
 }
 
 const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isNewModalOpen, setIsNewModalOpen] = useState(false);
+
+  if (!settlementData) {
+    return <p className={styles.noData}>정산 정보가 없습니다.</p>;
+  }
 
   const handleCopy = () => {
-    if (settlementData) {
+    if (settlementData.accountNumber) {
       navigator.clipboard.writeText(settlementData.accountNumber).then(() => {
         alert("복사되었습니다");
       });
     }
   };
 
-  const openModal = () => {
-    setIsModalOpen(true);
-  };
-
-  const openNewModal = () => {
-    setIsNewModalOpen(true);
-    console.log("open");
-    console.log(isNewModalOpen);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const closeNewModal = () => {
-    setIsNewModalOpen(false);
-  };
-
+  const openModal = () => setIsModalOpen(true);
+  const closeModal = () => setIsModalOpen(false);
   const handleRegister = () => {
     alert("수정되었습니다");
     closeModal();
   };
 
-  if (!settlementData) {
-    return (
-      <>
-        <div className={styles.noSettlementContainer}>
-          <div className={styles.noSettlement}>등록된 정산이 없습니다</div>
-
-          <div className={styles.editButton}>
-            <CircleButton onClick={openNewModal} />
-          </div>
-        </div>
-
-        {/* 새로운 정산 작성 모달 컴포넌트 */}
-        <Modal isOpen={isNewModalOpen} onClose={closeNewModal}>
-          <SettlementModalNew handleRegister={handleRegister} />
-        </Modal>
-      </>
-    );
-  }
-
   // 총액 계산
-  const totalAmount = settlementData.items.reduce(
-    (sum, item) => sum + item.price,
+  const totalAmount = settlementData.details?.reduce(
+    (sum, item) => sum + item.amount,
     0
-  );
-  const perPersonAmount = Math.floor(
-    totalAmount / settlementData.numberOfPeople
-  );
+  ) ?? 0;
+
+  const perPersonAmount = settlementData.memberCount
+    ? Math.floor(totalAmount / settlementData.memberCount)
+    : 0;
 
   return (
     <div className={styles.container}>
@@ -92,12 +59,16 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
                 </tr>
               </thead>
               <tbody>
-                {settlementData.items.map((item) => (
+                {settlementData.details?.map((item) => (
                   <tr key={item.id}>
-                    <td>{item.place}</td>
-                    <td>{item.price.toLocaleString()}원</td>
+                    <td>{item.descript}</td>
+                    <td>{item.amount.toLocaleString()}원</td>
                   </tr>
-                ))}
+                )) || (
+                  <tr>
+                    <td colSpan={2}>결제 항목이 없습니다.</td>
+                  </tr>
+                )}
               </tbody>
             </table>
           </div>
@@ -114,7 +85,7 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
                 </tr>
                 <tr>
                   <td>인원 수</td>
-                  <td>{settlementData.numberOfPeople}명</td>
+                  <td>{settlementData.memberCount || 0}명</td>
                 </tr>
                 <tr>
                   <td>인 당</td>
@@ -130,20 +101,22 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
               <span>계좌번호</span>
               <div>
                 <div className={styles.accountNumber}>
-                  {settlementData.accountNumber}
+                  {settlementData.accountNumber || "없음"}
                 </div>
-                <button className={styles.copyButton} onClick={handleCopy}>
-                  복사
-                </button>
+                {settlementData.accountNumber && (
+                  <button className={styles.copyButton} onClick={handleCopy}>
+                    복사
+                  </button>
+                )}
               </div>
             </div>
             <div className={styles.row}>
               <span>은행사</span>
-              <div>{settlementData.bank}</div>
+              <div>{settlementData.bank || "없음"}</div>
             </div>
             <div className={styles.row}>
               <span>예금주</span>
-              <div>{settlementData.depositor}</div>
+              <div>{settlementData.accountHolderName || "없음"}</div>
             </div>
           </div>
         </div>

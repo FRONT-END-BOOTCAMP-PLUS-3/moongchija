@@ -2,11 +2,11 @@ import { useState, useEffect } from "react";
 import { FaPlus, FaMinus } from "react-icons/fa6"; // Import FaMinus for the - button
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
-import { Settlement } from "../../detail/types/detailTypes";
 import { banks } from "../../const/banks";
+import { SettlementDto } from "@/application/usecases/appointment/dto/SettlementDto";
 
 type ModalContentProps = {
-  initialData: Settlement;
+  initialData: SettlementDto;
   handleRegister: () => void;
 };
 
@@ -16,7 +16,7 @@ const SettlementModalContent = ({
 }: ModalContentProps) => {
   const [totalPrice, setTotalPrice] = useState(0); // 총액
   const [numberOfPeople, setNumberOfPeople] = useState(
-    initialData.numberOfPeople
+    initialData.memberCount
   ); // 인원 수
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
   const [accountNumber, setAccountNumber] = useState(initialData.accountNumber); // 계좌번호 상태 추가
@@ -25,11 +25,11 @@ const SettlementModalContent = ({
       (bank) => bank.replace(/\s/g, "") === initialData.bank.replace(/\s/g, "")
     ) || banks[0]
   ); // 은행사 상태 추가
-  const [depositor, setDepositor] = useState(initialData.depositor); // 예금주 상태 추가
+  const [depositor, setDepositor] = useState(initialData.accountHolderName); // 예금주 상태 추가
 
   // 장소&금액 input
   const [inputSets, setInputSets] = useState(
-    initialData.items.map((item) => ({ place: item.place, price: item.price }))
+    initialData.details.map((item) => ({ place: item.descript, price: item.amount }))
   );
 
   // 인원 수가 변경될 때마다 인당 금액을 계산
