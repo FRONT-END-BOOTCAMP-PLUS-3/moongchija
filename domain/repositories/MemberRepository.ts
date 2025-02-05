@@ -21,4 +21,6 @@ export interface MemberRepository {
     appointmentId: number,
     isVote: boolean
   ): Promise<void>;
+
+  getVotedMemberIdsByAppointment(appointmentId: number): Promise<string[]>;
 }

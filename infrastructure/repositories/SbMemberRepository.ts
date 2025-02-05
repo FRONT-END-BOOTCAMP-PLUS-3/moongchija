@@ -115,4 +115,22 @@ export class SbMemberRepository implements MemberRepository {
       throw new Error(`Failed to update vote status: ${error.message}`);
     }
   }
+
+  async getVotedMemberIdsByAppointment(
+    appointmentId: number
+  ): Promise<string[]> {
+    const supabase = await this.getClient();
+
+    const { data, error } = await supabase
+      .from("member")
+      .select("user_id")
+      .eq("appointment_id", appointmentId)
+      .eq("is_vote", true);
+
+    if (error) {
+      throw new Error(`투표 완료한 멤버 조회 실패: ${error.message}`);
+    }
+
+    return data ? data.map((member) => member.user_id) : [];
+  }
 }

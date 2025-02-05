@@ -4,6 +4,7 @@ import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlace
 import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUsecase";
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
+import { TimeVoteDto } from "@/application/usecases/vote/dto/VoteDto";
 
 export async function POST(
   request: NextRequest,
@@ -29,7 +30,7 @@ export async function POST(
       new SbMemberRepository()
     );
 
-    // ✅ `timeVotes`에서 `timeId`를 찾고, 없으면 생성하는 최적화된 코드
+    // ✅ page에서 받은 time(YYYY-MM-DD HH:MM:SS)이 time_vote테이블에 존재하면 time_id반환 없으면 null반환
     const existingTimeVotes = await Promise.all(
       timeVotes.map(async (vote: { time: string }) => {
         const existingTimeId = await timeVoteRepo.findTimeIdByTimestamp(
@@ -40,6 +41,7 @@ export async function POST(
       })
     );
 
+    // ✅ page에서 받은 time들 가운데 time_id가 없는 것듯은 nuwTimes에 저장
     const newTimes = timeVotes.filter(
       (_: { time: string }, index: number) => !existingTimeVotes[index]
     );
@@ -50,10 +52,20 @@ export async function POST(
       newTimes.map((vote: { time: string }) => vote.time)
     );
 
-    // ✅ 기존 `existingTimeVotes`와 새로 추가된 `newTimeIds`를 정확하게 매칭
-    const processedTimeVotes = existingTimeVotes.map(
-      (vote, index) => (vote ? vote : { timeId: newTimeIds[index] ?? null }) // null 방지
-    );
+    // ✅ null 값을 newTimeIds에서 가져올 때 올바르게 매핑
+    const processedTimeVotes: TimeVoteDto[] = existingTimeVotes
+      .map((vote, index) => {
+        if (vote) {
+          return vote; // ✅ 기존 time_id가 있으면 그대로 사용
+        } else {
+          const newTimeId = newTimeIds.shift();
+          if (!newTimeId) {
+            throw new Error("새로운 timeId 매핑 중 오류 발생"); // ✅ 예외 처리 추가
+          }
+          return { timeId: newTimeId }; // ✅ 새로 추가한 timeId 매핑
+        }
+      })
+      .filter((vote): vote is TimeVoteDto => vote !== null); // ✅ `null` 필터링
 
     // ✅ placeVotes 유효성 검사
     if (!placeVotes || placeVotes.length === 0 || !placeVotes[0]?.placeId) {
