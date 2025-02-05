@@ -1,11 +1,7 @@
-import { UserEmojiRepository } from "@/domain/repositories/UserEmojiRepository";
 import { UserRepository } from "@/domain/repositories/UserRepository";
 
 export class DfSignUpUsecase {
-  constructor(
-    private userRepository: UserRepository,
-    private UserEmojiRepository: UserEmojiRepository
-  ) {}
+  constructor(private userRepository: UserRepository) {}
 
   async execute(user_email: string, hashedPassword: string, nickname: string) {
     const existingUser = await this.userRepository.findUserByEmail(user_email);
@@ -17,7 +13,7 @@ export class DfSignUpUsecase {
       nickname
     );
 
-    const emoji = await this.UserEmojiRepository.createUserRandomEmoji();
+    const emoji = await this.userRepository.createUserRandomEmoji();
 
     const provider = "email";
 

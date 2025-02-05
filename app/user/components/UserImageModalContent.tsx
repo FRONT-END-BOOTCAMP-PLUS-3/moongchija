@@ -2,25 +2,84 @@
 import Image from "next/image";
 import styles from "./UserImageModalContent.module.scss";
 import Button from "@/components/button/Button";
+import { useEffect, useState } from "react";
 
-const emojis = [
-  { id: 1, src: "/images/emojis/bear.webp", alt: "곰" },
-  { id: 2, src: "/images/emojis/cerberus.webp", alt: "케르베로스" },
-  { id: 3, src: "/images/emojis/dragon.webp", alt: "용" },
-  { id: 4, src: "/images/emojis/ikaros.webp", alt: "이카로스" },
-  { id: 5, src: "/images/emojis/lion.webp", alt: "사자" },
-  { id: 6, src: "/images/emojis/pegasus.webp", alt: "페가수스" },
-  { id: 7, src: "/images/emojis/person.webp", alt: "사람" },
-  { id: 8, src: "/images/emojis/werewolf.webp", alt: "늑대인간" },
-  { id: 9, src: "/images/emojis/wolf.webp", alt: "늑대" },
-];
+type Emoji = {
+  id: number;
+  src: string;
+  alt: string;
+};
+
 const UserProfileImageModalContent = () => {
+  const [emojis, setEmojis] = useState<Emoji[]>([]);
+  const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+
+  const getEmojis = async () => {
+    try {
+      const response = await fetch("/api/user/emojis");
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch emojis");
+      }
+
+      const emojis = await response.json();
+      setEmojis(emojis);
+    } catch (error) {}
+  };
+
+  useEffect(() => {
+    getEmojis();
+  }, []);
+
+  const handleEmojiChange = async () => {
+    if (!selectedEmoji) {
+      alert("이모지를 선택해주세요.");
+      return;
+    }
+
+    const confirmChange = confirm("이모지를 변경하시겠습니까?");
+    if (!confirmChange) {
+      return;
+    }
+
+    try {
+      const response = await fetch("/api/user/update-emoji", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ emoji: selectedEmoji }),
+      });
+
+      if (!response.ok) {
+        throw new Error("이모지 업데이트에 실패하였습니다.");
+      }
+
+      alert("이모지가 성공적으로 변경되었습니다!");
+    } catch (error) {
+      console.error("Error updating emoji:", error);
+      alert("이모지 변경 중 오류가 발생했습니다.");
+    }
+  };
+
+  const handleEmojiClick = (image: Emoji) => {
+    setSelectedEmoji(image.src);
+  };
+
   return (
     <div className={styles.userImageModalContainer}>
       <div className={styles.userEmojiWrapper}>
         {emojis.map((image) => (
-          <div key={image.id} className={styles.imageWrapper}>
-            <button className={styles.hiddenButton}>
+          <div
+            key={image.id}
+            className={`${styles.imageWrapper} ${
+              selectedEmoji === image.src ? styles.selected : ""
+            }`}
+          >
+            <button
+              className={styles.hiddenButton}
+              onClick={() => handleEmojiClick(image)}
+            >
               <Image
                 src={image.src}
                 alt={image.src}
@@ -32,7 +91,7 @@ const UserProfileImageModalContent = () => {
           </div>
         ))}
       </div>
-      <Button text="변경하기" size="sm" />
+      <Button text="변경하기" size="sm" onClick={handleEmojiChange} />
     </div>
   );
 };
