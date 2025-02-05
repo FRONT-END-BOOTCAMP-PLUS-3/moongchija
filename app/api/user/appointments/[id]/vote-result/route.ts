@@ -6,11 +6,13 @@ import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRe
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteResultUsecase";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    // ✅ URL에서 약속 ID 추출
-    const pathname = request.nextUrl.pathname; // ex) "/api/user/appointments/1/vote-result"
-    const appointmentId = parseInt(pathname.split("/").slice(-2, -1)[0]); // 마지막에서 두 번째 값 추출
+    const { id } = await params;
+    const appointmentId = id;
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(

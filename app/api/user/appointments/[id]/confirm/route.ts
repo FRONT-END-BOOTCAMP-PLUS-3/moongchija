@@ -4,10 +4,13 @@ import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVote
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    const pathname = request.nextUrl.pathname; // ex) "/api/user/appointments/1/vote-result"
-    const appointmentId = parseInt(pathname.split("/").slice(-2, -1)[0]); // 마지막에서 두 번째 값 추출
+    const { id } = await params;
+    const appointmentId = id;
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
