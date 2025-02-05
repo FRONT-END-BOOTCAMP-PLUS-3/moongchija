@@ -247,9 +247,6 @@ export class SbUserRepository implements UserRepository {
         throw new Error("변경할 정보가 없습니다.");
       }
 
-      console.log("🔍 업데이트할 userId:", userId);
-      console.log("🔍 업데이트 필드:", updateFields);
-
       const { data: updatedUser, error: updateError } = await supabase
         .from("user")
         .update(updateFields)
