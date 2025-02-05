@@ -8,4 +8,5 @@ export interface AppointmentCardDto {
     participants: string[];
     isCreator: boolean;
     extraParticipants: number;
+    status: "voting" | "confirmed"
   }
