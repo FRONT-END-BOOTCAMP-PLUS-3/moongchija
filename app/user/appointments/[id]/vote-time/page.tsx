@@ -38,7 +38,6 @@ const VoteTimePage: React.FC = () => {
           startDate.getHours(),
           endDate.getHours()
         );
-
         setDateList(generatedDateList);
         setTimeList(generatedTimeList);
 
@@ -58,21 +57,26 @@ const VoteTimePage: React.FC = () => {
 
   const getDateList = (start: Date, end: Date) => {
     const dates = [];
-    const current = new Date(
-      Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate())
-    );
-    const endDate = new Date(
-      Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate())
-    );
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
+    // ✅ UTC 변환 제거 → 한국 시간 그대로 사용
+    const current = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate()
+    );
+    const endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
     while (current <= endDate) {
-      const year = current.getUTCFullYear();
-      const month = String(current.getUTCMonth() + 1).padStart(2, "0");
-      const day = String(current.getUTCDate()).padStart(2, "0");
-      const dayOfWeek = daysOfWeek[current.getUTCDay()];
+      const year = current.getFullYear();
+      const month = String(current.getMonth() + 1).padStart(2, "0");
+      const day = String(current.getDate()).padStart(2, "0");
+      const dayOfWeek = daysOfWeek[current.getDay()]; // ✅ 현지 시간 요일 사용
+
       dates.push(`${year}-${month}-${day}-${dayOfWeek}`);
-      current.setUTCDate(current.getUTCDate() + 1);
+
+      // ✅ UTC가 아닌 현지 시간 기준으로 날짜 증가
+      current.setDate(current.getDate() + 1);
     }
 
     return dates;
