@@ -5,29 +5,55 @@ import Button from "@/components/button/Button";
 import { useState, useMemo, useRef } from "react";
 
 interface NoticeBoxProps {
-  content: string; // content를 prop으로 받음
+  noticeId: number;
+  content: string;
+  appointmentId: number;
+  onNoticeUpdate: (updatedNotice: { noticeId: number, content: string }) => void; 
 }
 
-const NoticeBox = ({ content }: NoticeBoxProps) => {
+const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate }: NoticeBoxProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isShowMore, setIsShowMore] = useState(false); // 더보기 열고 닫는 상태
-  const textLimit = useRef(30); // 글자수 제한
+  const [isShowMore, setIsShowMore] = useState(false);
+  const [updatedContent, setUpdatedContent] = useState(content); 
+  const textLimit = useRef(30);
 
   const truncatedContent = useMemo(() => {
     const shortContent = content.slice(0, textLimit.current);
-
-    if (content.length > textLimit.current) {
-      return isShowMore ? content : shortContent;
-    }
-    return content;
+    return content.length > textLimit.current
+      ? isShowMore
+        ? content
+        : shortContent
+      : content;
   }, [isShowMore, content]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleRegister = () => {
-    alert("수정되었습니다");
-    closeModal();
+  const handleUpdate = async () => {
+    if (!updatedContent.trim()) {
+      alert("내용을 입력해주세요.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/user/appointments/${appointmentId}/information`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ noticeId, descript: updatedContent }),
+      });
+
+      if (response.ok) {
+        alert("공지사항이 수정되었습니다.");
+        onNoticeUpdate({ noticeId, content: updatedContent });
+        closeModal();
+      } else {
+        const errorData = await response.json();
+        alert(`수정 실패: ${errorData.error}`);
+      }
+    } catch (error) {
+      console.error("공지사항 수정 오류:", error);
+      alert("공지사항 수정 중 오류가 발생했습니다.");
+    }
   };
 
   const handleDelete = () => {
@@ -61,14 +87,18 @@ const NoticeBox = ({ content }: NoticeBoxProps) => {
         <div className={styles.modalContainer}>
           <div className={styles.modalBox}>
             <span className={styles.modalTitle}>공지사항 수정하기</span>
-            <textarea className={styles.modalContent} defaultValue={content} />
+            <textarea
+              className={styles.modalContent}
+              value={updatedContent}
+              onChange={(e) => setUpdatedContent(e.target.value)}
+            />
             <div className={styles.editButton}>
               <Button
                 text="수정하기"
                 size="sm"
                 color="--primary-color"
                 active={true}
-                onClick={handleRegister}
+                onClick={handleUpdate}
               />
             </div>
           </div>

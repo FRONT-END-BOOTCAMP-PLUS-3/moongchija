@@ -5,6 +5,7 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 import { SbNoticeRepository } from "@/infrastructure/repositories/SbNoticeRepository";
 import { DfGetAppointmentInformationUsecase } from "@/application/usecases/appointment/DfGetAppointmentInformationUsecase";
 import { DfCreateNoticeUsecase } from "@/application/usecases/appointment/DfCreateNotionUsecase";
+import { DfUpdateNoticeUsecase } from "@/application/usecases/appointment/DfUpdateNotionUseCase";
 
 const appointmentRepository = new SbAppointmentRepository();
 const memberRepository = new SbMemberRepository();
@@ -58,7 +59,7 @@ export async function POST(req: NextRequest) {
     const { descript, appointmentId } = body;
 
     const parsedAppointmentId = Number(appointmentId);
-    if  (!descript || isNaN(parsedAppointmentId))  {
+    if (!descript || isNaN(parsedAppointmentId)) {
       return NextResponse.json(
         { error: "Invalid request data" },
         { status: 400 }
@@ -73,6 +74,32 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to create notice" },
+      { status: 500 }
+    );
+  }
+}
+
+// 공지사항 수정
+export async function PATCH(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { descript, noticeId } = body;
+
+    if (!descript || isNaN(noticeId)) {
+      return NextResponse.json(
+        { error: "잘못된 요청 데이터입니다" },
+        { status: 400 }
+      );
+    }
+
+    const updateNoticeUsecase = new DfUpdateNoticeUsecase(noticeRepository);
+    await updateNoticeUsecase.execute(noticeId, descript);
+
+    return NextResponse.json({ message: "공지사항이 수정되었습니다" }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "공지사항 수정에 실패했습니다" },
       { status: 500 }
     );
   }

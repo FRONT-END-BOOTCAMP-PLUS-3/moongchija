@@ -40,9 +40,13 @@ export class SbNoticeRepository implements NoticeRepository {
       .from("notice")
       .update({ descript })
       .eq("id", noticeId);
+      console.log(supabase);
+      
 
     if (error) {
-      throw new Error(`공지사항 수정 실패: ${error.message}`);
+      console.error(`공지사항 수정 실패: ${error.message}`);
+  throw new Error(`공지사항 수정 실패: ${error.message}`);
+
     }
   }
 
