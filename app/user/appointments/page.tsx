@@ -101,7 +101,7 @@ const AppointmentsPage: React.FC = () => {
         return;
       }
 
-      const response = await fetch(`/api/user/appointments/${userId}`);
+      const response = await fetch(`/api/user/appointments?userId=${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch appointments');
       }
