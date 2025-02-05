@@ -13,13 +13,8 @@ export class DfSubmitVoteUsecase {
   async execute(voteData: VoteSubmissionDto): Promise<void> {
     const { userId, appointmentId, timeVotes, placeVotes } = voteData;
 
-    // ✅ 1. 투표하려는 사용자의 is_vote 확인
-    const member = await this.memberRepo.getMemberStatus(userId, appointmentId);
-    if (!member) {
-      throw new Error("해당 약속의 멤버가 아닙니다.");
-    }
-
-    if (member.is_vote) {
+    // ✅ 이미 투표한 사용자 방지
+    if (await this.memberRepo.isUserInAppointment(userId, appointmentId)) {
       throw new Error("❌ 이미 투표한 사용자입니다.");
     }
 
@@ -37,8 +32,11 @@ export class DfSubmitVoteUsecase {
       })
     );
 
-    // ✅ 4. 투표 완료 후 사용자의 `is_vote` 상태를 `true`로 업데이트
-    await this.memberRepo.updateVoteStatus(userId, appointmentId, true);
+    // ✅ 3. 투표 완료 후 사용자를 appointment 멤버로 추가
+    console.log(
+      `📌 [DEBUG] ${userId}를 appointment ${appointmentId}의 멤버로 추가`
+    );
+    await this.memberRepo.addMemberToAppointment(userId, appointmentId);
 
     console.log("📌 [DEBUG] DfSubmitVoteUsecase 완료!");
   }

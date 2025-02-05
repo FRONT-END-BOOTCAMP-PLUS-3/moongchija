@@ -55,6 +55,6 @@ export class SbTimeVoteRepository implements TimeVoteRepository {
     if (error) {
       return null;
     }
-    return data?.id ?? null;
+    return data?.id || null;
   }
 }

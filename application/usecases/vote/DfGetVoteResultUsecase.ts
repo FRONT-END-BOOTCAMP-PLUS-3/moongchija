@@ -1,5 +1,3 @@
-import { MemberRepository } from "@/domain/repositories/MemberRepository";
-import { UserRepository } from "@/domain/repositories/UserRepository";
 import { TimeVoteUserRepository } from "@/domain/repositories/TimeVoteUserRepository";
 import { PlaceVoteUserRepository } from "@/domain/repositories/PlaceVoteUserRepository";
 import { AppointmentRepository } from "@/domain/repositories/AppointmentRepository";
@@ -8,8 +6,6 @@ import { PlaceVoteRepository } from "@/domain/repositories/PlaceVoteRepository";
 
 export class DfGetVoteResultUseCase {
   constructor(
-    private memberRepo: MemberRepository,
-    private userRepo: UserRepository,
     private timeVoteUserRepo: TimeVoteUserRepository,
     private placeVoteUserRepo: PlaceVoteUserRepository,
     private appointmentRepo: AppointmentRepository,
@@ -18,18 +14,17 @@ export class DfGetVoteResultUseCase {
   ) {}
 
   async execute(appointmentId: number) {
-    // ✅ 1. 해당 약속에서 투표 완료한 유저들의 user_id 조회
-    const votedUserIds = await this.memberRepo.getVotedMemberIdsByAppointment(
+    // ✅ 1. 해당 약속의 모든 멤버 조회 (nickname 포함)
+    const members = await this.appointmentRepo.getMembersByAppointment(
       appointmentId
     );
 
-    // ✅ 2. user_id 리스트를 이용해 닉네임 조회
-    const votedUsers = await this.userRepo.getNicknamesByUserIds(votedUserIds);
-
-    // ✅ 3. 시간 투표 결과 조회
+    // ✅ 2. 해당 약속의 시간 투표 결과 조회
     const timeVotes = await this.timeVoteRepo.getTimeVotesByAppointment(
       appointmentId
     );
+
+    // ✅ 3. 각 시간별 투표자 조회 (nickname 포함)
     const timeResults = await Promise.all(
       timeVotes.map(async (timeVote) => {
         const users = await this.timeVoteUserRepo.getUsersByTime(timeVote.id);
@@ -40,10 +35,12 @@ export class DfGetVoteResultUseCase {
       })
     );
 
-    // ✅ 4. 장소 투표 결과 조회
+    // ✅ 4. 해당 약속의 장소 투표 결과 조회
     const placeVotes = await this.placeVoteRepo.getPlacesByAppointment(
       appointmentId
     );
+
+    // ✅ 5. 각 장소별 투표자 조회 (nickname 포함)
     const placeResults = await Promise.all(
       placeVotes.map(async (placeVote) => {
         const users = await this.placeVoteUserRepo.getUsersByPlace(
@@ -57,20 +54,20 @@ export class DfGetVoteResultUseCase {
       })
     );
 
-    // ✅ 5. 약속 정보 조회 (owner_id, start_time, end_time 포함)
+    // ✅ 6. 약속 정보에서 start_time, end_time 가져오기 위함 , owner_id(방장id)를 가져옴
     const appointmentInfo = await this.appointmentRepo.findById(appointmentId);
 
-    // ✅ 6. 최종 데이터 반환
+    // ✅ 7. 최종 결과 데이터 반환
     return {
       ownerId: appointmentInfo?.owner_id,
       time: {
         start_time: appointmentInfo ? appointmentInfo.start_time : null,
         end_time: appointmentInfo ? appointmentInfo.end_time : null,
-        member: votedUsers.map((u) => u.nickname), // ✅ 투표 완료한 멤버의 닉네임 반환
+        member: members.map((m) => m.nickname), // ✅ 멤버 닉네임 포함
         result: timeResults,
       },
       place: {
-        member: votedUsers.map((u) => u.nickname), // ✅ 투표 완료한 멤버의 닉네임 반환
+        member: members.map((m) => m.nickname), // ✅ 멤버 닉네임 포함
         result: placeResults,
       },
     };
