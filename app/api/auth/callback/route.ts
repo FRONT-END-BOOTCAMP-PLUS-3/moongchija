@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { getKakaoUserInfo } from "../kakao-user/route";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { DfSocialLoginUseCase } from "@/application/usecases/auth/DfSocialLoginUseCase";
-import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
+import { extractUserIdFromToken } from "@/utils/auth/extractUserIdFromToken";
 
 export async function GET(request: NextRequest) {
   try {
@@ -58,15 +58,14 @@ export async function GET(request: NextRequest) {
     const userInfo = await getKakaoUserInfo(tokenData.access_token);
 
     const userRepository = new SbUserRepository();
-    const emojiRepository = new SbUserEmojiRepository();
-    const socialLoginUsecase = new DfSocialLoginUseCase(
-      emojiRepository,
-      userRepository
-    );
+
+    const socialLoginUsecase = new DfSocialLoginUseCase(userRepository);
 
     const user = await socialLoginUsecase.execute(userInfo);
 
-    const userId = user.access_token;
+    const token = user.access_token;
+
+    const userId = extractUserIdFromToken(token!);
 
     const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
     const response = NextResponse.redirect(redirectUrl);
