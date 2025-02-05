@@ -2,7 +2,7 @@ import { Appointment } from "../entities/Appointment";
 import { Member } from "../entities/Member";
 
 export interface AppointmentRepository {
-  create(appointment: Appointment): Promise<Appointment[]>; // 약속 생성
+  create(appointment: Appointment): Promise<Appointment>; // 약속 생성
   findById(appointmentId: number): Promise<Appointment | null>; // 특정 약속 조회
   getAppointmentTime(
     appointmentId: number

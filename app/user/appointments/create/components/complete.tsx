@@ -2,11 +2,15 @@
 
 import styles from "./complete.module.scss";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Button from "@/components/button/Button";
 import Moongchi from "@/components/moongchi/Moongchi";
 
-const CreateComplete: React.FC = () => {
+interface Props {
+  onIsComplete: () => void;
+}
+
+const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
   const [copyActive, setCopyActive] = useState<boolean>(false);
   const router = useRouter();
   const appointmentId = 1; // TODO: 상태 관리로 동적 ID 가져오기
@@ -23,6 +27,10 @@ const CreateComplete: React.FC = () => {
       alert(type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
     }
   };
+
+  useEffect(() => {
+    onIsComplete();
+  }, []);
 
   return (
     <div className={styles.completeContainer}>

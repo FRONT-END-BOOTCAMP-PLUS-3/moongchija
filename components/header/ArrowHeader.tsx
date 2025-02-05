@@ -13,7 +13,7 @@ const ArrowHeader: React.FC<ArrowHeaderProps> = ({ setValue }) => {
   const handleBack = () => {
     if (setValue) {
       setValue((prev) => {
-        if (prev === 1) {
+        if (prev <= 1) {
           window.history.back();
           return prev;
         }
