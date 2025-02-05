@@ -8,7 +8,11 @@ import CircleIndicator from "./CircleIndicator";
 
 const MAX_PLACES = 5;
 
-const CreatePlace: React.FC = () => {
+interface Props {
+  onPageChange: (index: number) => void;
+}
+
+const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
   const { createAppointment } = useCreateAppointment();
 
   const [places, setPlaces] = useState([{ name: "", url: "" }]);
@@ -39,6 +43,7 @@ const CreatePlace: React.FC = () => {
 
   const handleNextButton = () => {
     createAppointment();
+    onPageChange(4)
   };
 
   return (

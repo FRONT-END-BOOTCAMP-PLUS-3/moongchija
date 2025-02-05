@@ -3,6 +3,27 @@ import { PlaceVoteRepository } from "@/domain/repositories/PlaceVoteRepository";
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 
 export class SbPlaceVoteRepository implements PlaceVoteRepository {
+  async create(placeVotes: PlaceVote | PlaceVote[]): Promise<PlaceVote | PlaceVote[]> {
+    const supabase = await createClient();
+  
+    // 단일 객체를 배열로 변환 (배열이 아닐 경우)
+    const votesArray = Array.isArray(placeVotes) ? placeVotes : [placeVotes];
+  
+    const { data, error } = await supabase
+      .from("place_vote")
+      .insert(votesArray); // 항상 배열로 처리
+  
+    if (error) {
+      throw new Error(`Failed to create place votes: ${error.message}`);
+    }
+  
+    if (!data) {
+      throw new Error('Failed to create place votes: data is null');
+    }
+
+    return Array.isArray(placeVotes) ? data : data[0];
+  }
+
   async addPlace(
     appointmentId: number,
     place: string,

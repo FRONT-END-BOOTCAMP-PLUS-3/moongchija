@@ -5,6 +5,18 @@ import { AppointmentRepository } from "@/domain/repositories/AppointmentReposito
 import { Member } from "@/domain/entities/Member";
 
 export class SbAppointmentRepository implements AppointmentRepository {
+  async create(appointment: Appointment): Promise<Appointment> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment")
+      .insert(appointment)
+      .single();
+
+    if (error) {
+      throw new Error(`Failed to create appointment: ${error.message}`);
+    }
+    return data;
+  }
   async findByIds(appointmentIds: number[]): Promise<Appointment[] | null> {
     const supabase = await this.getClient();
     const { data, error } = await supabase
@@ -21,19 +33,6 @@ export class SbAppointmentRepository implements AppointmentRepository {
 
   private async getClient(): Promise<SupabaseClient> {
     return await createClient();
-  }
-
-  async create(appointment: Appointment): Promise<Appointment[]> {
-    const supabase = await this.getClient();
-    const { data, error } = await supabase
-      .from("appointment")
-      .insert([appointment])
-      .select();
-
-    if (error) {
-      throw new Error(`약속 생성 실패: ${error.message}`);
-    }
-    return data || [];
   }
 
   async findById(appointmentId: number): Promise<Appointment | null> {
