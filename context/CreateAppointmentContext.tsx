@@ -42,7 +42,7 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
 
   const [placeVotes, setPlaceVotes] = useState<PlaceVote[]>([]);
 
-  async function createAppointment(): Promise<Appointment | null> {
+  async function createAppointment() {
     try {
       const userId = await getUserIdClient();
       if (!userId) {
@@ -64,12 +64,9 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
       const data: Appointment = await response.json();
       console.log("✅ Appointment Created:", data);
 
-      // 상태 업데이트 (성공 시)
       setAppointment(data);
-      return data;
     } catch (error) {
-      console.error("❌ Error creating appointment:", error);
-      return null;
+      console.error("❌ 약속 생성 오류가 발생하였습니다. :", error);
     }
   }
 

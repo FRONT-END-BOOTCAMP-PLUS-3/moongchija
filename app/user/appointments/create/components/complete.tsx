@@ -5,15 +5,17 @@ import { useRouter } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import Button from "@/components/button/Button";
 import Moongchi from "@/components/moongchi/Moongchi";
+import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 
 interface Props {
   onIsComplete: () => void;
 }
 
 const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
-  const [copyActive, setCopyActive] = useState<boolean>(false);
   const router = useRouter();
-  const appointmentId = 1; // TODO: 상태 관리로 동적 ID 가져오기
+  const [copyActive, setCopyActive] = useState<boolean>(false);
+  const { appointment } = useCreateAppointment(); // TODO: 상태 관리로 동적 ID 가져오기
+  const appointmentId = appointment.id ? appointment.id : ''
 
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
