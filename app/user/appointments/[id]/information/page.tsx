@@ -6,9 +6,7 @@ import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
 import { useEffect, useState } from "react";
-// import detailDummyData from "../components/detail/dummyData/detailDummyData";
 import { useParams } from "next/navigation";
-// import { detailTypes } from "../components/detail/types/detailTypes";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
 import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
@@ -20,7 +18,7 @@ const InformationPage = () => {
   const router = useRouter();
 
   useEffect(() => {
-    const fetchPlaces = async () => {
+    const fetchInfo = async () => {
       try {
         const response = await fetch(
           `/api/user/appointments/${id}/information`
@@ -35,7 +33,7 @@ const InformationPage = () => {
       }
     };
 
-    if (id) fetchPlaces();
+    if (id) fetchInfo();
   }, [id]);
 
   const handleCopyRoomId = () => {
@@ -83,7 +81,7 @@ const InformationPage = () => {
         ) : (
           <>
             <InformationDetail informationData={infoData} />
-            <NoticeDetail noticeData={infoData.notices} />
+            <NoticeDetail noticeData={infoData.notices} appointmentId={Number(id)}  />
             <div className={styles.buttonWrapper}>
               <div className={styles.copyButton}>
                 <Button

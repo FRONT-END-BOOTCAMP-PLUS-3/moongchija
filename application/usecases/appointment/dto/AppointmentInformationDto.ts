@@ -1,3 +1,5 @@
+import { NoticeItemDto } from "./NoticeDto";
+
 export interface AppointmentInformationDto {
   id: number;
   title: string;
@@ -8,9 +10,5 @@ export interface AppointmentInformationDto {
     nickname: string;
     emoji: string;
   }[];
-  notices?: {
-    id: number;
-    descript: string;
-    createdAt: Date;
-  }[];
+  notices?: NoticeItemDto[];
 }
