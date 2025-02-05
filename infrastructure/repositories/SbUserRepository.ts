@@ -2,8 +2,12 @@ import { User } from "@/domain/entities/User";
 import { UserRepository } from "@/domain/repositories/UserRepository";
 import { generateJwtToken } from "@/utils/auth/auth-utils";
 import { createClient } from "@/utils/supabase/server";
+import { SupabaseClient } from "@supabase/supabase-js";
 
 export class SbUserRepository implements UserRepository {
+  private async getClient(): Promise<SupabaseClient> {
+    return await createClient();
+  }
   async findByIds(id: string[]): Promise<User[]> {
     const supabase = await createClient();
     const { data: users, error } = await supabase
@@ -153,6 +157,28 @@ export class SbUserRepository implements UserRepository {
     return newNickname;
   }
 
+  // ✅ 여러 `user_id`를 기반으로 `nickname` 조회
+  async getNicknamesByUserIds(
+    userIds: string[]
+  ): Promise<{ user_id: string; nickname: string }[]> {
+    if (userIds.length === 0) return [];
+
+    const supabase = await this.getClient();
+
+    const { data, error } = await supabase
+      .from("user")
+      .select("id, nickname")
+      .in("id", userIds);
+
+    if (error) {
+      throw new Error(`유저 닉네임 조회 실패: ${error.message}`);
+    }
+
+    return data
+      ? data.map((user) => ({ user_id: user.id, nickname: user.nickname }))
+      : [];
+  }
+
   async createUserRandomEmoji(): Promise<string> {
     const supabase = await createClient();
 
@@ -260,7 +286,7 @@ export class SbUserRepository implements UserRepository {
       }
 
       return updatedUser;
-    } catch (error) {
+    } catch (error: any) {
       throw new Error(
         error.message || "유저 정보 업데이트 중 오류가 발생했습니다."
       );

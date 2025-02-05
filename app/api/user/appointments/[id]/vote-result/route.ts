@@ -5,6 +5,8 @@ import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppoint
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteResultUsecase";
+import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
+import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
 export async function GET(
   request: NextRequest,
@@ -22,6 +24,8 @@ export async function GET(
     }
 
     const voteResultUseCase = new DfGetVoteResultUseCase(
+      new SbMemberRepository(),
+      new SbUserRepository(),
       new SbTimeVoteUserRepository(),
       new SbPlaceVoteUserRepository(),
       new SbAppointmentRepository(),
