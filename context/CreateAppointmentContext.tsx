@@ -2,21 +2,27 @@
 
 import { Appointment } from "@/domain/entities/Appointment";
 import { PlaceVote } from "@/domain/entities/PlaceVote";
+import { getUserIdClient } from "@/utils/supabase/client";
 import { createContext, useContext, useState, ReactNode } from "react";
+import { useRouter } from 'next/navigation';
 
 type CreateAppointmentContextType = {
   appointment: Appointment;
-  setAppointment: (appointment: Appointment | ((prev: Appointment) => Appointment)) => void;
+  setAppointment: (
+    appointment: Appointment | ((prev: Appointment) => Appointment)
+  ) => void;
   placeVotes: PlaceVote[];
   setPlaceVotes: (votes: PlaceVote[]) => void;
   createAppointment: () => void;
 };
 
-const CreateAppointmentContext = createContext<CreateAppointmentContextType | undefined>(
-  undefined
-);
+const CreateAppointmentContext = createContext<
+  CreateAppointmentContextType | undefined
+>(undefined);
 
 export const CreateAppointmentProvider = ({ children }: { children: ReactNode }) => {
+  const router = useRouter();
+
   const [appointment, setAppointment] = useState<Appointment>({
     id: null,
     confirm_time: null,
@@ -36,22 +42,51 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
 
   const [placeVotes, setPlaceVotes] = useState<PlaceVote[]>([]);
 
-  const createAppointment = () => {
-    console.log(appointment);
-    console.log(placeVotes);
-  }
+  async function createAppointment(): Promise<Appointment | null> {
+    try {
+      const userId = await getUserIdClient();
+      if (!userId) {
+        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return null;
+      }
 
-  console.log("Provider rendered", appointment);
+      const newAppointment: Appointment = { ...appointment, owner_id: userId };
+
+      const response = await fetch("/api/user/appointments/create", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ appointment: newAppointment, placeVotes }),
+      });
+
+      if (!response.ok) throw new Error("Failed to create appointment");
+
+      const data: Appointment = await response.json();
+      console.log("✅ Appointment Created:", data);
+
+      // 상태 업데이트 (성공 시)
+      setAppointment(data);
+      return data;
+    } catch (error) {
+      console.error("❌ Error creating appointment:", error);
+      return null;
+    }
+  }
 
   return (
     <CreateAppointmentContext.Provider
-      value={{ appointment, setAppointment, placeVotes, setPlaceVotes, createAppointment }}
+      value={{
+        appointment,
+        setAppointment,
+        placeVotes,
+        setPlaceVotes,
+        createAppointment,
+      }}
     >
       {children}
     </CreateAppointmentContext.Provider>
   );
 };
-
 export const useCreateAppointment = () => {
   const context = useContext(CreateAppointmentContext);
   if (!context) {
