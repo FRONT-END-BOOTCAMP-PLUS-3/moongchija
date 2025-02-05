@@ -1,5 +1,5 @@
 export interface Appointment {
-  id: number; // 약속 ID (Primary Key)
+  id?: number | null; // 약속 ID (Primary Key)
   confirm_time?: string | null; // 확정된 시간
   confirm_place?: string | null; // 확정된 장소
   confirm_place_url?: string | null; // 확정된 장소 URL

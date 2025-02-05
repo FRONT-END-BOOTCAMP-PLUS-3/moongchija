@@ -160,7 +160,7 @@ const AppointmentsPage: React.FC = () => {
           className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
-          <Link href={"/user/appointments/create/information"}>
+          <Link href={"/user/appointments/create"}>
             약속 만들기
           </Link>
           <button onClick={openModal}>방번호로 참여</button>

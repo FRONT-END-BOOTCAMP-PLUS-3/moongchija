@@ -1,20 +1,28 @@
 "use client";
 
 import styles from "./time.module.scss";
-import { useState } from "react";
-import CircleIndicator from "../components/CircleIndicator";
 import Button from "@/components/button/Button";
+import { useState } from "react";
+import CircleIndicator from "./CircleIndicator";
 
+import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { DateRange } from "react-date-range";
 
-const CreateTimePage = () => {
+interface Props {
+  onPageChange: (index: number) => void;
+}
+
+const CreateTime: React.FC<Props> = ({ onPageChange }) => {
+  const { setAppointment } = useCreateAppointment();
+
   const [startTime, setStartTime] = useState("오전 9시");
   const [endTime, setEndTime] = useState("오후 3시");
 
   const initialStartDate = new Date();
   const initialEndDate = new Date();
+
   initialStartDate.setHours(timeTo24HourFormat(startTime), 0, 0, 0);
   initialEndDate.setHours(timeTo24HourFormat(endTime), 0, 0, 0);
 
@@ -30,8 +38,29 @@ const CreateTimePage = () => {
     const range = ranges.selection;
     const differenceInDays =
       (range.endDate - range.startDate) / (1000 * 60 * 60 * 24);
+
     if (differenceInDays <= 7) {
-      setSelectedRange([range]);
+      setSelectedRange([
+        {
+          startDate: new Date(
+            range.startDate.setHours(
+              selectedRange[0].startDate.getHours(),
+              selectedRange[0].startDate.getMinutes(),
+              selectedRange[0].startDate.getSeconds(),
+              selectedRange[0].startDate.getMilliseconds()
+            )
+          ),
+          endDate: new Date(
+            range.endDate.setHours(
+              selectedRange[0].endDate.getHours(),
+              selectedRange[0].endDate.getMinutes(),
+              selectedRange[0].endDate.getSeconds(),
+              selectedRange[0].endDate.getMilliseconds()
+            )
+          ),
+          key: "selection",
+        },
+      ]);
     } else {
       alert("최대 7일까지 선택할 수 있습니다.");
     }
@@ -60,9 +89,13 @@ const CreateTimePage = () => {
   };
 
   const handleNextButton = () => {
-    console.log("Start Time:", selectedRange[0].startDate);
-    console.log("End Time:", selectedRange[0].endDate);
-    window.location.href = "/user/appointments/create/place";
+    setAppointment((prev) => ({
+      ...prev,
+      start_time: selectedRange[0].startDate.toISOString(),
+      end_time: selectedRange[0].endDate.toISOString(),
+    }));
+
+    onPageChange(3);
   };
 
   return (
@@ -74,7 +107,9 @@ const CreateTimePage = () => {
 
         <div className={styles.datePickerWrapper}>
           <p>기간 선택</p>
-          <span className={styles.message}>최대 7일까지 선택할 수 있습니다.</span>
+          <span className={styles.message}>
+            최대 7일까지 선택할 수 있습니다.
+          </span>
           <DateRange
             ranges={selectedRange}
             onChange={handleDateChange}
@@ -106,12 +141,14 @@ const CreateTimePage = () => {
         </div>
       </section>
 
-      <Button size="lg" text="다음" onClick={handleNextButton} />
+      <div className={styles.buttonWrapper}>
+        <Button size="lg" text="다음" onClick={handleNextButton} />
+      </div>
     </div>
   );
 };
 
-export default CreateTimePage;
+export default CreateTime;
 
 const times = [
   "오전 12시",

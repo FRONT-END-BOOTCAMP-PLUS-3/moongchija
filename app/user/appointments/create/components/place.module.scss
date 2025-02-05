@@ -4,12 +4,15 @@
   align-items: center;
   justify-content: space-between;
   height: 100vh;
-  padding: 20px;
+  padding: 40px;
+
+  .buttonWrapper {
+    width: 100%;
+  }
 }
 
 .mainBox {
   width: 100%;
-  padding: 20px;
 
   .title {
     font-size: var(--font-size-md);
@@ -23,7 +26,7 @@
     flex-direction: column;
     gap: 10px;
     overflow-y: auto;
-    height: 70vh;
+    max-height: 50vh;
 
     label {
       display: block;

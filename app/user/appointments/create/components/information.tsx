@@ -3,8 +3,9 @@
 import styles from "./information.module.scss";
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
-import { useState, useEffect } from "react";
-import CircleIndicator from "../components/CircleIndicator";
+import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import { useEffect, useState } from "react";
+import CircleIndicator from "./CircleIndicator";
 
 const quizList = [
   "내 MBTI는?",
@@ -20,26 +21,32 @@ const quizList = [
   "직접 입력하기",
 ];
 
-const CreateInformationPage = () => {
-  const [name, setName] = useState<string>("");
-  const [quiz, setQuiz] = useState<string>("내 MBTI는?");
-  const [answer, setAnswer] = useState<string>("");
+interface Props {
+  onPageChange: (index: number) => void;
+}
+
+const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
+  const { appointment, setAppointment } = useCreateAppointment();
+
   const [isCustomQuiz, setIsCustomQuiz] = useState<boolean>(false);
 
-  const [nameError, setNameError] = useState<string>("");
   const [quizError, setQuizError] = useState<string>("");
   const [answerError, setAnswerError] = useState<string>("");
+
+  const [nameError, setNameError] = useState<string>("");
   const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
 
   const handleQuizChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedValue = e.target.value;
-    setQuiz(selectedValue);
+
+    handleSetQuiz(selectedValue);
+
     setIsCustomQuiz(selectedValue === "직접 입력하기");
 
     if (selectedValue !== "직접 입력하기") {
-      setQuiz(selectedValue);
+      handleSetQuiz(selectedValue);
     } else {
-      setQuiz("");
+      handleSetQuiz("");
     }
   };
 
@@ -50,22 +57,44 @@ const CreateInformationPage = () => {
     } else {
       setNameError("");
     }
-    setName(value);
+
+    handleSetTitle(value);
   };
 
   const handleNextButton = () => {
-    window.location.href = "/user/appointments/create/time"
+    onPageChange(2);
+  };
+
+  const handleSetTitle = (title: string) => {
+    setAppointment((prev) => ({
+      ...prev,
+      title: title,
+    }));
+  };
+
+  const handleSetQuiz = (quiz: string) => {
+    setAppointment((prev) => ({
+      ...prev,
+      quiz: quiz,
+    }));
+  };
+
+  const handleSetAnswer = (answer: string) => {
+    setAppointment((prev) => ({
+      ...prev,
+      answer: answer,
+    }));
   };
 
   useEffect(() => {
     // 모든 필드가 유효한지 확인하여 버튼 활성화 상태 설정
     const isFormValid =
-      name.trim().length > 0 &&
+      appointment.title.trim().length > 0 &&
       nameError === "" &&
-      quiz.trim().length > 0 &&
-      answer.trim().length > 0;
+      appointment.quiz!.trim().length > 0 &&
+      appointment.answer!.trim().length > 0;
     setIsButtonActive(isFormValid);
-  }, [name, quiz, answer, nameError]);
+  }, [appointment.title, appointment.quiz, appointment.answer, nameError]);
 
   return (
     <div className={styles.container}>
@@ -77,7 +106,7 @@ const CreateInformationPage = () => {
         <InputField
           label="약속 이름"
           placeholder="약속 이름을 입력하세요. (최대 20자)"
-          value={name}
+          value={appointment.title}
           onChange={handleNameChange}
           error={nameError}
         />
@@ -85,7 +114,7 @@ const CreateInformationPage = () => {
         <label htmlFor="quiz-select">비밀번호 퀴즈</label>
         <select
           id="quiz-select"
-          value={isCustomQuiz ? "직접 입력하기" : quiz}
+          value={isCustomQuiz ? "직접 입력하기" : appointment.quiz!}
           onChange={handleQuizChange}
         >
           {quizList.map((option) => (
@@ -98,8 +127,8 @@ const CreateInformationPage = () => {
         {isCustomQuiz && (
           <input
             type="text"
-            value={quiz}
-            onChange={(e) => setQuiz(e.target.value)}
+            value={appointment.quiz!}
+            onChange={(e) => handleSetQuiz(e.target.value)}
             placeholder="퀴즈를 입력하세요."
           />
         )}
@@ -109,20 +138,22 @@ const CreateInformationPage = () => {
         <InputField
           label="비밀번호 퀴즈 답"
           placeholder="퀴즈 답을 입력하세요."
-          value={answer}
-          onChange={(e) => setAnswer(e.target.value)}
+          value={appointment.answer!}
+          onChange={(e) => handleSetAnswer(e.target.value)}
           error={answerError}
         />
       </section>
 
-      <Button
-        size="lg"
-        text="다음"
-        active={isButtonActive}
-        onClick={handleNextButton}
-      />
+      <div className={styles.buttonWrapper}>
+        <Button
+          size="lg"
+          text="다음"
+          active={isButtonActive}
+          onClick={handleNextButton}
+        />
+      </div>
     </div>
   );
 };
 
-export default CreateInformationPage;
+export default CreateInformation;
