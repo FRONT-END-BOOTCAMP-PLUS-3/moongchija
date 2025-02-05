@@ -1,15 +1,7 @@
 import jwt from "jsonwebtoken";
-import { jwtDecode, JwtPayload } from "jwt-decode";
-
-interface CustomJwtPayload extends JwtPayload {
-  id: string;
-  email: string;
-  nickname: string;
-  emoji: string;
-}
 
 export const generateJwtToken = (
-  id: string,
+  userId: string,
   email: string,
   nickname: string,
   emoji: string
@@ -20,11 +12,9 @@ export const generateJwtToken = (
   }
 
   // JWT 생성 (예: 1시간 만료)
-  const payload = { id, email, nickname, emoji };
+  const payload = { sub: userId, email, nickname, emoji };
+
   const token = jwt.sign(payload, secretKey, { expiresIn: "1h" });
 
-  const decodedToken = jwtDecode<CustomJwtPayload>(token);
-  const userId = decodedToken.id;
-
-  return userId;
+  return token;
 };
