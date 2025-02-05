@@ -13,9 +13,7 @@ export class DfAppointmentCardUsecase {
       private appointmentRepository: AppointmentRepository
     ) {}
   
-    async execute(): Promise<AppointmentCardDto[]> {
-      const userId = "d832351e-564b-4d1a-b07a-e57edbd7b99e"; // TODO: 사용자 ID 쿠키에서 가져오게끔 수정하기
-  
+    async execute(userId: string): Promise<AppointmentCardDto[]> {  
       const membersByUserId: Member[] = await this.memberRepository.findByUserId(userId);
       const appointmentIds: number[] = membersByUserId.map(m => m.appointment_id);
   
@@ -23,14 +21,14 @@ export class DfAppointmentCardUsecase {
   
       const appointmentDtos: AppointmentCardDto[] = await Promise.all(
         appointments.map(async (appointment) => {
-          const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointment_id(appointment.id);
+          const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointment_id(appointment.id!);
           const memberIds: string[] = membersByAppointmentId.map(member => member.user_id);
           const participants: User[] = await this.userRepository.findByIds(memberIds);
 
           
   
           return {
-            id: appointment.id,
+            id: appointment.id ?? null,
             title: appointment.title,
             startDate: new Date(appointment.start_time),
             endDate: new Date(appointment.end_time),
