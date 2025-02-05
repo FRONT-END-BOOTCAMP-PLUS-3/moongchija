@@ -30,3 +30,16 @@ export const calculateCountdown = (startDate: Date): string => {
   if (daysLeft === 0) return "D-DAY"; // 당일
   return `D-${daysLeft}`;
 };
+
+export const timeTo24HourFormat = (time: string): number => {
+  const [period, hour] = time.split(" ");
+  let formattedHour = parseInt(hour.replace("시", ""));
+  if (period === "오후" && formattedHour !== 12) {
+    formattedHour += 12;
+  }
+  if (period === "오전" && formattedHour === 12) {
+    formattedHour = 0;
+  }
+  return formattedHour;
+};
+

@@ -117,7 +117,7 @@ const AppointmentsPage: React.FC = () => {
         endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
         confirmDate: appointment.confirmDate ? new Date(appointment.confirmDate) : undefined,
       }));
-      console.log(appointments)
+
       setAppointments(parseAppointments);
       
     } catch (error) {

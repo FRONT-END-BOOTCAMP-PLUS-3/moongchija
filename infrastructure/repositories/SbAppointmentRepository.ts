@@ -9,12 +9,12 @@ export class SbAppointmentRepository implements AppointmentRepository {
     const { data, error } = await supabase
       .from("appointment")
       .insert(appointment)
-      .single();
+      .select("*");
 
     if (error) {
       throw new Error(`Failed to create appointment: ${error.message}`);
     }
-    return data;
+    return data[0];
   }
   async findByIds(appointmentIds: number[]): Promise<Appointment[] | null> {
     const supabase = await this.getClient();
