@@ -5,9 +5,22 @@ import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUse
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    let { appointmentId, userId, timeVotes, placeVotes } = await request.json();
+    const { id } = await params;
+    const appointmentId = id;
+    let { userId, timeVotes, placeVotes } = await request.json();
+
+    // 필수 데이터 체크
+    if (!userId || !placeVotes.length) {
+      return NextResponse.json(
+        { error: "필수 데이터가 누락되었습니다." },
+        { status: 400 }
+      );
+    }
 
     const timeVoteRepo = new SbTimeVoteRepository();
     const voteUsecase = new DfSubmitVoteUsecase(

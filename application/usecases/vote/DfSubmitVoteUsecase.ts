@@ -13,12 +13,8 @@ export class DfSubmitVoteUsecase {
   async execute(voteData: VoteSubmissionDto): Promise<void> {
     const { userId, appointmentId, timeVotes, placeVotes } = voteData;
 
-    // ✅ 이미 멤버인지 확인
-    const isMember = await this.memberRepo.isUserInAppointment(
-      userId,
-      appointmentId
-    );
-    if (isMember) {
+    // ✅ 이미 투표한 사용자 방지
+    if (await this.memberRepo.isUserInAppointment(userId, appointmentId)) {
       throw new Error("❌ 이미 투표한 사용자입니다.");
     }
 

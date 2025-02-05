@@ -68,19 +68,15 @@ const VotePlacePage: React.FC = () => {
       router.push("/login");
       return;
     }
-
-    const voteData = {
-      appointmentId: parseInt(id),
-      userId,
-      timeVotes: selectedTimes.map((time) => ({ time })), // 시간만 포함
-      placeVotes: [{ placeId: selectedPlace }], // ✅ 장소 ID 포함
-    };
-
     try {
       const response = await fetch(`/api/user/appointments/${id}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(voteData),
+        body: JSON.stringify({
+          userId,
+          timeVotes: selectedTimes.map((time) => ({ time })),
+          placeVotes: [{ placeId: selectedPlace }],
+        }),
       });
 
       const responseData = await response.json();

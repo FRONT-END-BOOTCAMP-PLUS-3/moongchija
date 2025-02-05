@@ -1,16 +1,15 @@
 import { NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
-import { DfAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
+import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
 export async function GET(
-  req: Request,
-  { params }: { params: { id: string } }
+  request: Request,
+  { params }: { params: { id: number } }
 ) {
   const repository = new SbAppointmentRepository();
-  const usecase = new DfAppointmentTimeUsecase(repository);
-  // const appointmentTime = await usecase.execute(parseInt(params.id));
+  const usecase = new DfGetAppointmentTimeUsecase(repository);
   const { id } = await params;
-  const appointmentTime = await usecase.execute(parseInt(id));
+  const appointmentTime = await usecase.execute(id);
 
   if (!appointmentTime) {
     return NextResponse.json(

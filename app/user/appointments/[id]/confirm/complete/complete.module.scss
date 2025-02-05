@@ -3,26 +3,26 @@
   height: 100%;
 
   .mainBox {
+    height: 90%;
     display: flex;
     flex-direction: column;
     align-items: center;
+    justify-content: space-between;
     text-align: center;
     padding: 0 20px;
     .wrapLogo {
-      margin-top: 7vh;
+      margin-top: 20%;
     }
     .title {
       font-family: var(--font-sub);
       font-size: 42px;
       font-weight: bold;
       color: var(--primary-color);
-      margin-top: 6vh;
     }
 
     .description {
       font-size: var(--font-size-md);
       color: var(--grey-5-color);
-      margin-top: 50px;
       line-height: 1.4;
     }
 
@@ -32,7 +32,6 @@
       align-items: center;
       justify-content: center;
       width: 100%;
-      margin-top: 3vh;
       .copyButton {
         width: 80%;
         border: none;
@@ -57,7 +56,6 @@
     }
     .wrapButton {
       width: 100%;
-      margin-top: 6vh;
     }
   }
 }
