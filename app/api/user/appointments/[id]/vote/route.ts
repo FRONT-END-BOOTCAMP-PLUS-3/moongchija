@@ -15,7 +15,7 @@ export async function POST(
     let { userId, timeVotes, placeVotes } = await request.json();
 
     // 필수 데이터 체크
-    if (!userId || !placeVotes.length) {
+    if (!userId || !timeVotes.length || !placeVotes.length) {
       return NextResponse.json(
         { error: "필수 데이터가 누락되었습니다." },
         { status: 400 }
@@ -44,13 +44,13 @@ export async function POST(
       (_: { time: string }, index: number) => !existingTimeVotes[index]
     );
 
-    // ✅ 새로 추가할 시간 투표 생성 및 ID 반환
+    // ✅ 새로운 시간들을 DB에 추가하고 ID 리스트 가져오기
     const newTimeIds = await timeVoteRepo.createTimeVotes(
       appointmentId,
       newTimes.map((vote: { time: string }) => vote.time)
     );
 
-    // ✅ `processedTimeVotes` 생성 (null 방지)
+    // ✅ 기존 `existingTimeVotes`와 새로 추가된 `newTimeIds`를 정확하게 매칭
     const processedTimeVotes = existingTimeVotes.map(
       (vote, index) => (vote ? vote : { timeId: newTimeIds[index] ?? null }) // null 방지
     );
@@ -63,13 +63,24 @@ export async function POST(
       );
     }
 
-    // ✅ 투표 저장 실행
-    await voteUsecase.execute({
-      userId,
-      appointmentId,
-      timeVotes: processedTimeVotes,
-      placeVotes,
-    });
+    // ✅ 투표 저장 실행 (서버에서 발생하는 오류를 catch하기 위함)
+    try {
+      await voteUsecase.execute({
+        userId,
+        appointmentId,
+        timeVotes: processedTimeVotes,
+        placeVotes,
+      });
+    } catch (voteError) {
+      console.error("❌ 투표 오류 발생:", voteError);
+      return NextResponse.json(
+        {
+          error:
+            voteError instanceof Error ? voteError.message : "Unknown error",
+        },
+        { status: 400 }
+      ); // ✅ 400 상태 코드 반환
+    }
 
     return NextResponse.json({
       message: "✅ 투표가 성공적으로 저장되었습니다.",
