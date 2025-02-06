@@ -43,8 +43,8 @@ const UserName = () => {
       let data;
 
       try {
-        data = await response.json(); // JSON 응답을 한 번만 가져오기
-      } catch (error) {
+        data = await response.json();
+      } catch {
         alert("서버에서 올바른 응답을 받지 못했습니다.");
         return;
       }
@@ -59,7 +59,7 @@ const UserName = () => {
       }
 
       alert("닉네임이 성공적으로 변경되었습니다!");
-    } catch (error) {
+    } catch {
       alert("서버와의 연결에 문제가 발생했습니다.");
     }
 
