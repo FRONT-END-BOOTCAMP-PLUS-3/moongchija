@@ -4,7 +4,6 @@
   justify-content: center;
   align-items: flex-end;
   margin-bottom: 50px;
-
   font-size: var(--font-size-md);
   font-family: var(--font-sub);
 
@@ -13,17 +12,15 @@
     justify-content: flex-end;
     align-items: center;
     gap: 10px;
-    width: 90%;
     height: 40px;
 
     .userName {
-      width: 140px;
+      width: 100%;
     }
 
     .userNameInput {
       padding: 10px 5px;
       margin: 0;
-      width: 140px;
       border: 1px solid #d1d5db;
       border-radius: 10px;
       outline: none;
