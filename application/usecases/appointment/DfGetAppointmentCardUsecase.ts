@@ -23,7 +23,7 @@ export class DfAppointmentCardUsecase {
   
       appointmentDtos = await Promise.all(
         appointments.map(async (appointment) => {
-          const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointment_id(appointment.id!);
+          const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointmentId(appointment.id!);
           const memberIds: string[] = membersByAppointmentId.map(member => member.user_id);
           const participants: User[] = await this.userRepository.findByIds(memberIds);
   

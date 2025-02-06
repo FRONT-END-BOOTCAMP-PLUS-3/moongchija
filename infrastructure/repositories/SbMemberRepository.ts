@@ -52,7 +52,7 @@ export class SbMemberRepository implements MemberRepository {
     return !!data; // ✅ 존재하면 true, 없으면 false 반환
   }
 
-  async findByAppointment_id(appointment_id: number): Promise<Member[]> {
+  async findByAppointmentId(appointment_id: number): Promise<Member[]> {
     const client = await this.getClient();
     const { data, error } = await client
       .from("member")
@@ -76,6 +76,22 @@ export class SbMemberRepository implements MemberRepository {
       throw new Error(`Error finding member by user ID: ${error.message}`);
     }
     return data;
+  }
+
+  
+  async findIsVoteByAppointmentIdAndUserId(appointmentId: number, userId: string): Promise<boolean> {
+    const client = await this.getClient();
+    const { data, error } = await client
+      .from("member")
+      .select("is_vote")
+      .eq("user_id", userId)
+      .eq("appointment_id", appointmentId)
+      .single();
+
+    if (error) {
+      throw new Error(`Error finding member by user ID and appointment ID: ${error.message}`);
+    }
+    return data?.is_vote ?? false;
   }
 
   async getMemberStatus(

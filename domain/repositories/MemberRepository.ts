@@ -7,7 +7,9 @@ export interface MemberRepository {
 
   findByUserId(userId: string): Promise<Member[]>;
 
-  findByAppointment_id(appointment_id: number): Promise<Member[]>;
+  findByAppointmentId(appointmentId: number): Promise<Member[]>;
+
+  findIsVoteByAppointmentIdAndUserId(appointmentId: number, userId: string): Promise<boolean>;
 
   getMemberStatus(
     userId: string,
