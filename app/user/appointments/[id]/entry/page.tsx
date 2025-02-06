@@ -6,6 +6,8 @@ import Image from "next/image";
 import { useMemo, useState } from "react";
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
+import IconHeader from "@/components/header/IconHeader";
+import Moongchi from "@/components/moongchi/Moongchi";
 
 const EntryPage = () => {
   const [answer, setAnswer] = useState("");
@@ -38,41 +40,43 @@ const EntryPage = () => {
   };
 
   return (
-    <div className={styles.completeContainer}>
-      <Image
-        src="/images/logos/main-logo.svg"
-        alt="메인 로고"
-        width={270}
-        height={270}
-        className={styles.logo}
-      />
-      <h2 className={styles.title}>퀴즈를 맞혀보세요!</h2>
+    <>
+      <IconHeader />
+      <div className={styles.completeContainer}>
+        <Moongchi />
+        <h2 className={styles.title}>퀴즈를 맞혀보세요!</h2>
 
-      <section className={styles.sectionContainer}>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>약속 이름</span>
-          <span>홍대 모임</span>
-        </div>
-        <div className={styles.infoRow}>
-          <span className={styles.label}>퀴즈</span>
-          <span>내 MBTI는?</span>
-        </div>
+        <section className={styles.sectionContainer}>
+          <div className={styles.infoRow}>
+            <span className={styles.label}>약속 이름</span>
+            <span>홍대 모임</span>
+          </div>
+          <div className={styles.infoRow}>
+            <span className={styles.label}>퀴즈</span>
+            <span>내 MBTI는?</span>
+          </div>
 
-        <div className={styles.inputContainer}>
-          <InputField
-            label="퀴즈 답"
-            value={answer}
-            placeholder="퀴즈 답을 입력하세요."
-            onChange={handleAnswerChange}
-            error={error}
+          <div className={styles.inputContainer}>
+            <InputField
+              label="퀴즈 답"
+              value={answer}
+              placeholder="퀴즈 답을 입력하세요."
+              onChange={handleAnswerChange}
+              error={error}
+            />
+          </div>
+        </section>
+
+        <section className={styles.wrapButton}>
+          <Button
+            text="참여"
+            size="lg"
+            active={answerActive}
+            onClick={handleSubmit}
           />
-        </div>
-      </section>
-
-      <section className={styles.wrapButton}>
-        <Button text="참여" size="lg" active={answerActive} onClick={handleSubmit} />
-      </section>
-    </div>
+        </section>
+      </div>
+    </>
   );
 };
 
