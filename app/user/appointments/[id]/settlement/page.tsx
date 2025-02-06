@@ -24,43 +24,36 @@ const SettlementPage = () => {
 
   const openNewModal = () => {
     setIsNewModalOpen(true);
-    console.log("open");
-    console.log(isNewModalOpen);
   };
 
   const closeNewModal = () => {
     setIsNewModalOpen(false);
   };
 
-  const handleRegister = () => {
-    alert("수정되었습니다");
-    closeNewModal();
+  const fetchSettlement = async () => {
+    try {
+      setLoading(true);
+      setError(false); // 요청 시작 시 에러 상태 초기화
+
+      const response = await fetch(`/api/user/appointments/${id}/settlement`);
+
+      if (response.status === 404) {
+        setSettlementData(null); // 정산 데이터가 없음
+      } else if (!response.ok) {
+        throw new Error("서버 오류");
+      } else {
+        const data = await response.json();
+        setSettlementData(data);
+      }
+    } catch (error) {
+      console.error(error);
+      setError(true); // API 호출 실패
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
-    const fetchSettlement = async () => {
-      try {
-        setLoading(true);
-        setError(false); // 요청 시작 시 에러 상태 초기화
-
-        const response = await fetch(`/api/user/appointments/${id}/settlement`);
-
-        if (response.status === 404) {
-          setSettlementData(null); // 정산 데이터가 없음
-        } else if (!response.ok) {
-          throw new Error("서버 오류");
-        } else {
-          const data = await response.json();
-          setSettlementData(data);
-        }
-      } catch (error) {
-        console.error(error);
-        setError(true); // API 호출 실패
-      } finally {
-        setLoading(false);
-      }
-    };
-
     if (id) fetchSettlement();
   }, [id]);
 
@@ -98,7 +91,6 @@ const SettlementPage = () => {
           <DetailTabMenu />
           <div className={styles.noSettlementContainer}>
             <div className={styles.noSettlement}>등록된 정산이 없습니다</div>
-
             <div className={styles.editButton}>
               <CircleButton onClick={openNewModal} />
             </div>
@@ -107,7 +99,13 @@ const SettlementPage = () => {
 
         {/* 새로운 정산 작성 모달 컴포넌트 */}
         <Modal isOpen={isNewModalOpen} onClose={closeNewModal}>
-          <SettlementModalNew handleRegister={handleRegister} />
+          <SettlementModalNew
+            appointmentId={Number(id)}
+            onSuccess={() => {
+              closeNewModal();
+              fetchSettlement(); // 등록 후 최신 데이터 재조회
+            }}
+          />
         </Modal>
       </>
     );
