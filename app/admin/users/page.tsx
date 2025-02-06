@@ -38,6 +38,21 @@ export default function UsersPage() {
     setUsers(data);
   };
 
+  const handleDelete = async (userId: string) => {
+    if (!confirm("정말 이 유저를 삭제하시겠습니까?")) return;
+
+    const res = await fetch(`/api/admin/users/${userId}`, {
+      method: "DELETE",
+    });
+
+    if (res.ok) {
+      alert("유저가 삭제되었습니다.");
+      setUsers(users.filter((user) => user.id !== userId)); // 삭제된 유저 목록에서 제거
+    } else {
+      alert("유저 삭제에 실패했습니다.");
+    }
+  };
+
   return (
     <div className={styles.container}>
       <h2>👥 유저 관리</h2>
@@ -64,32 +79,43 @@ export default function UsersPage() {
         </button>
       </div>
 
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>이메일</th>
-            <th>닉네임</th>
-          </tr>
-        </thead>
-        <tbody>
-          {users.length > 0 ? (
-            users.map((user) => (
-              <tr key={user.id}>
-                <td>{user.id}</td>
-                <td>{user.email}</td>
-                <td>{user.nickname}</td>
-              </tr>
-            ))
-          ) : (
+      <div className={styles.tableContainer}>
+        <table className={styles.table}>
+          <thead>
             <tr>
-              <td colSpan={3} style={{ textAlign: "center" }}>
-                검색 결과가 없습니다.
-              </td>
+              <th>ID</th>
+              <th>이메일</th>
+              <th>닉네임</th>
+              <th>삭제</th>
             </tr>
-          )}
-        </tbody>
-      </table>
+          </thead>
+          <tbody>
+            {users.length > 0 ? (
+              users.map((user) => (
+                <tr key={user.id}>
+                  <td>{user.id}</td>
+                  <td>{user.email}</td>
+                  <td>{user.nickname}</td>
+                  <td>
+                    <button
+                      className={styles.deleteButton}
+                      onClick={() => handleDelete(user.id)}
+                    >
+                      삭제
+                    </button>
+                  </td>
+                </tr>
+              ))
+            ) : (
+              <tr>
+                <td colSpan={4} style={{ textAlign: "center" }}>
+                  검색 결과가 없습니다.
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 }
