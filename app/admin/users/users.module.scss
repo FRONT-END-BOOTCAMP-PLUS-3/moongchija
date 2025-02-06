@@ -45,47 +45,45 @@
   .tableContainer {
     max-height: 500px; // ✅ 너무 길어지지 않도록 제한
     overflow-y: auto; // ✅ 세로 스크롤 추가
-    border: 1px solid #ddd;
     border-radius: 8px;
-  }
+    .table {
+      width: 100%;
+      border-collapse: collapse;
 
-  .table {
-    width: 100%;
-    border-collapse: collapse;
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: center;
+        white-space: nowrap; // ✅ 줄바꿈 방지
+        overflow: hidden;
+        text-overflow: ellipsis; // ✅ 너무 긴 텍스트 `...` 처리
+        max-width: 110px; // ✅ 셀 너비 제한
+      }
 
-    th,
-    td {
-      padding: 10px;
-      border: 1px solid #ddd;
-      text-align: left;
-      white-space: nowrap; // ✅ 줄바꿈 방지
-      overflow: hidden;
-      text-overflow: ellipsis; // ✅ 너무 긴 텍스트 `...` 처리
-      max-width: 110px; // ✅ 셀 너비 제한
+      th {
+        background-color: #f8f8f8;
+        font-weight: bold;
+      }
+
+      tr:nth-child(even) {
+        background-color: #f9f9f9;
+      }
     }
 
-    th {
-      background-color: #f8f8f8;
-      font-weight: bold;
-    }
+    .deleteButton {
+      padding: 6px 12px;
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 14px;
+      transition: background-color 0.2s;
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
-  }
-
-  .deleteButton {
-    padding: 6px 12px;
-    background-color: #dc3545;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.2s;
-
-    &:hover {
-      background-color: #a71d2a;
+      &:hover {
+        background-color: #a71d2a;
+      }
     }
   }
 }
