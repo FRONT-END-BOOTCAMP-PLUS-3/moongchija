@@ -249,8 +249,6 @@ export class SbUserRepository implements UserRepository {
         .select("id, nickname, emoji")
         .eq("id", userId)
         .single();
-      console.log("existingUser:", existingUser);
-      console.log("findError:", findError);
 
       if (findError || !existingUser) {
         throw new Error("사용자를 찾을 수 없습니다.");
@@ -286,10 +284,17 @@ export class SbUserRepository implements UserRepository {
       }
 
       return updatedUser;
-    } catch (error: any) {
-      throw new Error(
-        error.message || "유저 정보 업데이트 중 오류가 발생했습니다."
-      );
+
+    } catch (error) {
+      if (error instanceof Error) {
+        throw new Error(
+          error.message || "유저 정보 업데이트 중 오류가 발생했습니다."
+        );
+      } else {
+        throw new Error(
+          "유저 정보 업데이트 중 알 수 없는 오류가 발생했습니다."
+        );
+      }
     }
   }
 }

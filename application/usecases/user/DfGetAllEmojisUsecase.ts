@@ -1,6 +1,6 @@
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export class DfAllEmojisUsecase {
+export class DfGetAllEmojisUsecase {
   constructor(private userRepository: SbUserRepository) {}
 
   async execute() {
