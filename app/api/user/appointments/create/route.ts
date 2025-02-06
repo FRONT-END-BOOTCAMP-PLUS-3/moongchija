@@ -6,14 +6,19 @@ import { NextResponse } from "next/server";
 
 export async function POST(req: Request) {
   try {
-    const { appointment, placeVotes } = await req.json();
+    const body = await req.json();
+    const { appointment, placeVotes } = body;
 
     if (!appointment || !placeVotes) {
+      console.error("❌ 필수 데이터 누락:", { appointment, placeVotes });
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
       );
     }
+
+    // id 자동 증감을 위해 id 속성은 보내지 않음
+    const { id, ...data } = appointment; 
 
     const appointmentRepository = new SbAppointmentRepository();
     const placeVoteRepository = new SbPlaceVoteRepository();
@@ -25,13 +30,13 @@ export async function POST(req: Request) {
       memberRepository
     );
 
-    const newAppointment = await usecase.execute(appointment, placeVotes);
+    const newAppointment = await usecase.execute(data, placeVotes);
 
     return NextResponse.json(newAppointment, { status: 201 });
   } catch (error) {
     console.error("❌ Error creating appointment:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }
     );
   }

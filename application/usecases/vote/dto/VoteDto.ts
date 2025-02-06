@@ -6,6 +6,10 @@ export interface PlaceVoteDto {
   placeId: number; // ✅ place_vote 테이블의 id
 }
 
+export interface TimeVoteInputDto {
+  time: string;
+}
+
 export interface VoteSubmissionDto {
   userId: string; // ✅ 투표하는 사용자 ID
   appointmentId: number; // ✅ 추가됨! (약속 ID)

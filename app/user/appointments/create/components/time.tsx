@@ -9,6 +9,7 @@ import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
+import { timeTo24HourFormat } from "@/utils/dateUtils/dateUtils";
 
 interface Props {
   onPageChange: (index: number) => void;
@@ -23,8 +24,8 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
   const initialStartDate = new Date();
   const initialEndDate = new Date();
 
-  initialStartDate.setHours(timeTo24HourFormat(startTime), 0, 0, 0);
-  initialEndDate.setHours(timeTo24HourFormat(endTime), 0, 0, 0);
+  initialStartDate.setUTCHours(timeTo24HourFormat(startTime), 0, 0, 0);
+  initialEndDate.setUTCHours(timeTo24HourFormat(endTime), 0, 0, 0);
 
   const [selectedRange, setSelectedRange] = useState([
     {
@@ -176,16 +177,3 @@ const times = [
   "오후 10시",
   "오후 11시",
 ];
-
-// util.ts
-const timeTo24HourFormat = (time: string): number => {
-  const [period, hour] = time.split(" ");
-  let formattedHour = parseInt(hour.replace("시", ""));
-  if (period === "오후" && formattedHour !== 12) {
-    formattedHour += 12;
-  }
-  if (period === "오전" && formattedHour === 12) {
-    formattedHour = 0;
-  }
-  return formattedHour;
-};

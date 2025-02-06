@@ -24,7 +24,6 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
   const router = useRouter();
 
   const [appointment, setAppointment] = useState<Appointment>({
-    id: null,
     confirm_time: null,
     confirm_place: null,
     confirm_place_url: null,
@@ -36,7 +35,6 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
     answer: "",
     start_time: "",
     end_time: "",
-    created_at: "",
     owner_id: "",
   });
 
@@ -50,25 +48,29 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
         router.push("/login");
         return null;
       }
-
+  
       const newAppointment: Appointment = { ...appointment, owner_id: userId };
-
+  
+      const requestBody = JSON.stringify({ appointment: newAppointment, placeVotes });
+  
       const response = await fetch("/api/user/appointments/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ appointment: newAppointment, placeVotes }),
+        body: requestBody,
       });
-
-      if (!response.ok) throw new Error("Failed to create appointment");
-
+  
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "Failed to create appointment");
+      }
+  
       const data: Appointment = await response.json();
-      console.log("✅ Appointment Created:", data);
-
+  
       setAppointment(data);
     } catch (error) {
       console.error("❌ 약속 생성 오류가 발생하였습니다. :", error);
     }
-  }
+  }  
 
   return (
     <CreateAppointmentContext.Provider
