@@ -8,10 +8,11 @@ interface NoticeBoxProps {
   noticeId: number;
   content: string;
   appointmentId: number;
-  onNoticeUpdate: (updatedNotice: { noticeId: number, content: string }) => void; 
+  onNoticeUpdate: (updatedNotice: { noticeId: number, content: string }) => void;
+  onNoticeDelete: (noticeId: number) => void;
 }
 
-const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate }: NoticeBoxProps) => {
+const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate, onNoticeDelete }: NoticeBoxProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShowMore, setIsShowMore] = useState(false);
   const [updatedContent, setUpdatedContent] = useState(content); 
@@ -56,10 +57,26 @@ const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate }: NoticeB
     }
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     const confirmation = confirm("삭제하겠습니까?");
     if (confirmation) {
-      alert("삭제되었습니다");
+      try {
+        const response = await fetch(`/api/user/appointments/${appointmentId}/information`, {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ noticeId }),
+        });
+        if (response.ok) {
+          alert("공지사항이 삭제되었습니다.");
+          onNoticeDelete(noticeId); // 부모에게 삭제된 noticeId 전달
+        } else {
+          const errorData = await response.json();
+          alert(`삭제 실패: ${errorData.error}`);
+        }
+      } catch (error) {
+        console.error("공지사항 삭제 오류:", error);
+        alert("공지사항 삭제 중 오류가 발생했습니다.");
+      }
     }
   };
 

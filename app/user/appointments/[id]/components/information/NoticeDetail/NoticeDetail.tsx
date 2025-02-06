@@ -63,11 +63,19 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
     }
   };
 
+  // 수정 시 업데이트하는 콜백
   const handleNoticeUpdate = (updatedNotice: { noticeId: number, content: string }) => {
     setNoticeData((prevNoticeData) =>
       prevNoticeData.map((notice) =>
         notice.id === updatedNotice.noticeId ? { ...notice, descript: updatedNotice.content } : notice
       )
+    );
+  };
+
+  // 삭제 시 해당 공지사항을 목록에서 제거하는 콜백
+  const handleNoticeDelete = (noticeId: number) => {
+    setNoticeData((prevNoticeData) =>
+      prevNoticeData.filter(notice => notice.id !== noticeId)
     );
   };
 
@@ -87,7 +95,8 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
                 noticeId={noticeItem.id}
                 content={noticeItem.descript}
                 appointmentId={appointmentId}
-                onNoticeUpdate={handleNoticeUpdate} 
+                onNoticeUpdate={handleNoticeUpdate}
+                onNoticeDelete={handleNoticeDelete}  // 삭제 콜백 전달
               />
             ))
           ) : (

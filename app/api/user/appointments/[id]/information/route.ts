@@ -6,6 +6,7 @@ import { SbNoticeRepository } from "@/infrastructure/repositories/SbNoticeReposi
 import { DfGetAppointmentInformationUsecase } from "@/application/usecases/appointment/DfGetAppointmentInformationUsecase";
 import { DfCreateNoticeUsecase } from "@/application/usecases/appointment/DfCreateNotionUsecase";
 import { DfUpdateNoticeUsecase } from "@/application/usecases/appointment/DfUpdateNotionUseCase";
+import { DfDeleteNoticeUsecase } from "@/application/usecases/appointment/DfDeleteNotionUseCase";
 
 const appointmentRepository = new SbAppointmentRepository();
 const memberRepository = new SbMemberRepository();
@@ -13,7 +14,6 @@ const userRepository = new SbUserRepository();
 const noticeRepository = new SbNoticeRepository();
 
 // 약속 정보 불러오기 (공지사항 포함)
-
 export async function GET(req: NextRequest) {
   try {
     const urlParts = req.nextUrl.pathname.split("/");
@@ -100,6 +100,32 @@ export async function PATCH(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { error: "공지사항 수정에 실패했습니다" },
+      { status: 500 }
+    );
+  }
+}
+
+// 공지사항 삭제
+export async function DELETE(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const { noticeId } = body;
+
+    if (!noticeId || isNaN(noticeId)) {
+      return NextResponse.json(
+        { error: "잘못된 요청 데이터입니다" },
+        { status: 400 }
+      );
+    }
+
+    const deleteNoticeUsecase = new DfDeleteNoticeUsecase(noticeRepository);
+    await deleteNoticeUsecase.execute(noticeId);
+
+    return NextResponse.json({ message: "공지사항이 삭제되었습니다" }, { status: 200 });
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "공지사항 삭제에 실패했습니다" },
       { status: 500 }
     );
   }
