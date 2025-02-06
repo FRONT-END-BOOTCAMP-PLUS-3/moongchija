@@ -17,6 +17,10 @@ const UserName = () => {
   };
 
   const handleChangeNickname = async () => {
+    if (nickname === user?.nickname) {
+      alert("기존 닉네임과 동일합니다.");
+      return;
+    }
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
       return;
