@@ -3,6 +3,7 @@ import { DfSignUpUsecase } from "@/application/usecases/auth/DfSignUpUseCase";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { extractUserIdFromToken } from "@/utils/auth/extractUserIdFromToken";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -24,7 +25,8 @@ export const POST = async (request: NextRequest) => {
       redirectUrl,
     });
 
-    const userId = userWithToken.access_token;
+    const token = userWithToken.access_token;
+    const userId = extractUserIdFromToken(token);
 
     if (userId) {
       response.cookies.set("userId", userId, {

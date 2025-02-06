@@ -38,7 +38,7 @@ const MyPagePage = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
-        <DeleteAccountModalContent />
+        <DeleteAccountModalContent onClose={handlecloseModal} />
       </Modal>
     </>
   );
