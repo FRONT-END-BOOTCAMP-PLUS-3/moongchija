@@ -17,6 +17,8 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
   const [newNoticeContent, setNewNoticeContent] = useState(""); 
   const [noticeData, setNoticeData] = useState(initialNotices); 
 
+
+  // 공지사항 가져오기 GET
   const fetchNotices = async () => {
     try {
       const response = await fetch(`/api/user/appointments/${appointmentId}/information`);
@@ -33,6 +35,8 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
+
+  // 공지사항 등록 POST
   const handleRegister = async () => {
     if (!newNoticeContent.trim()) {
       alert("공지사항 내용을 입력해주세요.");
