@@ -30,7 +30,7 @@ const UserImage = () => {
       </div>
       <Button text="수정" size="xs" onClick={handleopenModal} />
       <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
-        <UserImageModalContent />
+        <UserImageModalContent onClose={handlecloseModal} />
       </Modal>
     </div>
   );
