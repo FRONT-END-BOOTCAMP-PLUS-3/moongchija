@@ -72,12 +72,12 @@ export class SbPaymentsRepository implements PaymentsRepository {
     }
   }
 
-  async delete(paymentsId: number): Promise<void> {
-    const supabase = await this.getClient();
-    const { error } = await supabase.from("payments").delete().eq("id", paymentsId);
+  // async delete(paymentsId: number): Promise<void> {
+  //   const supabase = await this.getClient();
+  //   const { error } = await supabase.from("payments").delete().eq("id", paymentsId);
 
-    if (error) {
-      throw new Error(`정산 정보 삭제 실패: ${error.message}`);
-    }
-  }
+  //   if (error) {
+  //     throw new Error(`정산 정보 삭제 실패: ${error.message}`);
+  //   }
+  // }
 }

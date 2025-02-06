@@ -23,5 +23,5 @@ export interface PaymentsRepository {
   ): Promise<void>;
 
   // 정산 정보 삭제
-  delete(paymentsId: number): Promise<void>;
+  // delete(paymentsId: number): Promise<void>;
 }

@@ -11,5 +11,5 @@ export interface PaymentsDetailRepository {
   update(detailId: number, amount: number, descript: string): Promise<void>;
 
   // 세부 결제 내역 삭제
-  delete(detailId: number): Promise<void>;
+  // delete(detailId: number): Promise<void>;
 }
