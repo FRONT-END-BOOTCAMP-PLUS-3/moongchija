@@ -259,9 +259,15 @@ export class SbUserRepository implements UserRepository {
 
       return updatedUser;
     } catch (error) {
-      throw new Error(
-        error.message || "유저 정보 업데이트 중 오류가 발생했습니다."
-      );
+      if (error instanceof Error) {
+        throw new Error(
+          error.message || "유저 정보 업데이트 중 오류가 발생했습니다."
+        );
+      } else {
+        throw new Error(
+          "유저 정보 업데이트 중 알 수 없는 오류가 발생했습니다."
+        );
+      }
     }
   }
 }
