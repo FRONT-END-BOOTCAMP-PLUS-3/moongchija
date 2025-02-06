@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
+import { DfDeleteUserUsecase } from "@/application/usecases/user/DfDeleteUserUsecase";
 
 // ✅ DELETE: 유저 삭제
 export async function DELETE(
@@ -16,10 +17,10 @@ export async function DELETE(
       );
     }
 
+    // ✅ 유즈케이스를 통해 유저 삭제 실행
     const userRepository = new SbUserRepository();
-
-    // ✅ Supabase에서 유저 삭제 실행
-    const isDeleted = await userRepository.deleteUser(id);
+    const deleteUserUsecase = new DfDeleteUserUsecase(userRepository);
+    const isDeleted = await deleteUserUsecase.execute({ userId: id });
 
     if (!isDeleted) {
       return NextResponse.json({ error: "유저 삭제 실패" }, { status: 404 });
