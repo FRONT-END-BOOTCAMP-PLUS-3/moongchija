@@ -4,7 +4,7 @@ import { Appointment } from "@/domain/entities/Appointment";
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 import { getUserIdClient } from "@/utils/supabase/client";
 import { createContext, useContext, useState, ReactNode } from "react";
-import { useRouter } from 'next/navigation';
+import { useRouter } from "next/navigation";
 
 type CreateAppointmentContextType = {
   appointment: Appointment;
@@ -14,15 +14,20 @@ type CreateAppointmentContextType = {
   placeVotes: PlaceVote[];
   setPlaceVotes: (votes: PlaceVote[]) => void;
   createAppointment: () => void;
+  loading: boolean;
 };
 
 const CreateAppointmentContext = createContext<
   CreateAppointmentContextType | undefined
 >(undefined);
 
-export const CreateAppointmentProvider = ({ children }: { children: ReactNode }) => {
+export const CreateAppointmentProvider = ({
+  children,
+}: {
+  children: ReactNode;
+}) => {
   const router = useRouter();
-
+  const [loading, setLoading] = useState<boolean>(false);
   const [appointment, setAppointment] = useState<Appointment>({
     confirm_time: null,
     confirm_place: null,
@@ -38,9 +43,16 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
     owner_id: "",
   });
 
-  const [placeVotes, setPlaceVotes] = useState<PlaceVote[]>([]);
+  const [placeVotes, setPlaceVotes] = useState<PlaceVote[]>([
+    {
+      place: "",
+      place_url: "",
+      appointment_id: null,
+    },
+  ]);
 
   async function createAppointment() {
+    setLoading(true);
     try {
       const userId = await getUserIdClient();
       if (!userId) {
@@ -48,29 +60,33 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
         router.push("/login");
         return null;
       }
-  
+
       const newAppointment: Appointment = { ...appointment, owner_id: userId };
-  
-      const requestBody = JSON.stringify({ appointment: newAppointment, placeVotes });
-  
+      const requestBody = JSON.stringify({
+        appointment: newAppointment,
+        placeVotes,
+      });
+
       const response = await fetch("/api/user/appointments/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: requestBody,
       });
-  
+
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Failed to create appointment");
       }
-  
+
       const data: Appointment = await response.json();
-  
+
       setAppointment(data);
     } catch (error) {
       console.error("❌ 약속 생성 오류가 발생하였습니다. :", error);
+    } finally {
+      setLoading(false);
     }
-  }  
+  }
 
   return (
     <CreateAppointmentContext.Provider
@@ -80,6 +96,7 @@ export const CreateAppointmentProvider = ({ children }: { children: ReactNode })
         placeVotes,
         setPlaceVotes,
         createAppointment,
+        loading
       }}
     >
       {children}

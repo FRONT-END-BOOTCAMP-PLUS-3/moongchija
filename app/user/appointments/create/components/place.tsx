@@ -5,6 +5,7 @@ import Button from "@/components/button/Button";
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { useEffect, useState } from "react";
 import CircleIndicator from "./CircleIndicator";
+import Loading from "@/components/loading/Loading";
 
 const MAX_PLACES = 5;
 
@@ -13,37 +14,35 @@ interface Props {
 }
 
 const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
-  const { createAppointment } = useCreateAppointment();
-
-  const [places, setPlaces] = useState([{ name: "", url: "" }]);
+  const { placeVotes, setPlaceVotes, createAppointment, loading } = useCreateAppointment();
   const [isButtonActive, setIsButtonActive] = useState(false);
 
   useEffect(() => {
-    const allNamesFilled = places.every((place) => place.name.trim() !== "");
+    const allNamesFilled = placeVotes.every((place) => place.place.trim() !== "");
     setIsButtonActive(allNamesFilled);
-  }, [places]);
+  }, [placeVotes]);
 
   const handleAddPlace = () => {
-    if (places.length < MAX_PLACES) {
-      setPlaces([...places, { name: "", url: "" }]);
+    if (placeVotes.length < MAX_PLACES) {
+      setPlaceVotes([...placeVotes, { place: "", place_url: "", appointment_id: null }]);
     }
   };
 
   const handleRemovePlace = () => {
-    if (places.length > 1) {
-      setPlaces(places.slice(0, -1));
+    if (placeVotes.length > 1) {
+      setPlaceVotes(placeVotes.slice(0, -1));
     }
   };
 
-  const handleChange = (index: number, key: "name" | "url", value: string) => {
-    const updatedPlaces = [...places];
+  const handleChange = (index: number, key: "place" | "place_url", value: string) => {
+    const updatedPlaces = [...placeVotes];
     updatedPlaces[index][key] = value;
-    setPlaces(updatedPlaces);
+    setPlaceVotes(updatedPlaces);
   };
 
-  const handleNextButton = () => {
-    createAppointment();
-    onPageChange(4)
+  const handleNextButton = async () => {
+    await createAppointment();
+    onPageChange(4);
   };
 
   return (
@@ -71,35 +70,39 @@ const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
         </div>
 
         <div className={styles.placeWrapper}>
-          {places.map((place, index) => (
+          {placeVotes.map((place, index) => (
             <div key={index} className={styles.placeItem}>
               <label>장소 {index + 1}</label>
               <input
                 type="text"
-                value={place.name}
-                onChange={(e) => handleChange(index, "name", e.target.value)}
+                value={place.place}
+                onChange={(e) => handleChange(index, "place", e.target.value)}
                 placeholder="장소명"
+                disabled={loading}
               />
               <input
                 className={styles.placeUrl}
                 type="text"
                 placeholder="장소 url (선택)"
-                value={place.url}
-                onChange={(e) => handleChange(index, "url", e.target.value)}
+                value={place.place_url}
+                onChange={(e) => handleChange(index, "place_url", e.target.value)}
+                disabled={loading}
               />
             </div>
           ))}
         </div>
       </section>
-        
+      
       <div className={styles.buttonWrapper}>
       <Button
         size="lg"
         text="약속 생성하기"
-        active={isButtonActive}
+        active={isButtonActive && !loading}
         onClick={handleNextButton}
       />
       </ div>
+
+      {loading && <Loading />}
     </div>
   );
 };
