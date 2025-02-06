@@ -110,7 +110,7 @@ const VotePlacePage: React.FC = () => {
               className={`${styles.placeItem} ${
                 selectedPlace === item.id ? styles.selected : ""
               }`}
-              onClick={() => handleSelect(item.id)}
+              onClick={() => item.id !== undefined && handleSelect(item.id)}
             >
               <div className={styles.itemTop}>
                 <div className={styles.placeName}>

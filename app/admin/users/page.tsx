@@ -103,9 +103,9 @@ export default function UsersPage() {
             {filteredUsers.length > 0 ? (
               filteredUsers.map((user) => (
                 <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>{user.email}</td>
-                  <td>{user.nickname}</td>
+                  <td title={user.id}>{user.id}</td>
+                  <td title={user.email}>{user.email}</td>
+                  <td title={user.nickname}>{user.nickname}</td>
                   <td>
                     <button
                       className={styles.deleteButton}

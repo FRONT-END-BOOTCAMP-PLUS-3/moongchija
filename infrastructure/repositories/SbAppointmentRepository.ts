@@ -114,15 +114,40 @@ export class SbAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  async delete(appointmentId: number): Promise<void> {
+  // ✅ 약속 삭제
+  async deleteAppointment(id: string): Promise<boolean> {
     const supabase = await this.getClient();
-    const { error } = await supabase
-      .from("appointment")
-      .delete()
-      .eq("id", appointmentId);
+
+    const { error } = await supabase.from("appointment").delete().eq("id", id);
 
     if (error) {
-      throw new Error(`약속 삭제 실패: ${error.message}`);
+      console.error("❌ 약속 삭제 실패:", error);
+      return false;
     }
+
+    return true;
+  }
+  // ✅ 전체 약속 조회
+  async getAllAppointments(): Promise<Appointment[]> {
+    const supabase = await this.getClient();
+
+    const { data, error } = await supabase
+      .from("appointment")
+      .select("id, title, status, confirm_time, created_at");
+
+    if (error) {
+      throw new Error("약속 목록 조회 실패");
+    }
+
+    return (data || []).map((appointment) => ({
+      id: appointment.id,
+      title: appointment.title,
+      status: appointment.status,
+      confirm_time: appointment.confirm_time,
+      created_at: appointment.created_at,
+      start_time: "",
+      end_time: "",
+      owner_id: "",
+    }));
   }
 }
