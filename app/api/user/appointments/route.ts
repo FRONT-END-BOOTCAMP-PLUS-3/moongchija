@@ -25,14 +25,10 @@ export async function GET(req: Request) {
 
     const appointments = await usecase.execute(id);
 
-    if (!appointments || appointments.length === 0) {
-      return NextResponse.json({ error: "No appointments found" }, { status: 404 });
-    }
-
     return NextResponse.json(appointments);
 
   } catch (error) {
-    console.error("❌ Error fetching appointments:", error);
+    console.log("❌ Error fetching appointments:", error);
     
     return NextResponse.json(
       { error: "Internal server error" },

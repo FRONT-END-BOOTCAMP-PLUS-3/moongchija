@@ -160,12 +160,14 @@ const AppointmentsPage: React.FC = () => {
 
         <section className={styles.listBox}>
           {loading && <Loading />}
-          {currentTab === 0 && (
+          {/* 투표중 약속 */}
+          {!loading && currentTab === 0 && (
             <AppointmentList
               appointments={filteredAppointments(inProgressAppointments)}
             />
           )}
-          {currentTab === 1 && (
+          {/* 확정된 약속 */}
+          {!loading && currentTab === 1 && (
             <AppointmentList
               appointments={filteredAppointments(confirmedAppointments)}
             />
