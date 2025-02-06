@@ -1,0 +1,77 @@
+.container {
+  padding: 10px;
+
+  h2 {
+    font-size: 24px;
+    margin-bottom: 15px;
+  }
+
+  .filterContainer {
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+
+    label {
+      font-weight: bold;
+    }
+
+    select {
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+  }
+
+  .table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+
+    th,
+    td {
+      border: 1px solid #ddd;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #f4f4f4;
+      font-weight: bold;
+    }
+
+    .link {
+      cursor: pointer;
+      color: #0070f3;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+
+    .voting {
+      color: #007bff;
+      font-weight: bold;
+    }
+
+    .upcoming {
+      color: #28a745;
+      font-weight: bold;
+    }
+
+    .finished {
+      color: #dc3545;
+      font-weight: bold;
+    }
+
+    .deleteButton {
+      background-color: #dc3545;
+      color: white;
+      border: none;
+      padding: 5px 10px;
+      cursor: pointer;
+      &:hover {
+        background-color: #c82333;
+      }
+    }
+  }
+}
