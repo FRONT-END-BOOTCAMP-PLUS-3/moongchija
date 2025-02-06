@@ -11,33 +11,46 @@ interface User {
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
+  const [filteredUsers, setFilteredUsers] = useState<User[]>([]); // 검색 필터링된 목록
   const [searchType, setSearchType] = useState<"id" | "email" | "nickname">(
     "id"
   );
   const [searchQuery, setSearchQuery] = useState("");
 
+  // ✅ 전체 유저 목록 불러오기
   const fetchUsers = async () => {
     const res = await fetch("/api/admin/users");
     const data = await res.json();
-    setUsers(data);
+    const mappedData = data.map((user: any) => ({
+      id: user.id,
+      email: user.user_email, // ✅ 여기서 필드명 변경
+      nickname: user.nickname,
+    }));
+
+    setUsers(mappedData);
+    setFilteredUsers(mappedData); // 기본적으로 모든 유저 표시
   };
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-  const handleSearch = async () => {
+  // ✅ 검색 필터링 기능 (useEffect 사용)
+  useEffect(() => {
     if (!searchQuery.trim()) {
-      fetchUsers(); // 검색어가 없으면 전체 목록 로드
+      setFilteredUsers(users); // 검색어가 없으면 전체 목록 표시
       return;
     }
 
-    const query = new URLSearchParams({ [searchType]: searchQuery }).toString();
-    const res = await fetch(`/api/admin/users?${query}`);
-    const data = await res.json();
-    setUsers(data);
-  };
+    // ✅ 검색어를 포함하는 유저만 필터링
+    const filtered = users.filter((user) =>
+      user[searchType].toLowerCase().includes(searchQuery.toLowerCase())
+    );
 
+    setFilteredUsers(filtered);
+  }, [searchQuery, searchType, users]);
+
+  // ✅ 삭제 기능
   const handleDelete = async (userId: string) => {
     if (!confirm("정말 이 유저를 삭제하시겠습니까?")) return;
 
@@ -74,9 +87,6 @@ export default function UsersPage() {
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
         />
-        <button className={styles.searchButton} onClick={handleSearch}>
-          검색
-        </button>
       </div>
 
       <div className={styles.tableContainer}>
@@ -90,8 +100,8 @@ export default function UsersPage() {
             </tr>
           </thead>
           <tbody>
-            {users.length > 0 ? (
-              users.map((user) => (
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map((user) => (
                 <tr key={user.id}>
                   <td>{user.id}</td>
                   <td>{user.email}</td>

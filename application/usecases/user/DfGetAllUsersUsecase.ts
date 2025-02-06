@@ -4,8 +4,9 @@ import { UserListDto } from "./dto/UserListDto";
 export class DfGetAllUsersUsecase {
   constructor(private userRepo: UserRepository) {}
 
-  async execute(filter: string, value: string): Promise<UserListDto[]> {
-    const users = await this.userRepo.getAllUsers(filter, value);
+  // ✅ 검색 필터링 제거
+  async execute(): Promise<UserListDto[]> {
+    const users = await this.userRepo.getAllUsers();
 
     // ✅ UseCase에서 DTO 변환
     return users.map((user) => ({

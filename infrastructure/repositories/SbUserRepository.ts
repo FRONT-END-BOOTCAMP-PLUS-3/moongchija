@@ -293,23 +293,13 @@ export class SbUserRepository implements UserRepository {
     }
   }
 
-  // ✅ 전체 유저 조회 + 필터링 기능 추가
-  async getAllUsers(filter: string, value: string): Promise<User[]> {
+  // ✅ 전체 유저 조회
+  async getAllUsers(): Promise<User[]> {
     const supabase = await this.getClient();
 
-    let query = supabase
+    const { data, error } = await supabase
       .from("user")
       .select("id, user_email, nickname, created_at"); // ✅ 필요한 필드만 선택
-
-    if (filter && value) {
-      if (filter === "id") query = query.eq("id", value);
-      else if (filter === "user_email")
-        query = query.ilike("user_email", `%${value}%`);
-      else if (filter === "nickname")
-        query = query.ilike("nickname", `%${value}%`);
-    }
-
-    const { data, error } = await query;
 
     if (error) {
       throw new Error("유저 목록 조회 실패");
