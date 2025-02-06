@@ -297,4 +297,42 @@ export class SbUserRepository implements UserRepository {
       }
     }
   }
+
+  // ✅ 전체 유저 조회
+  async getAllUsers(): Promise<User[]> {
+    const supabase = await this.getClient();
+
+    const { data, error } = await supabase
+      .from("user")
+      .select("id, user_email, nickname, created_at"); // ✅ 필요한 필드만 선택
+
+    if (error) {
+      throw new Error("유저 목록 조회 실패");
+    }
+
+    // ✅ `User` 타입에 맞게 변환 (부족한 필드는 기본값 제공)
+    return (data || []).map((user) => ({
+      id: user.id,
+      user_email: user.user_email,
+      nickname: user.nickname,
+      created_at: new Date(user.created_at),
+      password: "", // ✅ 기본값 설정
+      emoji: "", // ✅ 기본값 설정
+      provider: "", // ✅ 기본값 설정
+    }));
+  }
+
+  // ✅ 특정 유저 삭제
+  async deleteUser(userId: string): Promise<boolean> {
+    const supabase = await this.getClient();
+
+    const { error } = await supabase.from("user").delete().eq("id", userId);
+
+    if (error) {
+      console.error("❌ 유저 삭제 실패:", error);
+      return false;
+    }
+
+    return true;
+  }
 }

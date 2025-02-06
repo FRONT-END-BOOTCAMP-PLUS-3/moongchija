@@ -29,4 +29,6 @@ export interface UserRepository {
     userId: string,
     updateData: { nickname?: string; emoji?: string }
   ): Promise<User>;
+  getAllUsers(): Promise<User[]>;
+  deleteUser(userId: string): Promise<boolean>;
 }
