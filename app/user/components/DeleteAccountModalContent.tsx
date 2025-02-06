@@ -1,14 +1,36 @@
 "use client";
 import Button from "@/components/button/Button";
 import styles from "./DeleteAccountModalContent.module.scss";
+import { useRouter } from "next/navigation";
 
-const DeleteAccountModalContent = () => {
-  const handleConfirm = () => {
-    console.log("확인");
+const DeleteAccountModalContent = ({ onClose }: { onClose: () => void }) => {
+  const router = useRouter();
+  const handleConfirm = async () => {
+    try {
+      const response = await fetch("/api/user/delete-user", {
+        method: "DELETE",
+      });
+
+      if (!response.ok) {
+        alert("탈퇴에 실패했습니다.");
+      } else {
+        alert("탈퇴가 완료되었습니다.");
+        const { redirectUrl } = await response.json();
+
+        if (redirectUrl) {
+          router.push(redirectUrl);
+        }
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("❌ 탈퇴 중 오류 발생:", error.message);
+      }
+      alert("탈퇴 중 오류가 발생했습니다. 다시 시도해 주세요.");
+    }
   };
 
   const handleCancel = () => {
-    console.log("취소");
+    onClose();
   };
   return (
     <div className={styles.modalContent}>
