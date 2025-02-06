@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 const DeleteAccountModalContent = ({ onClose }: { onClose: () => void }) => {
   const router = useRouter();
   const handleConfirm = async () => {
+    confirm("정말로 탈퇴하시겠습니까?");
     try {
       const response = await fetch("/api/user/delete-user", {
         method: "DELETE",
