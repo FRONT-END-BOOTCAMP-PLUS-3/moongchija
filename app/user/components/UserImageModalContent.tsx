@@ -3,6 +3,7 @@ import Image from "next/image";
 import styles from "./UserImageModalContent.module.scss";
 import Button from "@/components/button/Button";
 import { useEffect, useState } from "react";
+import { useUser } from "@/context/UserContext";
 
 type Emoji = {
   id: number;
@@ -10,9 +11,10 @@ type Emoji = {
   alt: string;
 };
 
-const UserProfileImageModalContent = () => {
+const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
   const [emojis, setEmojis] = useState<Emoji[]>([]);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
+  const { user, setUser } = useUser();
 
   const getEmojis = async () => {
     try {
@@ -24,7 +26,11 @@ const UserProfileImageModalContent = () => {
 
       const emojis = await response.json();
       setEmojis(emojis);
-    } catch (error) {}
+    } catch (error) {
+      if (error instanceof Error) {
+        console.error("이모지를 불러오는데 실패하였습니다.:", error.message);
+      }
+    }
   };
 
   useEffect(() => {
@@ -55,7 +61,12 @@ const UserProfileImageModalContent = () => {
         throw new Error("이모지 업데이트에 실패하였습니다.");
       }
 
+      if (user) {
+        setUser({ ...user, emoji: selectedEmoji });
+      }
+
       alert("이모지가 성공적으로 변경되었습니다!");
+      onClose();
     } catch (error) {
       console.error("Error updating emoji:", error);
       alert("이모지 변경 중 오류가 발생했습니다.");
