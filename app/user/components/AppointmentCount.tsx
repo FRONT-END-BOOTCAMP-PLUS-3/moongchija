@@ -1,3 +1,4 @@
+"use client";
 import styles from "./AppointmentCount.module.scss";
 
 const AppointmentCount = ({ color, text }: { color: string; text: string }) => {

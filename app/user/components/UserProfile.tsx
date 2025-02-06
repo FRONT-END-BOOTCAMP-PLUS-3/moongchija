@@ -1,9 +1,15 @@
 "use client";
 
-import UserInfo from "./UserInfo";
+import UserImage from "./UserImage";
+import UserName from "./UserName";
 
 const UserProfile = () => {
-  return <UserInfo />;
+  return (
+    <>
+      <UserImage />
+      <UserName />
+    </>
+  );
 };
 
 export default UserProfile;

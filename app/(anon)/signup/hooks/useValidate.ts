@@ -8,6 +8,11 @@ export const validateEmail = (value: string) => {
 
 export const validateNickname = (value: string) => {
   const nicknameRegex = /^[a-z0-9가-힣]{1,10}$/;
+
+  if (/\s/.test(value)) {
+    return "닉네임에는 공백을 포함할 수 없습니다.";
+  }
+
   if (!nicknameRegex.test(value)) {
     return "소문자, 한글, 숫자를 포함하여 10자 이하로 작성해주세요.";
   }
