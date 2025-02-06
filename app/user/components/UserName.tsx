@@ -39,7 +39,11 @@ const UserName = () => {
         )}
 
         <div className={styles.editButtonBox}>
-          <Button text="수정" size="xs" onClick={handleEditClick} />
+          <Button
+            text={isEditing ? "변경" : "수정"}
+            size="xs"
+            onClick={handleEditClick}
+          />
         </div>
       </div>
 
