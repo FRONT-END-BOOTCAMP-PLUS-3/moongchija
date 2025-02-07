@@ -5,8 +5,10 @@ import styles from "./images.module.scss";
 
 interface Image {
   id: number;
-  url: string;
-  uploaded_at: string;
+  appointment_id: number;
+  image_url: string;
+  creater_id: string;
+  created_at: string;
 }
 
 export default function ImagesPage() {
@@ -41,8 +43,11 @@ export default function ImagesPage() {
         <div className={styles.imageGrid}>
           {images.map((image) => (
             <div key={image.id} className={styles.imageCard}>
-              <img src={image.url} alt={`업로드된 이미지 ${image.id}`} />
-              <p>{new Date(image.uploaded_at).toLocaleString()}</p>
+              <a href={image.image_url} target="_blank">
+                <img src={image.image_url} alt={`이미지 ${image.id}`} />
+              </a>
+              <p>업로드한 유저: {image.creater_id}</p>
+              <p>{new Date(image.created_at).toLocaleString()}</p>
               <button
                 className={styles.deleteButton}
                 onClick={() => handleDelete(image.id)}
