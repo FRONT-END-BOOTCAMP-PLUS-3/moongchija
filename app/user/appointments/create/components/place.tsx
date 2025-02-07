@@ -41,8 +41,12 @@ const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
   };
 
   const handleNextButton = async () => {
-    await createAppointment();
-    onPageChange(4);
+    try {
+      await createAppointment();
+      onPageChange(4);
+    } catch {
+      alert("약속 생성에 실패했습니다. 다시 시도해주세요.");
+    }
   };
 
   return (

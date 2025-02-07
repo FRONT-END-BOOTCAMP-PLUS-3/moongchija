@@ -49,8 +49,6 @@ export const CreateAppointmentProvider = ({
     },
   ]);
 
-  console.log("appointment", appointment);
-
   async function createAppointment() {
     setLoading(true);
     try {
