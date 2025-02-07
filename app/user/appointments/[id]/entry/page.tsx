@@ -1,37 +1,86 @@
 "use client";
 
-import styles from "./entry.module.scss";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { useMemo, useState } from "react";
 import Button from "@/components/button/Button";
-import InputField from "@/components/input-filed/InputFiled";
 import IconHeader from "@/components/header/IconHeader";
+import InputField from "@/components/input-filed/InputFiled";
 import Moongchi from "@/components/moongchi/Moongchi";
+import { getUserIdClient } from "@/utils/supabase/client";
+import { useParams, useRouter } from "next/navigation";
+import { useEffect, useMemo, useState } from "react";
+import styles from "./entry.module.scss";
+import { Appointment } from '@/domain/entities/Appointment';
 
 const EntryPage = () => {
+  const [userId, setUserId] = useState<string | null>(null);
+
+  const params = useParams();
+  const router = useRouter();
+
+  const [appointment, setAppointment] = useState<Appointment>();
+  
   const [answer, setAnswer] = useState("");
   const [error, setError] = useState("");
 
-  const router = useRouter();
-  const appointmentId = 1; // TODO: 상태 관리로 동적 ID 가져오기
+  const appointmentId = params.id as string;
 
   const answerActive = useMemo(() => answer.trim() !== "", [answer]);
 
+  const fetchGetUserId = async () => {
+    const userId = await getUserIdClient();
+    setUserId(userId);
+
+    if (!userId) {
+      alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+      router.push("/login");
+      return;
+    }
+  };
+
+  useEffect(() => {
+    fetchGetUserId();
+    fetchGetAppointment();
+  }, []);
+
+  const fetchGetAppointment = async () => {
+    try {        
+      const res = await fetch(`/api/user/appointments/${appointmentId}/entry`);
+      
+      const appointmentData = await res.json();
+      setAppointment(appointmentData);
+
+    } catch (error) {
+      console.log("오류 발생 :", error);
+    }
+  }
+
+  const fetchEntryMember = async () => {
+    if (!handleValidation()) return;
+
+    try {
+      const response = await fetch(`/api/user/appointments/${appointmentId}/entry`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ userId : userId })
+      });
+      
+      if (response.status === 200) {
+        router.push(`/user/appointments/${appointmentId}/vote-time`);
+      }
+
+    } catch (error) {
+      console.log("오류 발생 :", error);
+    }
+  };
+
   const handleValidation = () => {
-    if (answer.trim() !== "정답") {
+    if (answer.trim() !== appointment?.answer) {
       setError("답이 틀렸습니다.");
       return false;
     }
     setError("");
     return true;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (answerActive && handleValidation()) {
-      router.push(`/user/appointments/${appointmentId}/vote-time`);
-    }
   };
 
   const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -49,11 +98,11 @@ const EntryPage = () => {
         <section className={styles.sectionContainer}>
           <div className={styles.infoRow}>
             <span className={styles.label}>약속 이름</span>
-            <span>홍대 모임</span>
+            <span>{appointment?.title}</span>
           </div>
           <div className={styles.infoRow}>
             <span className={styles.label}>퀴즈</span>
-            <span>내 MBTI는?</span>
+            <span>{appointment?.quiz}</span>
           </div>
 
           <div className={styles.inputContainer}>
@@ -72,7 +121,7 @@ const EntryPage = () => {
             text="참여"
             size="lg"
             active={answerActive}
-            onClick={handleSubmit}
+            onClick={fetchEntryMember}
           />
         </section>
       </div>
