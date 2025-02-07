@@ -4,6 +4,7 @@ import styles from "./UserImageModalContent.module.scss";
 import Button from "@/components/button/Button";
 import { useEffect, useState } from "react";
 import { useUser } from "@/context/UserContext";
+import EmojisSkeleton from "./user-skeleton/EmojisSkeleton";
 
 type Emoji = {
   id: number;
@@ -15,8 +16,10 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
   const [emojis, setEmojis] = useState<Emoji[]>([]);
   const [selectedEmoji, setSelectedEmoji] = useState<string | null>(null);
   const { user, setUser } = useUser();
+  const [isLoading, setIsLoading] = useState(true);
 
   const getEmojis = async () => {
+    setIsLoading(true);
     try {
       const response = await fetch("/api/user/emojis");
 
@@ -30,10 +33,13 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
       if (error instanceof Error) {
         console.error("이모지를 불러오는데 실패하였습니다.:", error.message);
       }
+    } finally {
+      setIsLoading(false);
     }
   };
 
   useEffect(() => {
+    console.log("isLoading 상태:", isLoading);
     getEmojis();
   }, []);
 
@@ -79,30 +85,36 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
 
   return (
     <div className={styles.userImageModalContainer}>
-      <div className={styles.userEmojiWrapper}>
-        {emojis.map((image) => (
-          <div
-            key={image.id}
-            className={`${styles.imageWrapper} ${
-              selectedEmoji === image.src ? styles.selected : ""
-            }`}
-          >
-            <button
-              className={styles.hiddenButton}
-              onClick={() => handleEmojiClick(image)}
-            >
-              <Image
-                src={image.src}
-                alt={image.src}
-                width={50}
-                height={50}
-                className={styles.emojiImage}
-              />
-            </button>
+      {isLoading ? (
+        <EmojisSkeleton />
+      ) : (
+        <>
+          <div className={styles.userEmojiWrapper}>
+            {emojis.map((image) => (
+              <div
+                key={image.id}
+                className={`${styles.imageWrapper} ${
+                  selectedEmoji === image.src ? styles.selected : ""
+                }`}
+              >
+                <button
+                  className={styles.hiddenButton}
+                  onClick={() => handleEmojiClick(image)}
+                >
+                  <Image
+                    src={image.src}
+                    alt={image.src}
+                    width={50}
+                    height={50}
+                    className={styles.emojiImage}
+                  />
+                </button>
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
-      <Button text="변경하기" size="sm" onClick={handleEmojiChange} />
+          <Button text="변경하기" size="sm" onClick={handleEmojiChange} />
+        </>
+      )}
     </div>
   );
 };
