@@ -2,6 +2,7 @@
 import { Event } from "@/types/Event";
 import AppointmentCount from "./AppointmentCount";
 import styles from "./UserAppointmentCount.module.scss";
+import { getEventsStatus } from "@/utils/user/getEventsStatus";
 
 const UserAppointmentCount = ({
   appointments = [],
@@ -10,17 +11,21 @@ const UserAppointmentCount = ({
 }) => {
   const votingCount =
     appointments?.filter((appointment) => {
-      return appointment.status;
+      const { status } = getEventsStatus(appointment);
+      return status === "voting";
     }).length ?? 0;
 
   const scheduledCount =
-    appointments?.filter(
-      (appointment) => appointment.status === "scheduledCount"
-    ).length ?? 0;
+    appointments?.filter((appointment) => {
+      const { status } = getEventsStatus(appointment);
+      return status === "scheduled";
+    }).length ?? 0;
+
   const confirmedCount =
-    appointments?.filter(
-      (appointment) => appointment.status === "confirmedCount"
-    ).length ?? 0;
+    appointments?.filter((appointment) => {
+      const { status } = getEventsStatus(appointment);
+      return status === "confirmed";
+    }).length ?? 0;
 
   const appointmentData = [
     { color: "greenColor", text: "투표중", count: votingCount },
