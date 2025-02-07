@@ -78,22 +78,6 @@ export class SbMemberRepository implements MemberRepository {
     return data;
   }
 
-  
-  async findIsVoteByAppointmentIdAndUserId(appointmentId: number, userId: string): Promise<boolean> {
-    const client = await this.getClient();
-    const { data, error } = await client
-      .from("member")
-      .select("is_vote")
-      .eq("user_id", userId)
-      .eq("appointment_id", appointmentId)
-      .single();
-
-    if (error) {
-      throw new Error(`Error finding member by user ID and appointment ID: ${error.message}`);
-    }
-    return data?.is_vote ?? false;
-  }
-
   async getMemberStatus(
     userId: string,
     appointmentId: number

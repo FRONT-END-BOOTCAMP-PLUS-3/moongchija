@@ -28,17 +28,11 @@ const AppointmentsPage: React.FC = () => {
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<string>("전체");
-  const [roomNumber, setRoomNumber] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-
-  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomNumber(e.target.value);
-    console.log(roomNumber);
-  };
 
   // 투표중인 약속 데이터
   const inProgressAppointments = appointments.filter(
@@ -94,7 +88,7 @@ const AppointmentsPage: React.FC = () => {
       });
   };
 
-  async function fetchAppointments() {
+  const fetchAppointments =  async() => {
     try {
       setLoading(true);
 
@@ -189,18 +183,62 @@ const AppointmentsPage: React.FC = () => {
 
       {/* 모달 */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className={styles.roomEntryBox}>
-          <InputField
-            label="방 번호"
-            value={roomNumber}
-            onChange={handleRoomNumberChange}
-            type="text"
-          />
-          <Button size="sm" text="참여" />
-        </div>
+          <EntryAppointmentModal />
       </Modal>
     </>
   );
 };
 
 export default AppointmentsPage;
+
+const EntryAppointmentModal:React.FC = () => {
+  const router = useRouter();
+
+  const [appointmentId, setAppointmentId] = useState<string>("");
+
+  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAppointmentId(e.target.value);
+    console.log(appointmentId);
+  };
+
+  const fetchCheckAppointmentEntry = async () => {
+    try {
+      const userId = await getUserIdClient();
+  
+      if (!userId) {
+        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return;
+      }
+  
+      const response = await fetch(`/api/user/check-appointment-entry?appointmentId=${appointmentId}&userId=${userId}`);
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.error || "방 입장 여부 확인에 실패했습니다.");
+      }
+  
+      if (data.redirect) {
+        router.push(data.redirect);
+      } else {
+        alert(data.error);
+      }
+  
+    } catch (error: any) {
+      alert(`${error.message}`);
+    }
+  };
+  
+
+  return (
+    <div className={styles.roomEntryBox}>
+      <InputField
+        label="방 번호"
+        value={appointmentId}
+        onChange={handleRoomNumberChange}
+        type="text"
+      />
+    <Button size="sm" text="참여" onClick={fetchCheckAppointmentEntry} />
+  </div>
+  )
+}
