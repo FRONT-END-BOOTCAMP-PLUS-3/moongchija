@@ -3,11 +3,6 @@ import styles from "./Modal.module.scss";
 import { useEffect } from "react";
 import { IoIosClose } from "react-icons/io";
 
-// const [isModalOpen, setIsModalOpen] = useState(false);
-
-// const openModal = () => setIsModalOpen(true);
-// const closeModal = () => setIsModalOpen(false);
-
 interface Modal {
   isOpen: boolean;
   onClose: () => void;
@@ -37,7 +32,7 @@ const Modal = ({ isOpen, onClose, children }: Modal) => {
       <div className={styles.modalWrapper} onClick={(e) => e.stopPropagation()}>
         <div className={styles.modalBox}>
           <Image
-            src={"/images/logos/sub-logo.webp"}
+            src={"/images/logos/sub-logo.svg"}
             alt="sub-logo"
             width={30}
             height={30}
