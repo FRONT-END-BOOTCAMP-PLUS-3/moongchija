@@ -33,8 +33,6 @@ export const CreateAppointmentProvider = ({
     confirm_place: null,
     confirm_place_url: null,
     status: "voting",
-    result_time: null,
-    result_place: null,
     title: "",
     quiz: "내 MBTI는?",
     answer: "",
@@ -50,6 +48,8 @@ export const CreateAppointmentProvider = ({
       appointment_id: null,
     },
   ]);
+
+  console.log("appointment", appointment);
 
   async function createAppointment() {
     setLoading(true);

@@ -4,8 +4,6 @@ export interface Appointment {
   confirm_place?: string | null; // 확정된 장소
   confirm_place_url?: string | null; // 확정된 장소 URL
   status: string; // 약속 상태 (예: 대기중, 확정됨)
-  result_time?: any; // 투표 결과 (시간) - JSON 형식
-  result_place?: any; // 투표 결과 (장소) - JSON 형식
   title: string; // 약속 제목
   quiz?: string | null; // 입장 퀴즈 질문
   answer?: string | null; // 입장 퀴즈 정답

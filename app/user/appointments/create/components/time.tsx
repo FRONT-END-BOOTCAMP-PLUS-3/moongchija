@@ -3,13 +3,12 @@
 import styles from "./time.module.scss";
 import Button from "@/components/button/Button";
 import { useState } from "react";
-import CircleIndicator from "./CircleIndicator";
-
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import { formatToISOStringWithKST } from "@/utils/dateUtils/dateUtils";
 import { DateRange } from "react-date-range";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
-import { timeTo24HourFormat } from "@/utils/dateUtils/dateUtils";
+import CircleIndicator from "./CircleIndicator";
 
 interface Props {
   onPageChange: (index: number) => void;
@@ -18,15 +17,13 @@ interface Props {
 const CreateTime: React.FC<Props> = ({ onPageChange }) => {
   const { setAppointment } = useCreateAppointment();
 
-  const [startTime, setStartTime] = useState("오전 9시");
-  const [endTime, setEndTime] = useState("오후 3시");
+  const [startTime, setStartTime] = useState<number>(9);
+  const [endTime, setEndTime] = useState<number>(15);
 
-  const initialStartDate = new Date();
-  const initialEndDate = new Date();
-
-  initialStartDate.setUTCHours(timeTo24HourFormat(startTime), 0, 0, 0);
-  initialEndDate.setUTCHours(timeTo24HourFormat(endTime), 0, 0, 0);
-
+  const today = new Date();
+  const initialStartDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 9, 0, 0);
+  const initialEndDate = new Date(today.getFullYear(), today.getMonth(), today.getDate(), 15, 0, 0);
+  
   const [selectedRange, setSelectedRange] = useState([
     {
       startDate: initialStartDate,
@@ -70,30 +67,28 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
   const handleStartTimeChange = (
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
-    const selectedTime = event.target.value;
+    const selectedTime = Number(event.target.value);
     setStartTime(selectedTime);
 
     const updatedRange = { ...selectedRange[0] };
-    const startHour = timeTo24HourFormat(selectedTime);
-    updatedRange.startDate.setHours(startHour, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
+    updatedRange.startDate.setHours(selectedTime, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
     setSelectedRange([updatedRange]);
   };
 
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedTime = event.target.value;
+    const selectedTime = Number(event.target.value);
     setEndTime(selectedTime);
 
     const updatedRange = { ...selectedRange[0] };
-    const endHour = timeTo24HourFormat(selectedTime);
-    updatedRange.endDate.setHours(endHour, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
+    updatedRange.endDate.setHours(selectedTime, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
     setSelectedRange([updatedRange]);
   };
 
   const handleNextButton = () => {
     setAppointment((prev) => ({
       ...prev,
-      start_time: selectedRange[0].startDate.toISOString(),
-      end_time: selectedRange[0].endDate.toISOString(),
+      start_time: formatToISOStringWithKST(selectedRange[0].startDate),
+      end_time: formatToISOStringWithKST(selectedRange[0].endDate),
     }));
 
     onPageChange(3);
@@ -123,17 +118,17 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
           <p>시간 선택</p>
           <div className={styles.timePicker}>
             <select value={startTime} onChange={handleStartTimeChange}>
-              {times.map((time, index) => (
-                <option key={index} value={time}>
-                  {time}
+              {Object.entries(times).map(([key, value]) => (
+                <option key={value} value={value}>
+                  {key}
                 </option>
               ))}
             </select>
             <span>부터</span>
             <select value={endTime} onChange={handleEndTimeChange}>
-              {times.map((time, index) => (
-                <option key={index} value={time}>
-                  {time}
+              {Object.entries(times).map(([key, value]) => (
+                <option key={value} value={value}>
+                  {key}
                 </option>
               ))}
             </select>
@@ -151,29 +146,29 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
 
 export default CreateTime;
 
-const times = [
-  "오전 12시",
-  "오전 1시",
-  "오전 2시",
-  "오전 3시",
-  "오전 4시",
-  "오전 5시",
-  "오전 6시",
-  "오전 7시",
-  "오전 8시",
-  "오전 9시",
-  "오전 10시",
-  "오전 11시",
-  "오후 12시",
-  "오후 1시",
-  "오후 2시",
-  "오후 3시",
-  "오후 4시",
-  "오후 5시",
-  "오후 6시",
-  "오후 7시",
-  "오후 8시",
-  "오후 9시",
-  "오후 10시",
-  "오후 11시",
-];
+const times: { [key: string]: number } = {
+  "오전 12시": 0,
+  "오전 1시": 1,
+  "오전 2시": 2,
+  "오전 3시": 3,
+  "오전 4시": 4,
+  "오전 5시": 5,
+  "오전 6시": 6,
+  "오전 7시": 7,
+  "오전 8시": 8,
+  "오전 9시": 9,
+  "오전 10시": 10,
+  "오전 11시": 11,
+  "오후 12시": 12,
+  "오후 1시": 13,
+  "오후 2시": 14,
+  "오후 3시": 15,
+  "오후 4시": 16,
+  "오후 5시": 17,
+  "오후 6시": 18,
+  "오후 7시": 19,
+  "오후 8시": 20,
+  "오후 9시": 21,
+  "오후 10시": 22,
+  "오후 11시": 23,
+};
