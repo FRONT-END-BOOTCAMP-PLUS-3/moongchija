@@ -2,13 +2,14 @@
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0 auto;
+  padding: 0px 40px;
   height: 100%;
-
+  position: relative;
   .profileWrapper {
     display: flex;
     align-items: center;
     margin-bottom: 20px;
+    justify-content: space-between;
 
     .profileBox {
       display: flex;

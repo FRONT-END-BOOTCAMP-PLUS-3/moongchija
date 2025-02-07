@@ -4,10 +4,13 @@ import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVote
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    const pathname = request.nextUrl.pathname; // ex) "/api/user/appointments/1/vote-result"
-    const appointmentId = parseInt(pathname.split("/").slice(-2, -1)[0]); // 마지막에서 두 번째 값 추출
+    const { id } = await params;
+    const appointmentId = id;
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
@@ -43,7 +46,7 @@ export async function POST(request: NextRequest) {
     const { confirm_time, confirm_place, confirm_place_url } =
       await request.json();
 
-    if (!confirm_time || !confirm_place || !confirm_place_url) {
+    if (!confirm_time || !confirm_place) {
       return NextResponse.json(
         { error: "필수 정보가 부족합니다." },
         { status: 400 }

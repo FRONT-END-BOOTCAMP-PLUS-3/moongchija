@@ -126,11 +126,18 @@ const VoteResultPage = () => {
 
         <div className={styles.wrapButton}>
           {resultData.ownerId === userId ? (
-            <Button
-              text="약속 확정하러 가기"
-              size="lg"
-              onClick={() => router.push(`/user/appointments/${id}/confirm`)}
-            />
+            <div className={styles.ownerButtons}>
+              <Button
+                text="홈으로 가기"
+                size="lg"
+                onClick={() => router.push(`/user/appointments`)}
+              />
+              <Button
+                text="약속 확정하러 가기"
+                size="lg"
+                onClick={() => router.push(`/user/appointments/${id}/confirm`)}
+              />
+            </div>
           ) : (
             <Button
               text="홈으로 가기"

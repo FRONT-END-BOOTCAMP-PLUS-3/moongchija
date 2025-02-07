@@ -8,6 +8,7 @@ import DeleteAccountModalContent from "./components/DeleteAccountModalContent";
 import UserProfile from "./components/UserProfile";
 import MyCalendar from "./components/MyCalendar";
 import IconHeader from "@/components/header/IconHeader";
+import UserAppointmentCount from "./components/UserAppointmentCount";
 
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -20,8 +21,8 @@ const MyPagePage = () => {
       <div className={styles.myPagecontainer}>
         <div className={styles.profileWrapper}>
           <UserProfile />
+          <UserAppointmentCount />
         </div>
-
         <div className={styles.calendarWrapper}>
           <MyCalendar />
         </div>
@@ -37,7 +38,7 @@ const MyPagePage = () => {
       </div>
 
       <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
-        <DeleteAccountModalContent />
+        <DeleteAccountModalContent onClose={handlecloseModal} />
       </Modal>
     </>
   );

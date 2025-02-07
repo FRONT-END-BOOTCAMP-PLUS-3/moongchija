@@ -5,12 +5,16 @@ import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppoint
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteResultUsecase";
+import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
+import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export async function GET(request: NextRequest) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    // ✅ URL에서 약속 ID 추출
-    const pathname = request.nextUrl.pathname; // ex) "/api/user/appointments/1/vote-result"
-    const appointmentId = parseInt(pathname.split("/").slice(-2, -1)[0]); // 마지막에서 두 번째 값 추출
+    const { id } = await params;
+    const appointmentId = id;
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
@@ -20,6 +24,8 @@ export async function GET(request: NextRequest) {
     }
 
     const voteResultUseCase = new DfGetVoteResultUseCase(
+      new SbMemberRepository(),
+      new SbUserRepository(),
       new SbTimeVoteUserRepository(),
       new SbPlaceVoteUserRepository(),
       new SbAppointmentRepository(),

@@ -67,6 +67,7 @@ const CompletePage = () => {
             {isCopiedRoomId ? "✅ 방번호가 복사되었습니다!" : ""}
           </p>
         </div>
+
         <div className={styles.wrapButton}>
           <Button
             text="약속 페이지 가기"

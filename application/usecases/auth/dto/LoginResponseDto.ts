@@ -1,5 +1,5 @@
 export interface LoginResponseDto {
-  userId: string;
+  token: string;
   user: {
     id: string;
     user_email: string;

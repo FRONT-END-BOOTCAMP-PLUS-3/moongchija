@@ -1,9 +1,9 @@
 import { DfSignUpUsecase } from "@/application/usecases/auth/DfSignUpUseCase";
 
-import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import { extractUserIdFromToken } from "@/utils/auth/extractUserIdFromToken";
 
 export const POST = async (request: NextRequest) => {
   try {
@@ -12,11 +12,8 @@ export const POST = async (request: NextRequest) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     const userRepository = new SbUserRepository();
-    const userEmojiRepository = new SbUserEmojiRepository();
-    const signupUsecase = new DfSignUpUsecase(
-      userRepository,
-      userEmojiRepository
-    );
+
+    const signupUsecase = new DfSignUpUsecase(userRepository);
 
     const userWithToken = await signupUsecase.execute(
       user_email,
@@ -28,7 +25,8 @@ export const POST = async (request: NextRequest) => {
       redirectUrl,
     });
 
-    const userId = userWithToken.access_token;
+    const token = userWithToken.access_token;
+    const userId = extractUserIdFromToken(token);
 
     if (userId) {
       response.cookies.set("userId", userId, {

@@ -4,29 +4,11 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextResponse } from "next/server";
 
-// ✅ GET 요청 핸들러
-export async function GET() {
-// export async function GET(req: NextRequest) {
+export async function GET(req: Request) {
   try {
-    // // ✅ Supabase 클라이언트 생성
-    // const supabase = await createClient();
-    // if (!supabase) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
+    const { searchParams } = new URL(req.url);
+    const id = searchParams.get("userId"); 
 
-    // // ✅ 현재 로그인된 유저 확인
-    // const {
-    //   data: { session },
-    // } = await supabase.auth.getSession();
-
-    // if (!session || !session.user) {
-    //   return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
-    // }
-
-    // // ✅ 로그인된 사용자 ID 가져오기
-    // const userId = session.user.id;
-
-    // ✅ 레포지토리 및 유스케이스 생성
     const userRepository = new SbUserRepository();
     const memberRepository = new SbMemberRepository();
     const appointmentRepository = new SbAppointmentRepository();
@@ -37,15 +19,20 @@ export async function GET() {
       appointmentRepository
     );
 
-    // ✅ 유스케이스 실행 -> 사용자 약속 리스트 가져오기
-    const appointments = await usecase.execute();
+    if (!id) {
+      throw new Error("userId is required");
+    }
+
+    const appointments = await usecase.execute(id);
 
     return NextResponse.json(appointments);
+
   } catch (error) {
-    console.error("❌ Error fetching appointments:", error);
+    console.log("❌ Error fetching appointments:", error);
+    
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
     );
-  }
+  } // catch
 }

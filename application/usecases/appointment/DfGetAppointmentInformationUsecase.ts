@@ -30,7 +30,7 @@ export class DfGetAppointmentInformationUsecase {
     // 멤버 구성원 받아오기
 
     // (1) 해당 약속 id에 해당하는 멤버 테이블을 배열로 받아옴
-    const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointment_id(appointmentId);
+    const membersByAppointmentId: Member[] = await this.memberRepository.findByAppointmentId(appointmentId);
 
     // (2) 멤버 테이블 배열 중에서 user_id만 가져와서 배열에 담음
     const memberIds: string[] = membersByAppointmentId.map(member => member.user_id);

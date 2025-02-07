@@ -2,9 +2,20 @@ import { createClient } from "@/utils/supabase/server";
 import { Appointment } from "@/domain/entities/Appointment";
 import { SupabaseClient } from "@supabase/supabase-js";
 import { AppointmentRepository } from "@/domain/repositories/AppointmentRepository";
-import { Member } from "@/domain/entities/Member";
 
 export class SbAppointmentRepository implements AppointmentRepository {
+  async create(appointment: Appointment): Promise<Appointment> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment")
+      .insert([appointment])
+      .select("*");
+
+    if (error) {
+      throw new Error(`Failed to create appointment: ${error.message}`);
+    }
+    return data?.[0];
+  }
   async findByIds(appointmentIds: number[]): Promise<Appointment[] | null> {
     const supabase = await this.getClient();
     const { data, error } = await supabase
@@ -21,19 +32,6 @@ export class SbAppointmentRepository implements AppointmentRepository {
 
   private async getClient(): Promise<SupabaseClient> {
     return await createClient();
-  }
-
-  async create(appointment: Appointment): Promise<Appointment[]> {
-    const supabase = await this.getClient();
-    const { data, error } = await supabase
-      .from("appointment")
-      .insert([appointment])
-      .select();
-
-    if (error) {
-      throw new Error(`약속 생성 실패: ${error.message}`);
-    }
-    return data || [];
   }
 
   async findById(appointmentId: number): Promise<Appointment | null> {
@@ -95,45 +93,6 @@ export class SbAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  async getMembersByAppointment(
-    appointmentId: number
-  ): Promise<(Member & { nickname: string })[]> {
-    const supabase = await createClient();
-
-    // ✅ 1. member 테이블에서 user_id 목록 가져오기
-    const { data: members, error: memberError } = await supabase
-      .from("member")
-      .select("id, appointment_id, user_id, created_at")
-      .eq("appointment_id", appointmentId);
-
-    if (memberError) {
-      throw new Error(`Failed to fetch members: ${memberError.message}`);
-    }
-
-    if (!members || members.length === 0) return [];
-
-    // ✅ 2. user 테이블에서 user_id에 해당하는 nickname 가져오기
-    const userIds = members.map((member) => member.user_id);
-    const { data: users, error: userError } = await supabase
-      .from("user") // ✅ user 테이블에서 조회
-      .select("id, nickname")
-      .in("id", userIds);
-
-    if (userError) {
-      throw new Error(`Failed to fetch user nicknames: ${userError.message}`);
-    }
-
-    // ✅ 3. user_id를 기반으로 nickname 매칭하여 반환 (Member의 모든 속성 유지)
-    return members.map((member) => ({
-      id: member.id, // ✅ Member 타입 필수 속성 추가
-      appointment_id: member.appointment_id, // ✅ Member 타입 필수 속성 추가
-      user_id: member.user_id, // ✅ Member 타입 필수 속성 추가
-      created_at: member.created_at, // ✅ Member 타입 필수 속성 추가
-      nickname:
-        users.find((u) => u.id === member.user_id)?.nickname || "Unknown", // ✅ nickname 추가
-    }));
-  }
-
   async confirmAppointment(
     appointmentId: number,
     confirmData: {
@@ -155,15 +114,40 @@ export class SbAppointmentRepository implements AppointmentRepository {
     }
   }
 
-  async delete(appointmentId: number): Promise<void> {
+  // ✅ 약속 삭제
+  async deleteAppointment(id: string): Promise<boolean> {
     const supabase = await this.getClient();
-    const { error } = await supabase
-      .from("appointment")
-      .delete()
-      .eq("id", appointmentId);
+
+    const { error } = await supabase.from("appointment").delete().eq("id", id);
 
     if (error) {
-      throw new Error(`약속 삭제 실패: ${error.message}`);
+      console.error("❌ 약속 삭제 실패:", error);
+      return false;
     }
+
+    return true;
+  }
+  // ✅ 전체 약속 조회
+  async getAllAppointments(): Promise<Appointment[]> {
+    const supabase = await this.getClient();
+
+    const { data, error } = await supabase
+      .from("appointment")
+      .select("id, title, status, confirm_time, created_at");
+
+    if (error) {
+      throw new Error("약속 목록 조회 실패");
+    }
+
+    return (data || []).map((appointment) => ({
+      id: appointment.id,
+      title: appointment.title,
+      status: appointment.status,
+      confirm_time: appointment.confirm_time,
+      created_at: appointment.created_at,
+      start_time: "",
+      end_time: "",
+      owner_id: "",
+    }));
   }
 }

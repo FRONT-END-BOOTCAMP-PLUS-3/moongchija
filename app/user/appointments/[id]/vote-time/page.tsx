@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import { useTimeVote } from "@/context/TimeVoteContext";
 import Loading from "@/components/loading/Loading";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter();
@@ -23,11 +24,29 @@ const VoteTimePage: React.FC = () => {
   const isDragging = useRef(false);
   const dragValue = useRef<boolean>(false);
 
+  // 로그인 상태 확인
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
+
   useEffect(() => {
     const fetchAppointmentTime = async () => {
       try {
         const response = await fetch(`/api/user/appointments/${id}/time-vote`);
-        if (!response.ok) throw new Error("Failed to fetch appointment time");
+        if (!response.ok)
+          throw new Error("시간투표 리스트 불러오기를 실패했습니다.");
 
         const data = await response.json();
         const startDate = new Date(data.start_time);
@@ -38,7 +57,6 @@ const VoteTimePage: React.FC = () => {
           startDate.getHours(),
           endDate.getHours()
         );
-
         setDateList(generatedDateList);
         setTimeList(generatedTimeList);
 
@@ -58,21 +76,26 @@ const VoteTimePage: React.FC = () => {
 
   const getDateList = (start: Date, end: Date) => {
     const dates = [];
-    const current = new Date(
-      Date.UTC(start.getUTCFullYear(), start.getUTCMonth(), start.getUTCDate())
-    );
-    const endDate = new Date(
-      Date.UTC(end.getUTCFullYear(), end.getUTCMonth(), end.getUTCDate())
-    );
     const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
 
+    // ✅ UTC 변환 제거 → 한국 시간 그대로 사용
+    const current = new Date(
+      start.getFullYear(),
+      start.getMonth(),
+      start.getDate()
+    );
+    const endDate = new Date(end.getFullYear(), end.getMonth(), end.getDate());
+
     while (current <= endDate) {
-      const year = current.getUTCFullYear();
-      const month = String(current.getUTCMonth() + 1).padStart(2, "0");
-      const day = String(current.getUTCDate()).padStart(2, "0");
-      const dayOfWeek = daysOfWeek[current.getUTCDay()];
+      const year = current.getFullYear();
+      const month = String(current.getMonth() + 1).padStart(2, "0");
+      const day = String(current.getDate()).padStart(2, "0");
+      const dayOfWeek = daysOfWeek[current.getDay()]; // ✅ 현지 시간 요일 사용
+
       dates.push(`${year}-${month}-${day}-${dayOfWeek}`);
-      current.setUTCDate(current.getUTCDate() + 1);
+
+      // ✅ UTC가 아닌 현지 시간 기준으로 날짜 증가
+      current.setDate(current.getDate() + 1);
     }
 
     return dates;

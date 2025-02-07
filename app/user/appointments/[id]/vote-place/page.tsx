@@ -68,27 +68,25 @@ const VotePlacePage: React.FC = () => {
       router.push("/login");
       return;
     }
-
-    const voteData = {
-      appointmentId: parseInt(id),
-      userId,
-      timeVotes: selectedTimes.map((time) => ({ time })), // 시간만 포함
-      placeVotes: [{ placeId: selectedPlace }], // ✅ 장소 ID 포함
-    };
-
     try {
       const response = await fetch(`/api/user/appointments/${id}/vote`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(voteData),
+        body: JSON.stringify({
+          userId,
+          timeVotes: selectedTimes.map((time) => ({ time })),
+          placeVotes: [{ placeId: selectedPlace }],
+        }),
       });
 
       const responseData = await response.json();
-      if (response.ok) {
+      if (!response.ok) {
+        // ❌ 서버에서 반환한 오류 메시지를 alert로 띄움
+        alert(`❌ 투표 실패: ${responseData.error || "알 수 없는 오류"}`);
+        return;
+      } else {
         alert("✅ 투표가 완료되었습니다! 투표결과페이지로 이동합니다.");
         router.push(`/user/appointments/${id}/vote-result`);
-      } else {
-        alert(`❌ 투표 저장 실패: ${responseData.error || "알 수 없는 오류"}`);
       }
     } catch (error) {
       console.error("❌ 투표 저장 중 오류 발생:", error);
@@ -112,7 +110,7 @@ const VotePlacePage: React.FC = () => {
               className={`${styles.placeItem} ${
                 selectedPlace === item.id ? styles.selected : ""
               }`}
-              onClick={() => handleSelect(item.id)}
+              onClick={() => item.id !== undefined && handleSelect(item.id)}
             >
               <div className={styles.itemTop}>
                 <div className={styles.placeName}>

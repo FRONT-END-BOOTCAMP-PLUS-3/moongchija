@@ -2,6 +2,7 @@
 
 import React, { useEffect, useState } from "react";
 import styles from "./Appointments.module.scss";
+import { useRouter } from 'next/navigation';
 import { SlMagnifier } from "react-icons/sl";
 import TabMenu from "../../../components/tabMenu/TabMenu";
 import AppointmentList from "./components/AppointmentList";
@@ -11,37 +12,36 @@ import Modal from "@/components/modal/Modal";
 import InputField from "@/components/input-filed/InputFiled";
 import Button from "@/components/button/Button";
 import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading";
 import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const tabs = ["투표 진행중", "약속 리스트"];
 
 const AppointmentsPage: React.FC = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState<boolean>(false);
+
   const [appointments, setAppointments] = useState<AppointmentCardDto[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
   const [showButtons, setShowButtons] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [selectedOption, setSelectedOption] = useState<string>("전체");
-  const [roomNumber, setRoomNumber] = useState<string>("");
 
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setRoomNumber(e.target.value);
-    console.log(roomNumber);
-  };
-
   // 투표중인 약속 데이터
   const inProgressAppointments = appointments.filter(
-    (appointment) => appointment.startDate && appointment.endDate
+    (appointment) => appointment.status === 'voting'
   );
 
   // 확정된 약속 데이터
   const confirmedAppointments = appointments.filter(
-    (appointment) => appointment.confirmDate
+    (appointment) => appointment.status === 'confirmed'
   );
 
   const handleTabChange = (index: number) => {
@@ -88,9 +88,18 @@ const AppointmentsPage: React.FC = () => {
       });
   };
 
-  async function fetchAppointments() {
+  const fetchAppointments =  async() => {
     try {
-      const response = await fetch('/api/user/appointments');
+      setLoading(true);
+
+      const userId = await getUserIdClient();
+      if (!userId) {
+        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return;
+      }
+
+      const response = await fetch(`/api/user/appointments?userId=${userId}`);
       if (!response.ok) {
         throw new Error('Failed to fetch appointments');
       }
@@ -102,11 +111,13 @@ const AppointmentsPage: React.FC = () => {
         endDate: appointment.endDate ? new Date(appointment.endDate) : undefined,
         confirmDate: appointment.confirmDate ? new Date(appointment.confirmDate) : undefined,
       }));
-      console.log(appointments)
+
       setAppointments(parseAppointments);
       
     } catch (error) {
-      console.error('Error:', error);
+      alert(`❌오류가 발생했습니다. :, ${error}`);
+    } finally {
+      setLoading(false);
     }
   }
 
@@ -142,12 +153,15 @@ const AppointmentsPage: React.FC = () => {
         </section>
 
         <section className={styles.listBox}>
-          {currentTab === 0 && (
+          {loading && <Loading />}
+          {/* 투표중 약속 */}
+          {!loading && currentTab === 0 && (
             <AppointmentList
               appointments={filteredAppointments(inProgressAppointments)}
             />
           )}
-          {currentTab === 1 && (
+          {/* 확정된 약속 */}
+          {!loading && currentTab === 1 && (
             <AppointmentList
               appointments={filteredAppointments(confirmedAppointments)}
             />
@@ -160,7 +174,7 @@ const AppointmentsPage: React.FC = () => {
           className={`${styles.buttonBox} ${showButtons ? styles.show : ""}`}
           onClick={handleCircleButtonClick}
         >
-          <Link href={"/user/appointments/create/information"}>
+          <Link href={"/user/appointments/create"}>
             약속 만들기
           </Link>
           <button onClick={openModal}>방번호로 참여</button>
@@ -169,18 +183,62 @@ const AppointmentsPage: React.FC = () => {
 
       {/* 모달 */}
       <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className={styles.roomEntryBox}>
-          <InputField
-            label="방 번호"
-            value={roomNumber}
-            onChange={handleRoomNumberChange}
-            type="text"
-          />
-          <Button size="sm" text="참여" />
-        </div>
+          <EntryAppointmentModal />
       </Modal>
     </>
   );
 };
 
 export default AppointmentsPage;
+
+const EntryAppointmentModal:React.FC = () => {
+  const router = useRouter();
+
+  const [appointmentId, setAppointmentId] = useState<string>("");
+
+  const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAppointmentId(e.target.value);
+    console.log(appointmentId);
+  };
+
+  const fetchCheckAppointmentEntry = async () => {
+    try {
+      const userId = await getUserIdClient();
+  
+      if (!userId) {
+        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return;
+      }
+  
+      const response = await fetch(`/api/user/check-appointment-entry?appointmentId=${appointmentId}&userId=${userId}`);
+      const data = await response.json();
+  
+      if (!response.ok) {
+        throw new Error(data.error || "방 입장 여부 확인에 실패했습니다.");
+      }
+  
+      if (data.redirect) {
+        router.push(data.redirect);
+      } else {
+        alert(data.error);
+      }
+  
+    } catch (error: any) {
+      alert(`${error.message}`);
+    }
+  };
+  
+
+  return (
+    <div className={styles.roomEntryBox}>
+      <InputField
+        label="방 번호"
+        value={appointmentId}
+        onChange={handleRoomNumberChange}
+        type="text"
+      />
+    <Button size="sm" text="참여" onClick={fetchCheckAppointmentEntry} />
+  </div>
+  )
+}

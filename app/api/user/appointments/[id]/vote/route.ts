@@ -5,41 +5,28 @@ import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUse
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
-export async function POST(request: NextRequest) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: { id: number } }
+) {
   try {
-    let { appointmentId, userId, timeVotes, placeVotes } = await request.json();
+    const { id } = await params;
+    const appointmentId = id;
+    let { userId, timeVotes, placeVotes } = await request.json();
 
-    const timeVoteRepo = new SbTimeVoteRepository();
-    const voteUsecase = new DfSubmitVoteUsecase(
+    // 필수 데이터 체크
+    if (!userId || !timeVotes.length || !placeVotes.length) {
+      return NextResponse.json(
+        { error: "필수 데이터가 누락되었습니다." },
+        { status: 400 }
+      );
+    }
+
+    const submitVoteUsecase = new DfSubmitVoteUsecase(
       new SbTimeVoteUserRepository(),
       new SbPlaceVoteUserRepository(),
-      new SbMemberRepository()
-    );
-
-    // ✅ `timeVotes`에서 `timeId`를 찾고, 없으면 생성하는 최적화된 코드
-    const existingTimeVotes = await Promise.all(
-      timeVotes.map(async (vote: { time: string }) => {
-        const existingTimeId = await timeVoteRepo.findTimeIdByTimestamp(
-          appointmentId,
-          vote.time
-        );
-        return existingTimeId ? { timeId: existingTimeId } : null;
-      })
-    );
-
-    const newTimes = timeVotes.filter(
-      (_: { time: string }, index: number) => !existingTimeVotes[index]
-    );
-
-    // ✅ 새로 추가할 시간 투표 생성 및 ID 반환
-    const newTimeIds = await timeVoteRepo.createTimeVotes(
-      appointmentId,
-      newTimes.map((vote: { time: string }) => vote.time)
-    );
-
-    // ✅ `processedTimeVotes` 생성 (null 방지)
-    const processedTimeVotes = existingTimeVotes.map(
-      (vote, index) => (vote ? vote : { timeId: newTimeIds[index] ?? null }) // null 방지
+      new SbMemberRepository(),
+      new SbTimeVoteRepository()
     );
 
     // ✅ placeVotes 유효성 검사
@@ -50,13 +37,24 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // ✅ 투표 저장 실행
-    await voteUsecase.execute({
-      userId,
-      appointmentId,
-      timeVotes: processedTimeVotes,
-      placeVotes,
-    });
+    // ✅ 투표 저장 실행 (서버에서 발생하는 오류를 catch하기 위함)
+    try {
+      await submitVoteUsecase.execute({
+        userId,
+        appointmentId,
+        timeVotes,
+        placeVotes,
+      });
+    } catch (voteError) {
+      console.error("❌ 투표 오류 발생:", voteError);
+      return NextResponse.json(
+        {
+          error:
+            voteError instanceof Error ? voteError.message : "Unknown error",
+        },
+        { status: 400 }
+      ); // ✅ 400 상태 코드 반환
+    }
 
     return NextResponse.json({
       message: "✅ 투표가 성공적으로 저장되었습니다.",

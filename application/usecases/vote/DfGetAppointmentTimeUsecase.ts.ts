@@ -1,7 +1,7 @@
 import { AppointmentRepository } from "@/domain/repositories/AppointmentRepository";
 import { Appointment } from "@/domain/entities/Appointment";
 
-export class DfAppointmentTimeUsecase {
+export class DfGetAppointmentTimeUsecase {
   constructor(private repository: AppointmentRepository) {}
 
   async execute(appointmentId: number): Promise<Partial<Appointment> | null> {

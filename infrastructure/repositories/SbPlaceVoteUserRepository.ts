@@ -1,6 +1,5 @@
 import { createClient } from "@/utils/supabase/server";
 import { PlaceVoteUserRepository } from "@/domain/repositories/PlaceVoteUserRepository";
-import { PlaceVoteUser } from "@/domain/entities/PlaceVoteUser";
 
 export class SbPlaceVoteUserRepository implements PlaceVoteUserRepository {
   async voteForPlace(userId: string, placeId: number): Promise<void> {

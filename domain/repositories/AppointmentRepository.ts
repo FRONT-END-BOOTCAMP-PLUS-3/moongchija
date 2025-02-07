@@ -1,8 +1,7 @@
 import { Appointment } from "../entities/Appointment";
-import { Member } from "../entities/Member";
 
 export interface AppointmentRepository {
-  create(appointment: Appointment): Promise<Appointment[]>; // 약속 생성
+  create(appointment: Appointment): Promise<Appointment>; // 약속 생성
   findById(appointmentId: number): Promise<Appointment | null>; // 특정 약속 조회
   getAppointmentTime(
     appointmentId: number
@@ -13,9 +12,7 @@ export interface AppointmentRepository {
   findByOwner(ownerId: string): Promise<Appointment[]>; // 특정 사용자의 약속 목록 조회
 
   updateStatus(appointmentId: number, status: string): Promise<void>; // 약속 상태 업데이트
-  getMembersByAppointment(
-    appointmentId: number
-  ): Promise<(Member & { nickname: string })[]>; // 특정 약속의 멤버리스트 조회
+
   confirmAppointment(
     appointmentId: number,
     confirmData: {
@@ -25,5 +22,6 @@ export interface AppointmentRepository {
       status: string;
     }
   ): Promise<void>; // 약속 확정
-  delete(appointmentId: number): Promise<void>; // 약속 삭제
+  getAllAppointments(): Promise<Appointment[]>;
+  deleteAppointment(id: string): Promise<boolean>;
 }

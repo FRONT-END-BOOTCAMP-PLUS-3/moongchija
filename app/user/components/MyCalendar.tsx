@@ -11,34 +11,49 @@ interface Event {
   title: string;
   start: string;
   end: string;
-  color?: string;
+  confirm_time: string;
+  status: string;
 }
+
 const MyCalendar = () => {
-  // 이벤트 데이터
   const [events, setEvents] = useState<Event[]>([]);
 
+  const getEventsStatus = (event: Event) => {
+    const startTime = event.start;
+    const confirmTime = event.confirm_time ? event.confirm_time : null;
+
+    if (event.status === "voting") {
+      return { status: "voting", color: "#64c964" };
+    }
+
+    if (event.status === "confirmed") {
+      if (confirmTime && confirmTime < startTime) {
+        return { status: "scheduled", color: "##fd8446" };
+      }
+      return { status: "confirmed", color: "#fd565f" };
+    }
+    return { status: event.status, color: "#000000" };
+  };
+
   useEffect(() => {
-    const userEvents = [
-      {
-        title: "회의",
-        start: "2025-01-27",
-        end: "2025-01-27",
-        color: "#9cc0ff",
-      },
-      {
-        title: "프로젝트 마감",
-        start: "2025-01-27",
-        end: "2025-01-27",
-        color: "#9cc0ff",
-      },
-      {
-        title: "개인 일정",
-        start: "2025-01-27",
-        end: "2025-01-27",
-        color: "#9cc0ff",
-      },
-    ];
-    setEvents(userEvents);
+    const appointmentsListFetch = async () => {
+      const response = await fetch("/api/user/user-appointments");
+
+      const appointments = await response.json();
+      const transformedEvents = appointments.map((event: Event) => {
+        const { status, color } = getEventsStatus(event);
+
+        return {
+          ...event,
+          status,
+          color,
+        };
+      });
+
+      setEvents(transformedEvents);
+    };
+
+    appointmentsListFetch();
   }, []);
 
   return (
@@ -48,6 +63,19 @@ const MyCalendar = () => {
         initialView="dayGridMonth"
         firstDay={1}
         events={events}
+        eventContent={(eventInfo) => {
+          return (
+            <div
+              style={{
+                whiteSpace: "nowrap",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+              }}
+            >
+              {eventInfo.event.title}
+            </div>
+          );
+        }}
         locale={koLocale}
         titleFormat={{ year: "2-digit", month: "long" }}
         headerToolbar={{

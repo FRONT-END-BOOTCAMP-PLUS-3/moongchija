@@ -30,3 +30,8 @@ export const calculateCountdown = (startDate: Date): string => {
   if (daysLeft === 0) return "D-DAY"; // 당일
   return `D-${daysLeft}`;
 };
+
+export const formatToISOStringWithKST = (date: Date) => {
+  const kstToUtc = new Date(date.getTime() - date.getTimezoneOffset() * 60000);
+  return kstToUtc.toISOString();
+};

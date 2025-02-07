@@ -1,5 +1,5 @@
 import { generateJwtToken } from "@/utils/auth/auth-utils";
-import { SbUserEmojiRepository } from "@/infrastructure/repositories/SbUserEmojiRepository";
+
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { SocialLoginResponseDto } from "./dto/SocialLoginResponseDto";
 interface KakaoUserInfo {
@@ -9,16 +9,13 @@ interface KakaoUserInfo {
   };
 }
 export class DfSocialLoginUseCase {
-  constructor(
-    private userRandomEmoji: SbUserEmojiRepository,
-    private userRepository: SbUserRepository
-  ) {}
+  constructor(private userRepository: SbUserRepository) {}
 
   async execute(userInfo: KakaoUserInfo): Promise<SocialLoginResponseDto> {
     const kakao_id = userInfo.id;
     const user_email = userInfo.kakao_account?.email;
     const nickname = user_email.split("@")[0];
-    const emoji = await this.userRandomEmoji.createUserRandomEmoji();
+    const emoji = await this.userRepository.createUserRandomEmoji();
     const uniqueNickname = await this.userRepository.generateUniqueNickname(
       nickname
     );

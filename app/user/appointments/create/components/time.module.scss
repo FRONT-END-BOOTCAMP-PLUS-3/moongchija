@@ -1,0 +1,72 @@
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20px 40px;
+  height: 100%;
+  width: 100%;
+
+  .buttonWrapper {
+    width: 100%;
+  }
+}
+
+.mainBox {
+  width: 100%;
+
+  p {
+    font-size: var(--font-size-md);
+    font-weight: bold;
+    margin-bottom: 8px;
+    display: block;
+  }
+
+  .message {
+    color: var(--grey-4-color);
+  }
+}
+
+.indicatorWrapper {
+  display: flex;
+  margin-bottom: 20px;
+}
+
+.datePickerWrapper {
+    & > div {
+        width: 100%;
+        margin-top: 20px;
+        div { width: auto; }
+    }
+}
+
+.timeSelectWrapper {
+  margin-top: 20px;
+
+  .timePicker {
+    // margin-top: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+
+    select {
+      padding: 8px;
+      font-size: 0.9rem;
+      border: none;
+      border-bottom: 1px solid var(--primary-color);
+      background: none;
+      cursor: pointer;
+
+      &:focus {
+        outline: none;
+        border-color: #6c63ff;
+      }
+    }
+
+    span {
+      font-size: 0.9rem;
+      color: #333;
+    }
+  }
+}
