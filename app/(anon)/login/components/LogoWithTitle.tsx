@@ -2,7 +2,6 @@
 
 import Moongchi from "@/components/moongchi/Moongchi";
 import styles from "./LogoWithTitle.module.scss";
-import Image from "next/image";
 
 const LogoWithTitle = () => {
   return (
