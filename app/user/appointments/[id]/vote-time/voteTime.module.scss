@@ -8,11 +8,11 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 20px;
+    padding: 10px;
     .subtitle {
       font-size: var(--font-size-md);
       font-weight: bold;
-      margin: 5vh 0 20px;
+      margin: 5vh 0 2vh;
     }
 
     .description {
@@ -24,7 +24,7 @@
     .schedule {
       .row {
         display: flex;
-        margin-bottom: 10px;
+        margin-bottom: 1vh;
         min-width: fit-content; // 날짜가 많아져도 간견유지
         .timeLabel {
           width: 40px;
@@ -44,7 +44,7 @@
           font-size: var(--font-size-md);
           text-align: center;
           margin-right: 5px;
-          margin-bottom: 5px;
+          margin-bottom: 1vh;
         }
       }
     }
@@ -52,7 +52,7 @@
     .timeGrid {
       display: flex;
       align-items: flex-start;
-      height: 400px;
+      height: 47vh;
       overflow-y: auto; /* 세로 스크롤 활성화 */
 
       .timeLabels {
@@ -97,7 +97,7 @@
     }
     .wrapButton {
       width: 100%;
-      margin-top: 3vh;
+      margin-top: 7vh;
     }
   }
 }

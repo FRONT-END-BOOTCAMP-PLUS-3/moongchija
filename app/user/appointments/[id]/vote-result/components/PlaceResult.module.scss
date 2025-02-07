@@ -1,11 +1,8 @@
 .placeResultContainer {
-  height: 62vh;
+  height: 60vh;
   overflow-y: auto;
-  display: flex;
-  flex-direction: column;
   width: 100%;
   max-width: 400px;
-  margin: 0 auto;
   position: relative;
 
   .header {
@@ -14,9 +11,6 @@
     z-index: 20;
     padding-bottom: 5px;
     background-color: var(--grey-2-color);
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
     margin-bottom: 10px;
     font-size: var(--font-size-sm);
 
@@ -30,7 +24,6 @@
       align-items: center;
       justify-content: space-between;
       width: 150px;
-      position: relative;
       z-index: 30;
 
       .arrow {
@@ -80,7 +73,6 @@
     gap: 10px;
 
     .placeItem {
-      // background: var(--grey-2-color);
       background-color: #fff;
       border-radius: 10px;
       padding: 15px;
