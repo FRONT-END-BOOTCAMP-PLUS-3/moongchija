@@ -19,7 +19,7 @@ const CompletePage = () => {
   // const handleCopyInviteLink = async () => {
   //   try {
   //     await navigator.clipboard.writeText(
-  //       `http://localhost:3000/user/appointments/${appointmentId}/entry`
+  //       `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments/${appointmentId}/entry`
   //     );
   //     setIsCopiedLink(true);
   //     setTimeout(() => setIsCopiedLink(false), 2000);
@@ -42,7 +42,7 @@ const CompletePage = () => {
   // ✅ 초대링크 복사
   const handleCopyInviteLink = () => {
     copyToClipboard(
-      `https://yourdomain.com/user/appointments/${appointmentId}/entry`,
+      `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments/${appointmentId}/entry`,
       setIsCopiedLink,
       "초대링크 복사에 실패했습니다."
     );
