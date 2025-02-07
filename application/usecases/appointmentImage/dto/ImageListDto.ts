@@ -1,4 +1,4 @@
-export interface AppointmentImage {
+export interface ImageListDto {
   id: number;
   appointment_id: number;
   image_url: string;
