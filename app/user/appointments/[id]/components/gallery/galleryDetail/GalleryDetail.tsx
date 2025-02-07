@@ -5,22 +5,17 @@ import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import { FC, useState } from "react";
 import Button from "@/components/button/Button";
-import { GalleryItem } from "../../detail/types/detailTypes";
+import { ImageListDto } from "@/application/usecases/appointmentImage/dto/ImageListDto";
+
+
 
 interface GalleryDetailProps {
-  galleryData: GalleryItem[];
+  galleryData: ImageListDto[];
 }
 
-const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
-  const photos = [
-    { id: 1, src: "/images/고뭉치.png", username: "User1" },
-    { id: 2, src: "/images/고뭉치.png", username: "User2" },
-    { id: 3, src: "/images/고뭉치.png", username: "User3" },
-    { id: 4, src: "/images/고뭉치.png", username: "User4" },
-    { id: 5, src: "/images/고뭉치.png", username: "User5" },
-    { id: 6, src: "/images/고뭉치.png", username: "User6" },
-  ];
+const GalleryDetail: FC<GalleryDetailProps> = ({ galleryData }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
@@ -39,17 +34,13 @@ const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
           <div key={photo.id} className={styles.photoCard}>
             <div className={styles.photos}>
               <Image
-                src={photo.src}
-                alt={`Photo by ${photo.user}`}
+                src={photo.image_url}
+                alt={`Photo by ${photo.creater_id}`}
                 width={150}
                 height={150}
                 className={styles.image}
                 onClick={openModal}
               />
-            </div>
-            <div className={styles.userInfo}>
-              <div className={styles.userIcon}></div>
-              <span className={styles.username}>{photo.user}</span>
             </div>
           </div>
         ))}
@@ -59,13 +50,13 @@ const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
           <div className={styles.modalContainer}>
             <div className={styles.modalBox}>
               <div className={styles.photo}>
+                {/* 모달 내에서 첫 번째 이미지를 예시로 보여줍니다. 필요에 따라 선택된 이미지를 보여주도록 수정하세요. */}
                 <Image
-                  src={photos[0].src}
-                  alt={`Photo by ${photos[0].username}`}
+                  src={galleryData[0]?.image_url || ""}
+                  alt={`Photo by ${galleryData[0]?.creater_id}`}
                   width={360}
                   height={360}
                   className={styles.image}
-                  onClick={openModal}
                 />
               </div>
               <div className={styles.deleteButton}>
