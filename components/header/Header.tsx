@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import DropdownMenu from "./DropdownMenu";
 import styles from "./Header.module.scss";
 import { useRouter } from "next/navigation";
+import { useUser } from '@/context/UserContext';
 
 interface HeaderProps {
   children: React.ReactNode;
@@ -11,7 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ children, showUsername = true }) => {
-  const [username, setUsername] = useState<string>("고뭉치");
+  const { user } = useUser();
   const [isDropdownOpen, setIsDropdownOpen] = useState<boolean>(false);
   const router = useRouter();
   const toggleDropdown = () => {
@@ -44,7 +45,7 @@ const Header: React.FC<HeaderProps> = ({ children, showUsername = true }) => {
         <div className={styles.userContainer}>
           {showUsername ? (
             <span onClick={toggleDropdown} className={styles.username}>
-              {username}님
+              {user?.nickname}님
             </span>
           ) : (
             <button className={styles.logoutButton} onClick={handleLogout}>
