@@ -68,19 +68,33 @@ const CreateTime: React.FC<Props> = ({ onPageChange }) => {
     event: React.ChangeEvent<HTMLSelectElement>
   ) => {
     const selectedTime = Number(event.target.value);
+  
+    if (selectedTime >= endTime) {
+      alert("시작 시간은 종료 시간보다 이전이어야 합니다.");
+      setStartTime(startTime);
+      return;
+    }
+  
     setStartTime(selectedTime);
-
+  
     const updatedRange = { ...selectedRange[0] };
-    updatedRange.startDate.setHours(selectedTime, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
+    updatedRange.startDate.setHours(selectedTime, 0, 0, 0);
     setSelectedRange([updatedRange]);
   };
-
+  
   const handleEndTimeChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const selectedTime = Number(event.target.value);
+  
+    if (selectedTime <= startTime) {
+      alert("종료 시간은 시작 시간보다 이후여야 합니다.");
+      setEndTime(endTime);
+      return;
+    }
+  
     setEndTime(selectedTime);
-
+  
     const updatedRange = { ...selectedRange[0] };
-    updatedRange.endDate.setHours(selectedTime, 0, 0, 0); // 분, 초, 밀리초는 0으로 설정
+    updatedRange.endDate.setHours(selectedTime, 0, 0, 0);
     setSelectedRange([updatedRange]);
   };
 
