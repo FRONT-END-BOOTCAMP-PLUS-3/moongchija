@@ -8,6 +8,7 @@ export class SbPaymentsRepository implements PaymentsRepository {
     return await createClient();
   }
 
+  
   async create(
     appointmentId: number,
     accountNumber: string,
@@ -49,35 +50,17 @@ export class SbPaymentsRepository implements PaymentsRepository {
     return data || null;
   }
 
-  async update(
-    paymentsId: number,
-    accountNumber: string,
-    accountHolderName: string,
-    bank: string,
-    memberCount: number
-  ): Promise<void> {
+
+
+  async delete(paymentsId: number): Promise<void> {
     const supabase = await this.getClient();
     const { error } = await supabase
       .from("payments")
-      .update({
-        account_number: accountNumber,
-        account_holder_name: accountHolderName,
-        bank,
-        member_count: memberCount,
-      })
+      .delete()
       .eq("id", paymentsId);
 
     if (error) {
-      throw new Error(`정산 정보 수정 실패: ${error.message}`);
+      throw new Error(`정산 정보 삭제 실패: ${error.message}`);
     }
   }
-
-  // async delete(paymentsId: number): Promise<void> {
-  //   const supabase = await this.getClient();
-  //   const { error } = await supabase.from("payments").delete().eq("id", paymentsId);
-
-  //   if (error) {
-  //     throw new Error(`정산 정보 삭제 실패: ${error.message}`);
-  //   }
-  // }
 }

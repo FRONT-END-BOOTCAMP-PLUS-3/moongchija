@@ -13,11 +13,14 @@ type SettlementItem = {
 };
 
 interface SettlementModalNewProps {
-  appointmentId: number; 
-  onSuccess?: () => void; 
+  appointmentId: number;
+  onSuccess?: () => void;
 }
 
-const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProps) => {
+const SettlementModalNew = ({
+  appointmentId,
+  onSuccess,
+}: SettlementModalNewProps) => {
   const [totalPrice, setTotalPrice] = useState(0); // 총액
   const [memberCount, setMemberCount] = useState(1); // 인원 수 (기본값 1)
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
@@ -29,7 +32,6 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
   const [inputSets, setInputSets] = useState<SettlementItem[]>([
     { descript: "", amount: 0 },
   ]);
-  
 
   // 인원 수가 변경될 때마다 인당 금액 계산
   useEffect(() => {
@@ -40,7 +42,10 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
 
   // 총 금액 업데이트
   useEffect(() => {
-    const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.amount, 0);
+    const updatedTotalPrice = inputSets.reduce(
+      (acc, set) => acc + set.amount,
+      0
+    );
     setTotalPrice(updatedTotalPrice);
   }, [inputSets]);
 
@@ -61,26 +66,28 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
   // 등록
   const handleRegister = async () => {
     try {
-      const response = await fetch(`/api/user/appointments/${appointmentId}/settlement`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          appointmentId: appointmentId,
-          accountNumber: accountNumber,
-          accountHolderName: accountHolderName,
-          bank: selectedBank,
-          memberCount: memberCount,
-          details: inputSets, // [{ descript, amount }, ...] 형태로 전송됨
-        }),
-      });
+      const response = await fetch(
+        `/api/user/appointments/${appointmentId}/settlement`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            appointmentId: appointmentId,
+            accountNumber: accountNumber,
+            accountHolderName: accountHolderName,
+            bank: selectedBank,
+            memberCount: memberCount,
+            details: inputSets, // [{ descript, amount }, ...] 형태로 전송됨
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error("정산 등록 실패");
 
       alert("등록되었습니다");
       if (onSuccess) onSuccess();
-
     } catch (error) {
       console.error(error);
       alert("정산 등록에 실패했습니다.");
@@ -101,7 +108,6 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
             <div className={styles.modalListWrapper}>
               {inputSets.map((set, index) => (
                 <div className={styles.modalListBox} key={index}>
-                  {/* 장소 입력: 값은 set.descript, onChange에서 descript 업데이트 */}
                   <input
                     className={styles.place}
                     type="text"
@@ -135,7 +141,10 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
                 <button className={styles.inputPlusButton} onClick={addNewSet}>
                   <FaPlus className={styles.icon} />
                 </button>
-                <button className={styles.inputMinusButton} onClick={removeLastSet}>
+                <button
+                  className={styles.inputMinusButton}
+                  onClick={removeLastSet}
+                >
                   <FaMinus className={styles.icon} />
                 </button>
               </div>
@@ -193,7 +202,10 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
             </div>
             <div className={styles.bank}>
               <span>은행사</span>
-              <select value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)}>
+              <select
+                value={selectedBank}
+                onChange={(e) => setSelectedBank(e.target.value)}
+              >
                 {banks.map((bank, index) => (
                   <option key={index} value={bank}>
                     {bank}
@@ -209,7 +221,6 @@ const SettlementModalNew = ({ appointmentId, onSuccess }: SettlementModalNewProp
                 value={accountHolderName}
                 onChange={(e) => setAccountHolderName(e.target.value)}
               />
-              
             </div>
           </div>
         </div>

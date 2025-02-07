@@ -7,14 +7,18 @@ import { SettlementDto } from "@/application/usecases/appointment/dto/Settlement
 
 interface SettlementDetailProps {
   settlementData: SettlementDto | null; // 정산이 없을 수도 있으므로 null 허용
+  fetchSettlement: () => Promise<void>;
 }
 
-const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
+
+const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData, fetchSettlement }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
   if (!settlementData) {
     return <p className={styles.noData}>정산 정보가 없습니다.</p>;
   }
+
+  
 
   const handleCopy = () => {
     if (settlementData.accountNumber) {
@@ -26,10 +30,6 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
-  const handleRegister = () => {
-    alert("수정되었습니다");
-    closeModal();
-  };
 
   // 총액 계산
   const totalAmount = settlementData.details?.reduce(
@@ -137,7 +137,10 @@ const SettlementDetail: FC<SettlementDetailProps> = ({ settlementData }) => {
       <Modal isOpen={isModalOpen} onClose={closeModal}>
         <SettlementModalContent
           initialData={settlementData}
-          handleRegister={handleRegister}
+          onSuccess={() => {
+            closeModal();
+            fetchSettlement(); // 등록 후 최신 데이터 재조회
+          }}
         />
       </Modal>
     </div>

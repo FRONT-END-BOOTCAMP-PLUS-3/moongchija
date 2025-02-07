@@ -3,6 +3,7 @@ import { SbPaymentsRepository } from "@/infrastructure/repositories/SbPaymentsRe
 import { SbPaymentsDetailRepository } from "@/infrastructure/repositories/SbPaymentsDetailRepository";
 import { DfGetSettlementUsecase } from "@/application/usecases/appointment/DfGetSettlementUsecase";
 import { DfCreateSettlementUsecase } from "@/application/usecases/appointment/DfCreateSettlementUsecase";
+import { DfUpdateSettlementUsecase } from "@/application/usecases/appointment/DfUpdateSettlementUsecase";
 
 // 정산 정보 조회 (GET)
 export async function GET(req: NextRequest) {
@@ -105,6 +106,72 @@ export async function POST(req: NextRequest) {
     console.error(error);
     return NextResponse.json(
       { error: "Failed to create settlement" },
+      { status: 500 }
+    );
+  }
+}
+
+// 정산 정보 및 세부 내역 수정 (PUT)
+export async function PUT(req: NextRequest) {
+  try {
+    const body = await req.json();
+    const {
+      appointmentId,
+      accountNumber,
+      accountHolderName,
+      bank,
+      memberCount,
+      details, // [{ amount: number, descript: string }, ...]
+    } = body;
+
+    const parsedAppointmentId = Number(appointmentId);
+    const parsedMemberCount = Number(memberCount);
+
+    if (
+      !accountNumber ||
+      !accountHolderName ||
+      !bank ||
+      isNaN(parsedAppointmentId) ||
+      isNaN(parsedMemberCount)
+    ) {
+      return NextResponse.json(
+        { error: "Invalid request data" },
+        { status: 400 }
+      );
+    }
+
+    if (!Array.isArray(details)) {
+      return NextResponse.json(
+        { error: "세부 내역은 배열 형태여야 합니다." },
+        { status: 400 }
+      );
+    }
+
+    const paymentsRepository = new SbPaymentsRepository();
+    const paymentsDetailRepository = new SbPaymentsDetailRepository();
+
+    const usecase = new DfUpdateSettlementUsecase(
+      paymentsRepository,
+      paymentsDetailRepository
+    );
+
+    await usecase.execute(
+      parsedAppointmentId,
+      accountNumber,
+      accountHolderName,
+      bank,
+      parsedMemberCount,
+      details
+    );
+
+    return NextResponse.json(
+      { message: "Settlement updated successfully" },
+      { status: 200 }
+    );
+  } catch (error) {
+    console.error(error);
+    return NextResponse.json(
+      { error: "Failed to update settlement" },
       { status: 500 }
     );
   }

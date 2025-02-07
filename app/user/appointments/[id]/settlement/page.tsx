@@ -116,7 +116,7 @@ const SettlementPage = () => {
       <IconHeader />
       <DetailTabMenu />
       <div className={styles.container}>
-        <SettlementDetail settlementData={settlementData} />
+        <SettlementDetail settlementData={settlementData} fetchSettlement={fetchSettlement}  />
       </div>
     </div>
   );
