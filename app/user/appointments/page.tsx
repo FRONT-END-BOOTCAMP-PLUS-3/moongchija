@@ -15,13 +15,13 @@ import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
 import { calculateCountdown } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
-import { getUserIdClient } from "@/utils/supabase/client";
+import { useUser } from "@/context/UserContext";
 
 const tabs = ["투표 진행중", "약속 리스트"];
 
 const AppointmentsPage: React.FC = () => {
-  const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
+  const { user } = useUser();
+  const [loading, setLoading] = useState<boolean>(true);
 
   const [appointments, setAppointments] = useState<AppointmentCardDto[]>([]);
   const [currentTab, setCurrentTab] = useState<number>(0);
@@ -90,16 +90,7 @@ const AppointmentsPage: React.FC = () => {
 
   const fetchAppointments =  async() => {
     try {
-      setLoading(true);
-
-      const userId = await getUserIdClient();
-      if (!userId) {
-        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        router.push("/login");
-        return;
-      }
-
-      const response = await fetch(`/api/user/appointments?userId=${userId}`);
+      const response = await fetch(`/api/user/appointments?userId=${user?.id}`);
       if (!response.ok) {
         throw new Error('Failed to fetch appointments');
       }
@@ -122,8 +113,10 @@ const AppointmentsPage: React.FC = () => {
   }
 
   useEffect(() => {
-    fetchAppointments();
-  }, [])
+    if (user) {
+      fetchAppointments();
+    }
+  }, [user])
 
   return (
     <>
@@ -193,7 +186,7 @@ export default AppointmentsPage;
 
 const EntryAppointmentModal:React.FC = () => {
   const router = useRouter();
-
+  const { user } = useUser();
   const [appointmentId, setAppointmentId] = useState<string>("");
 
   const handleRoomNumberChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -202,16 +195,8 @@ const EntryAppointmentModal:React.FC = () => {
   };
 
   const fetchCheckAppointmentEntry = async () => {
-    try {
-      const userId = await getUserIdClient();
-  
-      if (!userId) {
-        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        router.push("/login");
-        return;
-      }
-  
-      const response = await fetch(`/api/user/check-appointment-entry?appointmentId=${appointmentId}&userId=${userId}`);
+    try {  
+      const response = await fetch(`/api/user/check-appointment-entry?appointmentId=${appointmentId}&userId=${user?.id}`);
       const data = await response.json();
   
       if (!response.ok) {

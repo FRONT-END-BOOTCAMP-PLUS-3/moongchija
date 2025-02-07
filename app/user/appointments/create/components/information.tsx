@@ -29,10 +29,6 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
   const { appointment, setAppointment } = useCreateAppointment();
 
   const [isCustomQuiz, setIsCustomQuiz] = useState<boolean>(false);
-
-  const [quizError, setQuizError] = useState<string>("");
-  const [answerError, setAnswerError] = useState<string>("");
-
   const [nameError, setNameError] = useState<string>("");
   const [isButtonActive, setIsButtonActive] = useState<boolean>(false);
 
@@ -133,14 +129,11 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
           />
         )}
 
-        {quizError && <p className={styles.errorMessage}>{quizError}</p>}
-
         <InputField
           label="비밀번호 퀴즈 답"
           placeholder="퀴즈 답을 입력하세요."
           value={appointment.answer!}
           onChange={(e) => handleSetAnswer(e.target.value)}
-          error={answerError}
         />
       </section>
 
