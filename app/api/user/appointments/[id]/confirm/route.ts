@@ -46,7 +46,7 @@ export async function POST(request: NextRequest) {
     const { confirm_time, confirm_place, confirm_place_url } =
       await request.json();
 
-    if (!confirm_time || !confirm_place || !confirm_place_url) {
+    if (!confirm_time || !confirm_place) {
       return NextResponse.json(
         { error: "필수 정보가 부족합니다." },
         { status: 400 }

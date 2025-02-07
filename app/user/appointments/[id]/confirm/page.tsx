@@ -10,6 +10,7 @@ import { Calendar } from "react-date-range";
 import Button from "@/components/button/Button";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import Loading from "@/components/loading/Loading";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const ConfirmPage = () => {
   const router = useRouter();
@@ -23,6 +24,23 @@ const ConfirmPage = () => {
   >([]);
   const [confirmPlace, setConfirmPlace] = useState("");
   const [isModalOpen, setModalOpen] = useState(false);
+
+  // 로그인 상태 확인
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
 
   // ✅ 1. 장소 목록을 API에서 가져오기
   useEffect(() => {

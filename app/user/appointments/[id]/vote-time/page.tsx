@@ -7,6 +7,7 @@ import { useParams, useRouter } from "next/navigation";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import { useTimeVote } from "@/context/TimeVoteContext";
 import Loading from "@/components/loading/Loading";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter();
@@ -23,11 +24,29 @@ const VoteTimePage: React.FC = () => {
   const isDragging = useRef(false);
   const dragValue = useRef<boolean>(false);
 
+  // 로그인 상태 확인
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const user = await getUserIdClient();
+        if (!user) {
+          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          router.push("/login");
+          return;
+        }
+      } catch (error) {
+        console.error("❌ 유저 정보 가져오기 실패:", error);
+      }
+    };
+    fetchUserId();
+  }, []);
+
   useEffect(() => {
     const fetchAppointmentTime = async () => {
       try {
         const response = await fetch(`/api/user/appointments/${id}/time-vote`);
-        if (!response.ok) throw new Error("Failed to fetch appointment time");
+        if (!response.ok)
+          throw new Error("시간투표 리스트 불러오기를 실패했습니다.");
 
         const data = await response.json();
         const startDate = new Date(data.start_time);
