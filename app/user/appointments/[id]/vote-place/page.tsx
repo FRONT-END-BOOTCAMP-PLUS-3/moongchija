@@ -3,7 +3,6 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import ArrowHeader from "@/components/header/ArrowHeader";
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
 import { useTimeVote } from "@/context/TimeVoteContext";
@@ -99,7 +98,6 @@ const VotePlacePage: React.FC = () => {
   }
   return (
     <div className={styles.placeVoteContainer}>
-      <ArrowHeader />
       <div className={styles.mainBox}>
         <p className={styles.subtitle}>원하는 약속 장소를 선택해주세요.</p>
 

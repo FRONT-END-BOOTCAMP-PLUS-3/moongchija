@@ -5,7 +5,6 @@ import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import ArrowHeader from "@/components/header/ArrowHeader";
 import { getUserIdClient } from "@/utils/supabase/client";
 import Loading from "@/components/loading/Loading";
 
@@ -85,7 +84,6 @@ const VoteResultPage = () => {
 
   return (
     <div className={styles.voteResultContainer}>
-      <ArrowHeader />
       <div className={styles.mainBox}>
         <p className={styles.subtitle}>
           현재까지{" "}
