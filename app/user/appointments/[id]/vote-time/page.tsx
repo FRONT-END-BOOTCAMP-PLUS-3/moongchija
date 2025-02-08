@@ -6,7 +6,6 @@ import Button from "@/components/button/Button";
 import { useParams, useRouter } from "next/navigation";
 import { useTimeVote } from "@/context/TimeVoteContext";
 import Loading from "@/components/loading/Loading";
-import { getUserIdClient } from "@/utils/supabase/client";
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter();
@@ -24,23 +23,6 @@ const VoteTimePage: React.FC = () => {
   const dragValue = useRef<boolean>(false);
   const lastTouchedCell = useRef<{ row: number; col: number } | null>(null); // 터치 드래그 중 같은 셀을 반복적으로 처리하지 않도록 방지
   const touchTimeout = useRef<NodeJS.Timeout | null>(null); // 단순 터치인지 드래그인지 구분
-
-  // 로그인 상태 확인
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const user = await getUserIdClient();
-        if (!user) {
-          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-          router.push("/login");
-          return;
-        }
-      } catch (error) {
-        console.error("❌ 유저 정보 가져오기 실패:", error);
-      }
-    };
-    fetchUserId();
-  }, []);
 
   useEffect(() => {
     const fetchAppointmentTime = async () => {
