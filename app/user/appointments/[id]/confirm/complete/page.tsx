@@ -16,6 +16,7 @@ const CompletePage = () => {
   const [isCopiedLink, setIsCopiedLink] = useState(false);
   const [isCopiedRoomId, setIsCopiedRoomId] = useState(false);
 
+  // 복사 함수, pc환경에서만 작동
   // const handleCopyInviteLink = async () => {
   //   try {
   //     await navigator.clipboard.writeText(
