@@ -26,9 +26,9 @@
         }
       }
       div {
-        background-color: #fff;
+        background-color: var(--background-color);
         button {
-          background-color: #fff;
+          background-color: var(--background-color);
         }
       }
     }
@@ -50,7 +50,7 @@
 
           &:focus {
             outline: none;
-            border-color: #6c63ff;
+            border-color: var(--purple-color);
           }
         }
 
@@ -75,7 +75,7 @@
           cursor: pointer;
           &:focus {
             outline: none;
-            border-color: #6c63ff;
+            border-color: var(--purple-color);
           }
           option {
             text-align: center;
@@ -138,7 +138,7 @@
         }
 
         .confirm {
-          background: #007aff;
+          background: var(--primary-color);
           color: white;
         }
       }

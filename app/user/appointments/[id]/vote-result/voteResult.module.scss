@@ -33,7 +33,7 @@
         }
         .selected {
           background-color: var(--primary-color);
-          color: #fff;
+          color: var(--background-color);
         }
         .timeButton {
           border-radius: 10 0 0 10;

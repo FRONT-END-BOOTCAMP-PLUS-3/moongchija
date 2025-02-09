@@ -1,7 +1,7 @@
 .adminContainer {
   .title {
-    color: #fff;
-    font-size: 20px;
+    color: var(--background-color);
+    font-size: var(--font-size-md);
     font-weight: bold;
     font-family: var(--font-sub);
   }
@@ -23,13 +23,13 @@
         background-color: #f0f0f0;
         color: #333;
         &:hover {
-          background-color: #007bff;
-          color: white;
+          background-color: var(--primary-color);
+          color: var(--background-color);
         }
       }
       .active {
-        background-color: #007bff;
-        color: white;
+        background-color: var(--primary-color);
+        color: var(--background-color);
       }
     }
   }
