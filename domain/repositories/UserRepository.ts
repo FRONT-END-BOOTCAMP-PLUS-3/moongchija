@@ -6,6 +6,7 @@ export interface UserRepository {
     nickname: string,
     emoji: string,
     provider: string,
+    type: string,
     kakao_id?: number,
     password?: string
   ): Promise<User & { access_token: string }>;

@@ -10,17 +10,25 @@ interface AppointmentListProps {
 }
 
 const AppointmentList: React.FC<AppointmentListProps> = ({ appointments }) => {
-
   return (
     <div className={styles.container}>
       {appointments.map((data, index) => (
-        <Link href={`appointments/${data.id}/${data.isVote ? data.status === 'confirmed' ? 'information' : 'vote-result' : 'vote-time'}`} key={index}>
+        <Link
+          href={`appointments/${data.id}/${
+            data.status === "confirmed"
+              ? "information"
+              : data.isVote
+              ? "vote-result"
+              : "vote-time"
+          }`}
+          key={index}
+        >
           <AppointmentCard appointment={data} />
         </Link>
       ))}
       {/* 약속이 없을 경우 */}
       {appointments.length === 0 && (
-        <p className={styles.message}>아직 약속이 없습니다.</p>
+        <p className={styles.message}>약속이 비어있습니다.</p>
       )}
     </div>
   );

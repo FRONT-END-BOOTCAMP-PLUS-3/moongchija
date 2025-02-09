@@ -14,7 +14,7 @@
   }
 
   .imageCard {
-    background: #fff;
+    background: var(--background-color);
     padding: 10px;
     border-radius: 10px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
@@ -28,35 +28,34 @@
       width: 100%;
       img {
         width: 100%;
-        height: auto;
-        max-height: 150px;
+        height: 150px;
         border-radius: 5px;
         object-fit: cover;
       }
     }
 
     p {
-      font-size: 12px;
+      font-size: var(--font-size-xs);
       color: #666;
     }
 
     .deleteButton {
-      background-color: #dc3545;
-      color: white;
+      background-color: var(--mypage-pink);
+      color: var(--background-color);
       border: none;
       padding: 5px 10px;
       border-radius: 5px;
       cursor: pointer;
       font-size: 14px;
       &:hover {
-        background-color: #c82333;
+        background-color: #a71d2a;
       }
     }
   }
 
   .noImages {
     text-align: center;
-    font-size: 16px;
+    font-size: var(--font-size-sm);
     color: #666;
     margin-top: 20px;
   }

@@ -28,6 +28,7 @@ export class DfSocialLoginUseCase {
         user_email,
         uniqueNickname,
         emoji,
+        "user",
         "kakao",
         kakao_id
       );

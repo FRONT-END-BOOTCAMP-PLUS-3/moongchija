@@ -3,13 +3,12 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import { FaMapMarkerAlt } from "react-icons/fa";
-import ArrowHeader from "@/components/header/ArrowHeader";
 import styles from "./votePlace.module.scss";
 import Button from "@/components/button/Button";
 import { useTimeVote } from "@/context/TimeVoteContext";
-import { getUserIdClient } from "@/utils/supabase/client"; // ✅ `userId` 가져오는 함수
 import { PlaceVote } from "@/domain/entities/PlaceVote";
 import Loading from "@/components/loading/Loading";
+import { useUser } from "@/context/UserContext";
 
 const VotePlacePage: React.FC = () => {
   const router = useRouter();
@@ -17,26 +16,9 @@ const VotePlacePage: React.FC = () => {
   const id = params.id as string;
 
   const { selectedTimes } = useTimeVote();
+  const { user } = useUser();
   const [places, setPlaces] = useState<PlaceVote[]>([]);
   const [selectedPlace, setSelectedPlace] = useState<number>();
-  const [userId, setUserId] = useState<string | null>(null);
-
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const user = await getUserIdClient();
-        if (!user) {
-          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-          router.push("/login");
-          return;
-        }
-        setUserId(user);
-      } catch (error) {
-        console.error("❌ 유저 정보 가져오기 실패:", error);
-      }
-    };
-    fetchUserId();
-  }, []);
 
   useEffect(() => {
     const fetchPlaces = async () => {
@@ -63,7 +45,7 @@ const VotePlacePage: React.FC = () => {
       alert("❌ 장소를 선택해주세요.");
       return;
     }
-    if (!userId) {
+    if (!user) {
       alert("❌ 로그인이 필요합니다.");
       router.push("/login");
       return;
@@ -73,7 +55,7 @@ const VotePlacePage: React.FC = () => {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          userId,
+          userId: user.id,
           timeVotes: selectedTimes.map((time) => ({ time })),
           placeVotes: [{ placeId: selectedPlace }],
         }),
@@ -99,7 +81,6 @@ const VotePlacePage: React.FC = () => {
   }
   return (
     <div className={styles.placeVoteContainer}>
-      <ArrowHeader />
       <div className={styles.mainBox}>
         <p className={styles.subtitle}>원하는 약속 장소를 선택해주세요.</p>
 

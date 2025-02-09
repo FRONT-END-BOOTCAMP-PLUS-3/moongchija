@@ -1,9 +1,8 @@
 .schedule {
-  height: 62vh;
-  margin-left: 3%;
+  height: 60vh;
   .row {
     display: flex;
-    margin-bottom: 10px;
+    margin-bottom: 1vh;
     min-width: fit-content; // 날짜가 많아져도 간견유지
     .timeLabel {
       width: 40px;
@@ -91,9 +90,9 @@
     margin-top: 4vh;
     span {
       font-size: var(--font-size-md);
+      font-weight: bold;
       position: sticky;
       top: 0;
-      // background: #fff;
       background: var(--grey-2-color);
       display: block;
     }

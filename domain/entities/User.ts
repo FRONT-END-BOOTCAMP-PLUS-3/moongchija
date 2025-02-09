@@ -6,5 +6,6 @@ export interface User {
   emoji: string;
   created_at: Date;
   provider: string;
+  type: string;
   kakao_id?: number;
 }

@@ -1,11 +1,19 @@
 "use client";
 import styles from "./AppointmentCount.module.scss";
 
-const AppointmentCount = ({ color, text }: { color: string; text: string }) => {
+const AppointmentCount = ({
+  color,
+  text,
+  count,
+}: {
+  color: string;
+  text: string;
+  count: number;
+}) => {
   return (
     <div className={`${styles.appointmentContainer} ${styles[color]}`}>
       <div className={styles.spanBox}>
-        <span>7</span>
+        <span>{count}</span>
         <span>{text}</span>
       </div>
     </div>

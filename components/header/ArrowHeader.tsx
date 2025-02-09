@@ -2,7 +2,7 @@
 
 import React from "react";
 import { FaArrowLeftLong } from "react-icons/fa6";
-import Header from "./Header";
+import Header from "./components/Header";
 
 interface ArrowHeaderProps {
   setValue?: React.Dispatch<React.SetStateAction<number>>;

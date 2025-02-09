@@ -5,8 +5,6 @@ import TimeResult from "./components/TimeResult";
 import PlaceResult from "./components/PlaceResult";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-import ArrowHeader from "@/components/header/ArrowHeader";
-import { getUserIdClient } from "@/utils/supabase/client";
 import Loading from "@/components/loading/Loading";
 
 interface TimeVoteResult {
@@ -64,28 +62,11 @@ const VoteResultPage = () => {
 
     fetchVoteResult();
   }, [id]);
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const user = await getUserIdClient();
-        if (!user) {
-          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-          router.push("/login");
-          return;
-        }
-        setUserId(user);
-      } catch (error) {
-        console.error("❌ 유저 정보 가져오기 실패:", error);
-      }
-    };
-    fetchUserId();
-  }, []);
 
   if (!resultData) return <Loading />;
 
   return (
     <div className={styles.voteResultContainer}>
-      <ArrowHeader />
       <div className={styles.mainBox}>
         <p className={styles.subtitle}>
           현재까지{" "}

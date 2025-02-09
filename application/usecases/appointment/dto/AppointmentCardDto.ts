@@ -9,5 +9,5 @@ export interface AppointmentCardDto {
     isCreator: boolean;
     extraParticipants: number;
     status: "voting" | "confirmed"
-    isVote: boolean // 현재 유저가 해당 약속에 대한 투표 유무무
+    isVote: boolean // 현재 유저가 해당 약속에 대한 투표 유무
   }

@@ -50,6 +50,27 @@
         text-overflow: ellipsis;
       }
     }
+
+    .linkWrapper {
+      display: flex;
+      justify-content: end;
+
+      .copyButton {
+        background: none;
+        color: var(--grey-7-color);
+        border: none;
+        border-radius: 5px;
+        padding: 10px;
+        cursor: pointer;
+        font-size: var(--font-size-xs);
+        display: flex;
+        gap: 2px;
+
+        &:hover {
+          color: var(--primary-color);
+        }
+      } // copyButton
+    } // linkWrapper
   } // rightBox
 
   .dateWrapper {

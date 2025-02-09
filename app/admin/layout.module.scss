@@ -1,33 +1,36 @@
 .adminContainer {
-  padding: 24px;
   .title {
-    font-size: 24px;
+    color: var(--background-color);
+    font-size: var(--font-size-md);
     font-weight: bold;
-    margin: 20px 0;
+    font-family: var(--font-sub);
   }
-  .nav {
-    display: flex;
-    justify-content: space-between;
-    border-bottom: 2px solid #ddd;
-    padding-bottom: 8px;
-    margin-bottom: 16px;
-    .tab {
-      width: 30%;
-      height: 40px;
-      text-align: center;
-      line-height: 250%;
-      border-radius: 4px;
-      text-decoration: none;
-      background-color: #f0f0f0;
-      color: #333;
-      &:hover {
-        background-color: #007bff;
-        color: white;
+  .mainBox {
+    padding: 24px;
+    .nav {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 2px solid #ddd;
+      padding-bottom: 8px;
+      margin-bottom: 16px;
+      .tab {
+        width: 30%;
+        height: 40px;
+        text-align: center;
+        line-height: 250%;
+        border-radius: 4px;
+        text-decoration: none;
+        background-color: #f0f0f0;
+        color: #333;
+        &:hover {
+          background-color: var(--primary-color);
+          color: var(--background-color);
+        }
       }
-    }
-    .active {
-      background-color: #007bff;
-      color: white;
+      .active {
+        background-color: var(--primary-color);
+        color: var(--background-color);
+      }
     }
   }
 }

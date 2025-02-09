@@ -2,11 +2,11 @@
 
 import styles from "./complete.module.scss";
 import { useParams, useRouter } from "next/navigation";
-import Image from "next/image";
 import { useState } from "react";
 import Button from "@/components/button/Button";
-import ArrowHeader from "@/components/header/ArrowHeader";
 import Moongchi from "@/components/moongchi/Moongchi";
+import IconHeader from "@/components/header/IconHeader";
+import { copyToClipboard } from "@/utils/copy/copyUtils";
 
 const CompletePage = () => {
   const params = useParams();
@@ -16,31 +16,51 @@ const CompletePage = () => {
   const [isCopiedLink, setIsCopiedLink] = useState(false);
   const [isCopiedRoomId, setIsCopiedRoomId] = useState(false);
 
-  const handleCopyInviteLink = async () => {
-    try {
-      await navigator.clipboard.writeText(
-        `http://localhost:3000/user/appointments/${appointmentId}/entry`
-      );
-      setIsCopiedLink(true);
-      setTimeout(() => setIsCopiedLink(false), 2000);
-    } catch (error) {
-      alert("초대링크 복사에 실패했습니다.");
-    }
+  // 복사 함수, pc환경에서만 작동
+  // const handleCopyInviteLink = async () => {
+  //   try {
+  //     await navigator.clipboard.writeText(
+  //       `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments/${appointmentId}/entry`
+  //     );
+  //     setIsCopiedLink(true);
+  //     setTimeout(() => setIsCopiedLink(false), 2000);
+  //   } catch (error) {
+  //     alert("초대링크 복사에 실패했습니다.");
+  //   }
+  // };
+
+  // const handleCopyRoomId = async () => {
+  //   try {
+  //     await navigator.clipboard.writeText(appointmentId);
+  //     setIsCopiedRoomId(true);
+  //     setTimeout(() => setIsCopiedRoomId(false), 2000);
+  //   } catch (error) {
+  //     alert("방번호 복사에 실패했습니다.");
+  //   }
+  // };
+
+  // 모바일 환경에서도 작동하는 복사 함수
+  // ✅ 초대링크 복사
+  const handleCopyInviteLink = () => {
+    copyToClipboard(
+      `${process.env.NEXT_PUBLIC_SITE_URL}/user/appointments/${appointmentId}/entry`,
+      setIsCopiedLink,
+      "초대링크 복사에 실패했습니다."
+    );
   };
 
-  const handleCopyRoomId = async () => {
-    try {
-      await navigator.clipboard.writeText(appointmentId);
-      setIsCopiedRoomId(true);
-      setTimeout(() => setIsCopiedRoomId(false), 2000);
-    } catch (error) {
-      alert("방번호 복사에 실패했습니다.");
-    }
+  // ✅ 방번호 복사
+  const handleCopyRoomId = () => {
+    copyToClipboard(
+      appointmentId,
+      setIsCopiedRoomId,
+      "방번호 복사에 실패했습니다."
+    );
   };
 
   return (
     <div className={styles.completeContainer}>
-      <ArrowHeader />
+      <IconHeader />
       <div className={styles.mainBox}>
         <div className={styles.wrapLogo}>
           <Moongchi />

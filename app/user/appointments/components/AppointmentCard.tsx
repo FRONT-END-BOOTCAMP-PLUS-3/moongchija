@@ -2,6 +2,7 @@
 
 import styles from "./AppointmentCard.module.scss";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
+import { FiCopy } from "react-icons/fi";
 import {
   calculateCountdown,
   formatDate,
@@ -15,6 +16,8 @@ interface AppointmentCardProps {
 }
 
 const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
+  const basicUrl = process.env.NEXT_PUBLIC_SITE_URL;
+
   const {
     title,
     startDate,
@@ -32,6 +35,18 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     if (countdown === "종료") return styles.end;
     if (countdown === "D-DAY") return styles.dDay;
     else return styles.count;
+  };
+
+  const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
+    e.preventDefault();
+    e.stopPropagation();
+
+    try {
+      await navigator.clipboard.writeText(text);
+      alert(`✅ 초대링크가 복사되었습니다! ${text}`);
+    } catch {
+      alert("초대링크 복사 실패");
+    }
   };
 
   return (
@@ -87,6 +102,20 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
             <>
               <FaMapMarkerAlt color={"rgb(90, 90, 244)"} />
               <span>{confirmPlace}</span>
+            </>
+          )}
+        </div>
+        {/* 링크 */}
+        <div className={styles.linkWrapper}>
+          {!confirmPlace && (
+            <>
+              <button
+                onClick={(e) => handleCopy(e, `${basicUrl}/user/appointments/${appointment.id}/entry`)}
+                className={styles.copyButton}
+              >
+                <FiCopy />
+                <p>복사</p>
+              </button>
             </>
           )}
         </div>

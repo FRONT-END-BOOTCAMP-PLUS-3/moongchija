@@ -1,47 +1,40 @@
 .container {
-  width: 100%;
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
   .mainBox {
     width: 100%;
-    padding: 30px 40px 20px;
+    padding: 30px 30px 10px;
 
     p {
       font-size: var(--font-size-md);
-      font-weight: 500;
+      font-weight: bold;
       margin-bottom: 8px;
       display: block;
     }
 
     .title {
-      margin-bottom: 30px;
+      margin-bottom: 3vh;
       font-weight: bold;
     }
     .datePickerWrapper {
-      margin-bottom: 20px;
+      margin-bottom: 9vh;
 
       & > div {
         width: 100%;
         height: 30vh;
-        margin-top: 20px;
+        margin-top: 2px;
         div {
           width: auto;
         }
       }
       div {
-        background-color: #fff;
+        background-color: var(--background-color);
         button {
-          background-color: #fff;
+          background-color: var(--background-color);
         }
       }
     }
     .timeSelectWrapper {
-      margin-top: 5vh;
-
       .timePicker {
-        margin-top: 20px;
+        margin-top: 2vh;
         display: flex;
         align-items: center;
         justify-content: center;
@@ -57,7 +50,7 @@
 
           &:focus {
             outline: none;
-            border-color: #6c63ff;
+            border-color: var(--purple-color);
           }
         }
 
@@ -68,9 +61,9 @@
       }
     }
     .placeSelectWrapper {
-      margin-top: 5vh;
+      margin-top: 3vh;
       .placePicker {
-        margin-top: 20px;
+        margin-top: 2vh;
         select {
           width: 100%;
           height: 50px;
@@ -82,7 +75,7 @@
           cursor: pointer;
           &:focus {
             outline: none;
-            border-color: #6c63ff;
+            border-color: var(--purple-color);
           }
           option {
             text-align: center;
@@ -93,7 +86,7 @@
     }
     .wrapButton {
       width: 100%;
-      margin-top: 10vh;
+      margin-top: 5vh;
     }
   }
   .modalOverlay {
@@ -145,7 +138,7 @@
         }
 
         .confirm {
-          background: #007aff;
+          background: var(--primary-color);
           color: white;
         }
       }

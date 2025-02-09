@@ -15,11 +15,12 @@ const LoginForm = () => {
     onChange: handleChangePassword,
   } = useInput("");
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
-
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/auth/login", {
@@ -34,6 +35,7 @@ const LoginForm = () => {
         const { error } = await response.json();
         setErrorMessage(error);
         setPassword("");
+        setIsLoading(false);
         return;
       }
 
@@ -44,6 +46,7 @@ const LoginForm = () => {
       }
     } catch (error) {
       console.log(error);
+      setIsLoading(false);
     }
   };
 
@@ -65,7 +68,8 @@ const LoginForm = () => {
           placeholder="비밀번호를 입력해주세요"
         />
         <p className={styles.loginErrorMessage}>{errorMessage}</p>
-        <Button text="로그인" size="lg" />
+
+        <Button text={isLoading ? "로그인 중..." : "로그인"} size="lg" />
       </form>
     </>
   );

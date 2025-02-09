@@ -12,8 +12,8 @@
 
     .subtitle {
       font-size: var(--font-size-md);
-      font-weight: 500;
-      margin: 20px 0 30px;
+      font-weight: bold;
+      margin: 4vh 0 3vh;
     }
     .wrapTapButton {
       display: flex;
@@ -33,7 +33,7 @@
         }
         .selected {
           background-color: var(--primary-color);
-          color: #fff;
+          color: var(--background-color);
         }
         .timeButton {
           border-radius: 10 0 0 10;

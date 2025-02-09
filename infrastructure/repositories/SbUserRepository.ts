@@ -69,6 +69,7 @@ export class SbUserRepository implements UserRepository {
     nickname: string,
     emoji: string,
     provider: string,
+    type: string,
     kakao_id?: number,
     hashedPassword?: string
   ): Promise<User & { access_token: string }> {
@@ -84,6 +85,7 @@ export class SbUserRepository implements UserRepository {
           emoji,
           kakao_id,
           provider,
+          type,
         },
       ])
       .select();
@@ -104,6 +106,7 @@ export class SbUserRepository implements UserRepository {
       created_at: new Date(),
       access_token,
       provider,
+      type,
       kakao_id,
       password: hashedPassword ?? "",
     };
@@ -284,7 +287,6 @@ export class SbUserRepository implements UserRepository {
       }
 
       return updatedUser;
-
     } catch (error) {
       if (error instanceof Error) {
         throw new Error(

@@ -20,6 +20,7 @@ export class DfSignUpUsecase {
 
     const emoji = await this.userRepository.createUserRandomEmoji();
 
+    const type = "user";
     const provider = "email";
 
     const userWithToken = await this.userRepository.createUser(
@@ -27,6 +28,7 @@ export class DfSignUpUsecase {
       uniqueNickname,
       emoji,
       provider,
+      type,
       undefined,
       hashedPassword
     );

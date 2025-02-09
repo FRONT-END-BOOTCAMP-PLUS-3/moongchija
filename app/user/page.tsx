@@ -9,9 +9,11 @@ import UserProfile from "./components/UserProfile";
 import MyCalendar from "./components/MyCalendar";
 import IconHeader from "@/components/header/IconHeader";
 import UserAppointmentCount from "./components/UserAppointmentCount";
+import { Event } from "@/types/Event";
 
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [appointments, setAppointments] = useState<Event[]>([]);
   const handleopenModal = () => setIsModalOpen(true);
   const handlecloseModal = () => setIsModalOpen(false);
 
@@ -21,10 +23,10 @@ const MyPagePage = () => {
       <div className={styles.myPagecontainer}>
         <div className={styles.profileWrapper}>
           <UserProfile />
-          <UserAppointmentCount />
+          <UserAppointmentCount appointments={appointments} />
         </div>
         <div className={styles.calendarWrapper}>
-          <MyCalendar />
+          <MyCalendar onAppointmentsFetch={setAppointments} />
         </div>
 
         <div className={styles.deleteAccountButton}>

@@ -12,12 +12,14 @@ interface Props {
 }
 
 const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
+  const basicUrl = process.env.NEXT_PUBLIC_SITE_URL;
   const router = useRouter();
   const [copyActive, setCopyActive] = useState<boolean>(false);
+  const [copiedText, setCopiedText] = useState<string | null>(null);
+
   const { appointment } = useCreateAppointment();
   const appointmentId = appointment.id ? appointment.id : "";
 
-  const [copiedText, setCopiedText] = useState<string | null>(null);
 
   const handleCopy = async (text: string, type: "link" | "id") => {
     try {
@@ -51,7 +53,7 @@ const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
           <button
             onClick={() =>
               handleCopy(
-                `http://localhost:3000/user/appointments/${appointmentId}/entry`,
+                `${basicUrl}/user/appointments/${appointmentId}/entry`,
                 "link"
               )
             }

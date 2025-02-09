@@ -4,17 +4,15 @@ import { useState, useRef, useEffect } from "react";
 import styles from "./voteTime.module.scss";
 import Button from "@/components/button/Button";
 import { useParams, useRouter } from "next/navigation";
-import ArrowHeader from "@/components/header/ArrowHeader";
 import { useTimeVote } from "@/context/TimeVoteContext";
 import Loading from "@/components/loading/Loading";
-import { getUserIdClient } from "@/utils/supabase/client";
 
 const VoteTimePage: React.FC = () => {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
 
-  const { selectedTimes, setSelectedTimes } = useTimeVote(); // Context 사용
+  const { setSelectedTimes } = useTimeVote(); // Context 사용
 
   const [dateList, setDateList] = useState<string[]>([]);
   const [timeList, setTimeList] = useState<number[]>([]);
@@ -23,23 +21,8 @@ const VoteTimePage: React.FC = () => {
   // 드래그 상태 관리
   const isDragging = useRef(false);
   const dragValue = useRef<boolean>(false);
-
-  // 로그인 상태 확인
-  useEffect(() => {
-    const fetchUserId = async () => {
-      try {
-        const user = await getUserIdClient();
-        if (!user) {
-          alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-          router.push("/login");
-          return;
-        }
-      } catch (error) {
-        console.error("❌ 유저 정보 가져오기 실패:", error);
-      }
-    };
-    fetchUserId();
-  }, []);
+  const lastTouchedCell = useRef<{ row: number; col: number } | null>(null); // 터치 드래그 중 같은 셀을 반복적으로 처리하지 않도록 방지
+  const touchTimeout = useRef<NodeJS.Timeout | null>(null); // 단순 터치인지 드래그인지 구분
 
   useEffect(() => {
     const fetchAppointmentTime = async () => {
@@ -130,7 +113,61 @@ const VoteTimePage: React.FC = () => {
     }
   };
 
-  const handleMouseUp = () => {
+  // ✅ 터치 이벤트
+  const handleTouchStart = (
+    event: React.TouchEvent,
+    row: number,
+    col: number
+  ) => {
+    isDragging.current = true;
+    dragValue.current = !gridSelected[row][col];
+
+    // ✅ 기존 timeout이 있다면 클리어
+    if (touchTimeout.current) {
+      clearTimeout(touchTimeout.current);
+    }
+
+    // ✅ 터치 후 100ms 내에 `touchmove`가 발생하지 않으면 단일 선택 적용
+    touchTimeout.current = setTimeout(() => {
+      if (isDragging.current) {
+        toggleCell(row, col);
+        lastTouchedCell.current = { row, col };
+      }
+    }, 100);
+  };
+
+  // ✅ 터치 이동 시 여러 셀을 선택하도록 개선
+  const handleTouchMove = (event: React.TouchEvent) => {
+    if (!isDragging.current) return;
+
+    // ✅ 단순한 터치라면 `setTimeout` 해제 (즉, 드래그로 간주)
+    if (touchTimeout.current) {
+      clearTimeout(touchTimeout.current);
+      touchTimeout.current = null;
+    }
+
+    const touch = event.touches[0];
+    const target = document.elementFromPoint(
+      touch.clientX,
+      touch.clientY
+    ) as HTMLElement;
+
+    if (target && target.dataset.row && target.dataset.col) {
+      const touchRow = parseInt(target.dataset.row);
+      const touchCol = parseInt(target.dataset.col);
+
+      if (
+        !lastTouchedCell.current ||
+        lastTouchedCell.current.row !== touchRow ||
+        lastTouchedCell.current.col !== touchCol
+      ) {
+        toggleCell(touchRow, touchCol, true);
+        lastTouchedCell.current = { row: touchRow, col: touchCol };
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
     isDragging.current = false;
   };
 
@@ -161,8 +198,11 @@ const VoteTimePage: React.FC = () => {
   }
 
   return (
-    <div className={styles.timeVoteContainer} onMouseUp={handleMouseUp}>
-      <ArrowHeader />
+    <div
+      className={styles.timeVoteContainer}
+      onMouseUp={handleTouchEnd}
+      onTouchEnd={handleTouchEnd}
+    >
       <div className={styles.mainBox}>
         <p className={styles.subtitle}>참여 가능한 시간을 선택해주세요.</p>
         <p className={styles.description}>
@@ -199,6 +239,7 @@ const VoteTimePage: React.FC = () => {
             <div
               className={styles.grid}
               style={{ gridTemplateColumns: `repeat(${dateList.length}, 1fr)` }}
+              onTouchMove={handleTouchMove}
             >
               {timeList.map((_, rowIndex) =>
                 dateList.map((_, colIndex) => (
@@ -209,6 +250,11 @@ const VoteTimePage: React.FC = () => {
                     }`}
                     onMouseDown={() => handleMouseDown(rowIndex, colIndex)}
                     onMouseEnter={() => handleMouseEnter(rowIndex, colIndex)}
+                    onTouchStart={(event) =>
+                      handleTouchStart(event, rowIndex, colIndex)
+                    }
+                    data-row={rowIndex}
+                    data-col={colIndex}
                   ></div>
                 ))
               )}
