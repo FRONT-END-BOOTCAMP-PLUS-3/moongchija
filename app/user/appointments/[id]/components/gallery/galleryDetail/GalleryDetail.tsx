@@ -3,9 +3,10 @@
 import Image from "next/image";
 import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Button from "@/components/button/Button";
 import { Dispatch, SetStateAction } from "react";
+import { getUserIdClient } from "@/utils/supabase/client"
 
 export interface ImagesDto {
   id: number;
@@ -30,6 +31,7 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
   const [selectedImg, setSelectedImg] = useState<{ index: number; id: number }>(
     { index: 0, id: 0 }
   );
+  const [userId, setUserId] = useState<string | null>(null); 
 
   const handleImageClick = (index: number, photoId: number) => {
     setIsModalOpen(true);
@@ -49,6 +51,16 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
     }
   };
 
+
+    useEffect(() => {
+      const fetchUserId = async () => {
+        const fetchedUserId = await getUserIdClient();
+        setUserId(fetchedUserId); 
+      };
+      fetchUserId();
+    }, []);
+  
+
   return (
     <div>
       <div className={styles.galleryContainer}>
@@ -58,7 +70,7 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
               {/* 사진첩 사진 */}
               <Image
                 src={photo.image_url}
-                alt={`Photo by ${photo.creater_id}`}
+                alt={`Photo by ${photo.nickname}`}
                 width={190}
                 height={190}
                 className={styles.galleryImage}
@@ -87,6 +99,7 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
                 />
               </div>
 
+              {userId === galleryData[selectedImg.index]?.creater_id ? ( 
               <div className={styles.deleteButton}>
                 <Button
                   text="삭제하기"
@@ -95,7 +108,7 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
                   active={true}
                   onClick={() => handleDelete(selectedImg.id)}
                 />
-              </div>
+              </div> )  : null}
             </div>
           </div>
         </Modal>
