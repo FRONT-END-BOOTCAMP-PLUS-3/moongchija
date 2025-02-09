@@ -28,12 +28,6 @@ export async function GET(req: NextRequest) {
 
     const settlementInfo = await usecase.execute(appointmentId);
 
-    if (!settlementInfo) {
-      return NextResponse.json(
-        { error: "Settlement not found" },
-        { status: 404 }
-      );
-    }
 
     return NextResponse.json(settlementInfo);
   } catch (error) {
