@@ -17,22 +17,20 @@ const InformationPage = () => {
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
 
+  const fetchInfo = async () => {
+    try {
+      const response = await fetch(`/api/user/appointments/${id}/information`);
+      if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
+
+      const data = await response.json();
+      setInfoData(data);
+      console.log(data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   useEffect(() => {
-    const fetchInfo = async () => {
-      try {
-        const response = await fetch(
-          `/api/user/appointments/${id}/information`
-        );
-        if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-
-        const data = await response.json();
-        setInfoData(data);
-        console.log(data);
-      } catch (error) {
-        console.error(error);
-      }
-    };
-
     if (id) fetchInfo();
   }, [id]);
 
@@ -45,7 +43,6 @@ const InformationPage = () => {
     }
   };
 
-
   const handleViewResult = () => {
     router.push(`/user/appointments/${id}/vote-result`);
   };
@@ -53,12 +50,31 @@ const InformationPage = () => {
   const handleChangeSchedule = () => {
     router.push(`/user/appointments/${id}/confirm`);
   };
-  const handleDeleteRoom = () => {
-    const confirmation = confirm(
-      "방을 삭제하면 해당 약속과 관련된 정보가 전부 사라지게 됩니다. 방을 정말 삭제 하시겠습니까?"
-    );
-    if (confirmation) {
-      alert("방이 삭제되었습니다.");
+
+  const handleDeleteRoom = async (appointmentId: number) => {
+    if (!confirm("정말 이 약속을 삭제하시겠습니까?")) return;
+
+    try {
+      const res = await fetch(`/api/admin/appointments/${appointmentId}`, {
+        method: "DELETE",
+      });
+
+      if (!res.ok) throw new Error("약속 삭제 실패");
+
+      const confirmation = confirm(
+        "방을 삭제하면 해당 약속과 관련된 정보가 전부 사라지게 됩니다. 방을 정말 삭제 하시겠습니까?"
+      );
+
+      if (confirmation) {
+        alert("방이 삭제되었습니다.");
+        setInfoData(undefined); // UI에서 즉시 반영
+        await fetchInfo(); // 최신 데이터 다시 불러오기
+      } else {
+        alert("약속 삭제를 취소했습니다.");
+      }
+    } catch (error) {
+      console.error("방 삭제 중 오류 발생:", error);
+      alert("방 삭제 중 오류가 발생했습니다.");
     }
   };
 
@@ -81,7 +97,10 @@ const InformationPage = () => {
         ) : (
           <>
             <InformationDetail informationData={infoData} />
-            <NoticeDetail noticeData={infoData.notices} appointmentId={Number(id)}  />
+            <NoticeDetail
+              noticeData={infoData.notices}
+              appointmentId={Number(id)}
+            />
             <div className={styles.buttonWrapper}>
               <div className={styles.copyButton}>
                 <Button
@@ -122,7 +141,7 @@ const InformationPage = () => {
                     size="sm"
                     color="--exit-red"
                     active={true}
-                    onClick={handleDeleteRoom}
+                    onClick={() => handleDeleteRoom(Number(id))} 
                   />
                 </div>
 
