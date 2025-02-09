@@ -1,6 +1,7 @@
 import { NextResponse, NextRequest } from "next/server";
 import { SbAppointmentImageRepository } from "@/infrastructure/repositories/SbAppointmentImageRepository";
 import { DfGetImageUsecase } from "@/application/usecases/appointmentImage/DfGetImageUsecase";
+import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
 export async function GET(req: NextRequest, { params }: { params: { id: number } }) {
   try {
@@ -17,7 +18,8 @@ export async function GET(req: NextRequest, { params }: { params: { id: number }
     }
 
     const imageRepo = new SbAppointmentImageRepository();
-    const usecase = new DfGetImageUsecase(imageRepo);
+    const userRepo =  new SbUserRepository();
+    const usecase = new DfGetImageUsecase(imageRepo, userRepo);
 
     // 특정 약속의 이미지 조회
     const images = await usecase.execute(appointmentId);

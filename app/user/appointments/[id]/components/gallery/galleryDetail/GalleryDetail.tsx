@@ -5,43 +5,68 @@ import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
 import { FC, useState } from "react";
 import Button from "@/components/button/Button";
-import { ImageListDto } from "@/application/usecases/appointmentImage/dto/ImageListDto";
+import { Dispatch, SetStateAction } from "react";
 
-
-
-interface GalleryDetailProps {
-  galleryData: ImageListDto[];
+export interface ImagesDto {
+  id: number;
+  appointment_id: number;
+  image_url: string;
+  creater_id: string;
+  created_at: Date;
+  nickname: string;
 }
 
-const GalleryDetail: FC<GalleryDetailProps> = ({ galleryData }) => {
-  const [isModalOpen, setIsModalOpen] = useState(false);
+interface GalleryDetailProps {
+  galleryData: ImagesDto[];
+  setGalleryData: Dispatch<SetStateAction<ImagesDto[]>>;
+}
 
-  const openModal = () => setIsModalOpen(true);
+const GalleryDetail: FC<GalleryDetailProps> = ({
+  galleryData,
+  setGalleryData,
+}) => {
+  console.log(galleryData);
+
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedImg, setSelectedImg] = useState<{ index: number; id: number }>(
+    { index: 0, id: 0 }
+  );
+
+  const handleImageClick = (index: number, photoId: number) => {
+    setIsModalOpen(true);
+    setSelectedImg({ index, id: photoId });
+  };
   const closeModal = () => setIsModalOpen(false);
 
-  const handleDelete = () => {
-    const confirmation = confirm("삭제하겠습니까?");
-    if (confirmation) {
-      alert("삭제되었습니다");
+  const handleDelete = async (id: number) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    const res = await fetch(`/api/admin/images/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setGalleryData(galleryData.filter((image) => image.id !== id));
+      setIsModalOpen(false);
+    } else {
+      alert("삭제 실패");
     }
-    closeModal();
   };
 
   return (
     <div>
       <div className={styles.galleryContainer}>
-        {galleryData.map((photo) => (
+        {galleryData.map((photo, index) => (
           <div key={photo.id} className={styles.photoCard}>
             <div className={styles.photos}>
+              {/* 사진첩 사진 */}
               <Image
                 src={photo.image_url}
                 alt={`Photo by ${photo.creater_id}`}
-                width={150}
-                height={150}
-                className={styles.image}
-                onClick={openModal}
+                width={190}
+                height={190}
+                className={styles.galleryImage}
+                onClick={() => handleImageClick(index, photo.id)}
               />
             </div>
+            <div key={photo.id}>{photo.nickname}</div>
           </div>
         ))}
       </div>
@@ -49,23 +74,27 @@ const GalleryDetail: FC<GalleryDetailProps> = ({ galleryData }) => {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className={styles.modalContainer}>
             <div className={styles.modalBox}>
+              <div className={styles.modalNickname}>
+                {galleryData[selectedImg.index]?.nickname}님의 사진
+              </div>
               <div className={styles.photo}>
-                {/* 모달 내에서 첫 번째 이미지를 예시로 보여줍니다. 필요에 따라 선택된 이미지를 보여주도록 수정하세요. */}
+                {/* 모달창 안 사진 */}
                 <Image
-                  src={galleryData[0]?.image_url || ""}
-                  alt={`Photo by ${galleryData[0]?.creater_id}`}
+                  src={galleryData[selectedImg.index]?.image_url || ""}
+                  alt={`Photo by ${galleryData[selectedImg.index]?.nickname}`}
                   width={360}
                   height={360}
-                  className={styles.image}
+                  className={styles.galleryModalImage}
                 />
               </div>
+
               <div className={styles.deleteButton}>
                 <Button
                   text="삭제하기"
                   size="sm"
                   color="--exit-red"
                   active={true}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(selectedImg.id)}
                 />
               </div>
             </div>
