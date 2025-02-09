@@ -11,35 +11,48 @@ import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
 import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 import { useRouter } from "next/navigation";
+import { getUserIdClient } from "@/utils/supabase/client"
+
+
 
 const InformationPage = () => {
   const { id } = useParams();
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
+  const [userId, setUserId] = useState<string | null>(null); 
+
+  
 
   const fetchInfo = async () => {
     try {
       const response = await fetch(`/api/user/appointments/${id}/information`);
       if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-
+    
       const data = await response.json();
       setInfoData(data);
-      console.log(data);
     } catch (error) {
       console.error(error);
-    }
+    } 
   };
 
   useEffect(() => {
     if (id) fetchInfo();
   }, [id]);
 
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const fetchedUserId = await getUserIdClient();
+      setUserId(fetchedUserId); 
+    };
+    fetchUserId();
+  }, []);
+
+
   const handleCopyRoomId = () => {
     if (id) {
       const roomId = id as string;
       navigator.clipboard.writeText(roomId);
       alert("방번호가 복사되었습니다.");
-      console.log(roomId);
     }
   };
 
@@ -67,8 +80,8 @@ const InformationPage = () => {
 
       if (confirmation) {
         alert("방이 삭제되었습니다.");
-        setInfoData(undefined); // UI에서 즉시 반영
-        await fetchInfo(); // 최신 데이터 다시 불러오기
+        setInfoData(undefined); 
+        await fetchInfo(); 
       } else {
         alert("약속 삭제를 취소했습니다.");
       }
@@ -123,6 +136,7 @@ const InformationPage = () => {
                   />
                 </div>
 
+                {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
                 <div className={styles.changeScheduleButton}>
                   <Button
                     text="일정 변경"
@@ -131,10 +145,12 @@ const InformationPage = () => {
                     active={true}
                     onClick={handleChangeSchedule}
                   />
-                </div>
+                </div>) : null}
               </div>
 
               <div className={styles.redButtonWrapper}>
+
+              {userId === infoData.owner_id ? (  // 방장이면, 방 삭제 가능
                 <div className={styles.deleteButton}>
                   <Button
                     text="삭제하기"
@@ -143,8 +159,9 @@ const InformationPage = () => {
                     active={true}
                     onClick={() => handleDeleteRoom(Number(id))} 
                   />
-                </div>
+                </div> ) : null}
 
+                {userId !== infoData.owner_id ? (  // 멤버면, 방 나가기
                 <div className={styles.exitButton}>
                   <Button
                     text="방 나가기"
@@ -153,7 +170,7 @@ const InformationPage = () => {
                     active={true}
                     onClick={handleExitRoom}
                   />
-                </div>
+                </div> ) : null}
               </div>
             </div>
           </>

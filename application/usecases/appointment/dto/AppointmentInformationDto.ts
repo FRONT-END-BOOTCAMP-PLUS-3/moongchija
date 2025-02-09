@@ -6,6 +6,7 @@ export interface AppointmentInformationDto {
   confirmPlace?: string;
   confirmPlaceUrl?: string;
   confirmDate?: Date;
+  owner_id: string;
   participants: {
     nickname: string;
     emoji: string;
