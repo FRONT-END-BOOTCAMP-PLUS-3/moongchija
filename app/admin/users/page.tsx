@@ -2,12 +2,16 @@
 
 import { useEffect, useState } from "react";
 import styles from "./users.module.scss";
+import { useRouter } from "next/navigation";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 interface User {
   id: string;
   email: string;
   nickname: string;
 }
+
+const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
 
 export default function UsersPage() {
   const [users, setUsers] = useState<User[]>([]);
@@ -16,6 +20,26 @@ export default function UsersPage() {
     "id"
   );
   const [searchQuery, setSearchQuery] = useState("");
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const currentUserId = await getUserIdClient();
+      setUserId(currentUserId);
+      if (currentUserId !== ADMIN_USER_ID) {
+        setErrorMessage(
+          "이 페이지는 관리자 전용입니다. 권한이 없는 사용자로는 접근할 수 없습니다."
+        );
+        setTimeout(() => {
+          router.push("/user/appointments");
+        }, 2000);
+      }
+    };
+
+    checkUser();
+  }, [router]);
 
   // ✅ 전체 유저 목록 불러오기
   const fetchUsers = async () => {
@@ -67,65 +91,71 @@ export default function UsersPage() {
   };
 
   return (
-    <div className={styles.container}>
-      <h2>👥 유저 관리</h2>
+    <>
+      {errorMessage ? (
+        <div className={styles.errorMessage}>{errorMessage}</div>
+      ) : (
+        <div className={styles.container}>
+          <h2>👥 유저 관리</h2>
 
-      <div className={styles.searchBar}>
-        <select
-          value={searchType}
-          onChange={(e) =>
-            setSearchType(e.target.value as "id" | "email" | "nickname")
-          }
-        >
-          <option value="id">ID</option>
-          <option value="email">이메일</option>
-          <option value="nickname">닉네임</option>
-        </select>
-        <input
-          type="text"
-          placeholder="검색어 입력"
-          value={searchQuery}
-          onChange={(e) => setSearchQuery(e.target.value)}
-        />
-      </div>
+          <div className={styles.searchBar}>
+            <select
+              value={searchType}
+              onChange={(e) =>
+                setSearchType(e.target.value as "id" | "email" | "nickname")
+              }
+            >
+              <option value="id">ID</option>
+              <option value="email">이메일</option>
+              <option value="nickname">닉네임</option>
+            </select>
+            <input
+              type="text"
+              placeholder="검색어 입력"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+            />
+          </div>
 
-      <div className={styles.tableContainer}>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>이메일</th>
-              <th>닉네임</th>
-              <th>삭제</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredUsers.length > 0 ? (
-              filteredUsers.map((user) => (
-                <tr key={user.id}>
-                  <td title={user.id}>{user.id}</td>
-                  <td title={user.email}>{user.email}</td>
-                  <td title={user.nickname}>{user.nickname}</td>
-                  <td>
-                    <button
-                      className={styles.deleteButton}
-                      onClick={() => handleDelete(user.id)}
-                    >
-                      삭제
-                    </button>
-                  </td>
+          <div className={styles.tableContainer}>
+            <table className={styles.table}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>이메일</th>
+                  <th>닉네임</th>
+                  <th>삭제</th>
                 </tr>
-              ))
-            ) : (
-              <tr>
-                <td colSpan={4} style={{ textAlign: "center" }}>
-                  검색 결과가 없습니다.
-                </td>
-              </tr>
-            )}
-          </tbody>
-        </table>
-      </div>
-    </div>
+              </thead>
+              <tbody>
+                {filteredUsers.length > 0 ? (
+                  filteredUsers.map((user) => (
+                    <tr key={user.id}>
+                      <td title={user.id}>{user.id}</td>
+                      <td title={user.email}>{user.email}</td>
+                      <td title={user.nickname}>{user.nickname}</td>
+                      <td>
+                        <button
+                          className={styles.deleteButton}
+                          onClick={() => handleDelete(user.id)}
+                        >
+                          삭제
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                ) : (
+                  <tr>
+                    <td colSpan={4} style={{ textAlign: "center" }}>
+                      검색 결과가 없습니다.
+                    </td>
+                  </tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+    </>
   );
 }

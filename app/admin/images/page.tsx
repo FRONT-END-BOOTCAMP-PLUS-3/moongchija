@@ -2,6 +2,8 @@
 
 import { useEffect, useState } from "react";
 import styles from "./images.module.scss";
+import { useRouter } from "next/navigation";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 interface Image {
   id: number;
@@ -10,7 +12,7 @@ interface Image {
   creater_id: string;
   created_at: string;
 }
-
+const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
 export default function ImagesPage() {
   const [images, setImages] = useState<Image[]>([]);
 
@@ -19,6 +21,26 @@ export default function ImagesPage() {
     const data = await res.json();
     setImages(data);
   };
+  const [errorMessage, setErrorMessage] = useState<string>("");
+  const [userId, setUserId] = useState<string | null>(null);
+  const router = useRouter();
+
+  useEffect(() => {
+    const checkUser = async () => {
+      const currentUserId = await getUserIdClient();
+      setUserId(currentUserId);
+      if (currentUserId !== ADMIN_USER_ID) {
+        setErrorMessage(
+          "이 페이지는 관리자 전용입니다. 권한이 없는 사용자로는 접근할 수 없습니다."
+        );
+        setTimeout(() => {
+          router.push("/user/appointments");
+        }, 2000);
+      }
+    };
+
+    checkUser();
+  }, [router]);
 
   useEffect(() => {
     fetchImages();
@@ -36,30 +58,36 @@ export default function ImagesPage() {
   };
 
   return (
-    <div className={styles.container}>
-      <h2>🖼 이미지 관리</h2>
-
-      {images.length > 0 ? (
-        <div className={styles.imageGrid}>
-          {images.map((image) => (
-            <div key={image.id} className={styles.imageCard}>
-              <a href={image.image_url} target="_blank">
-                <img src={image.image_url} alt={`이미지 ${image.id}`} />
-              </a>
-              <p>업로드한 유저: {image.creater_id}</p>
-              <p>{new Date(image.created_at).toLocaleString()}</p>
-              <button
-                className={styles.deleteButton}
-                onClick={() => handleDelete(image.id)}
-              >
-                삭제
-              </button>
-            </div>
-          ))}
-        </div>
+    <>
+      {errorMessage ? (
+        <div className={styles.errorMessage}>{errorMessage}</div>
       ) : (
-        <p className={styles.noImages}>등록된 이미지가 없습니다.</p>
+        <div className={styles.container}>
+          <h2>🖼 이미지 관리</h2>
+
+          {images.length > 0 ? (
+            <div className={styles.imageGrid}>
+              {images.map((image) => (
+                <div key={image.id} className={styles.imageCard}>
+                  <a href={image.image_url} target="_blank">
+                    <img src={image.image_url} alt={`이미지 ${image.id}`} />
+                  </a>
+                  <p>업로드한 유저: {image.creater_id}</p>
+                  <p>{new Date(image.created_at).toLocaleString()}</p>
+                  <button
+                    className={styles.deleteButton}
+                    onClick={() => handleDelete(image.id)}
+                  >
+                    삭제
+                  </button>
+                </div>
+              ))}
+            </div>
+          ) : (
+            <p className={styles.noImages}>등록된 이미지가 없습니다.</p>
+          )}
+        </div>
       )}
-    </div>
+    </>
   );
 }
