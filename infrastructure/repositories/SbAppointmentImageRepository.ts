@@ -3,17 +3,14 @@ import { AppointmentImageRepository } from "@/domain/repositories/AppointmentIma
 import { createClient } from "@/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-export class SbAppointmentImageRepository
-  implements AppointmentImageRepository
-{
+export class SbAppointmentImageRepository implements AppointmentImageRepository {
   private async getClient(): Promise<SupabaseClient> {
     return await createClient();
   }
 
-  // ✅ 전체 이미지 조회
+  // 전체 이미지 조회
   async getAllImages(): Promise<AppointmentImage[]> {
     const supabase = await this.getClient();
-
     const { data, error } = await supabase
       .from("appointment_image")
       .select("id, appointment_id, image_url, creater_id, created_at");
@@ -31,11 +28,53 @@ export class SbAppointmentImageRepository
     }));
   }
 
-  // ✅ Storage + DB에서 이미지 삭제
+  // 특정 약속의 이미지 조회
+  async getImagesByAppointmentId(appointmentId: number): Promise<AppointmentImage[]> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment_image")
+      .select("id, appointment_id, image_url, creater_id, created_at")
+      .eq("appointment_id", appointmentId);
+
+    if (error) {
+      throw new Error("특정 약속 이미지 조회 실패: " + error.message);
+    }
+
+    return (data || []).map((image) => ({
+      id: image.id,
+      appointment_id: image.appointment_id,
+      image_url: image.image_url,
+      creater_id: image.creater_id,
+      created_at: new Date(image.created_at),
+    }));
+  }
+
+  // 이미지 생성
+  async createImage(newImage: Omit<AppointmentImage, 'id' | 'created_at'>): Promise<AppointmentImage> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment_image")
+      .insert(newImage)
+      .select();
+
+    if (error || !data || data.length === 0) {
+      throw new Error("이미지 생성 실패: " + (error?.message || "알 수 없는 오류"));
+    }
+
+    const createdImage = data[0];
+    return {
+      id: createdImage.id,
+      appointment_id: createdImage.appointment_id,
+      image_url: createdImage.image_url,
+      creater_id: createdImage.creater_id,
+      created_at: new Date(createdImage.created_at),
+    };
+  }
+
+  // 이미지 삭제
   async deleteImage(imageId: string): Promise<boolean> {
     const supabase = await this.getClient();
 
-    // ✅ 1. `appointment_image` 테이블에서 해당 이미지의 `image_url` 가져오기
     const { data: imageData, error: fetchError } = await supabase
       .from("appointment_image")
       .select("image_url")
@@ -48,22 +87,19 @@ export class SbAppointmentImageRepository
     }
 
     const imageUrl = imageData.image_url;
-
-    // ✅ 2. Storage에서 이미지 삭제 (파일 경로 추출)
     const filePath = imageUrl.replace(
       "https://yswjnlalguzoxdcmydxr.supabase.co/storage/v1/object/public/images/",
       ""
     );
 
     const { error: storageError } = await supabase.storage
-      .from("images") // ✅ 스토리지 버킷 이름
+      .from("images")
       .remove([filePath]);
 
     if (storageError) {
       console.error("❌ 스토리지에서 이미지 삭제 실패:", storageError.message);
       return false;
     } else {
-      // ✅ 3. `appointment_image` 테이블에서 데이터 삭제
       const { error: deleteError } = await supabase
         .from("appointment_image")
         .delete()

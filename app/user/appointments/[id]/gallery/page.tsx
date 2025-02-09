@@ -1,29 +1,39 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import CircleButton from "@/components/circleButton/CircleButton";
+import { useState, useEffect, useRef } from "react";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
+import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
 import styles from "./gallery.module.scss";
+import { useParams } from "next/navigation";
+import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading";
+import CircleButton from "@/components/circleButton/CircleButton";
 import Modal from "@/components/modal/Modal";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
-import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
-import detailDummyData from "../components/detail/dummyData/detailDummyData";
-import { useParams } from "next/navigation";
-import { detailTypes } from "../components/detail/types/detailTypes";
-import IconHeader from "@/components/header/IconHeader";
-import Loading from "@/components/loading/Loading"; // 로딩 컴포넌트 추가
+
+export interface ImagesDto {
+  id: number;
+  appointment_id: number;
+  image_url: string;
+  creater_id: string;
+  created_at: Date;
+  nickname: string;
+}
 
 const GalleryPage = () => {
-  const { id } = useParams(); 
-  const [detail, setDetail] = useState<detailTypes | null>(null);
+  const { id } = useParams();
+  const [galleryData, setGalleryData] = useState<ImagesDto[]>([]); // 약속 이미지 데이터 배열
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
 
-  const openModal = () => setIsModalOpen(true);
-  const closeModal = () => setIsModalOpen(false);
+  const openUploaderModal = () => setIsModalOpen(true);
+  const closeUploaderModal = () => setIsModalOpen(false);
+  const onSuccessUpload = () => (setIsModalOpen(false), alert("완료"));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -49,39 +59,83 @@ const GalleryPage = () => {
     }
   };
 
+  const fetchGallery = async () => {
+    try {
+      setLoading(true);
+      setError(false);
+      const response = await fetch(`/api/user/appointments/${id}/gallery`);
+      if (!response.ok) throw new Error("이미지 불러오기 실패");
+      const data = await response.json();
+      setGalleryData(data);
+    } catch (error) {
+      console.error(error);
+      setError(true);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
     if (id) {
-      const appointmentDetail = detailDummyData.find((data) => data.id === Number(id));
-      setDetail(appointmentDetail || null);
+      fetchGallery();
     }
   }, [id]);
 
-  if (!detail) return (
-    <div className={styles.pageContainer}>
-      <IconHeader />
-      <DetailTabMenu />
-      <div className={styles.container}>
-        <Loading /> {/* 로딩 컴포넌트 표시 */}
+  if (loading) {
+    return (
+      <div className={styles.pageContainer}>
+        <IconHeader />
+        <DetailTabMenu />
+        <div className={styles.container}>
+          <Loading />
+        </div>
       </div>
-    </div>
-  );
+    );
+  }
+
+  if (error) {
+    return (
+      <div className={styles.pageContainer}>
+        <IconHeader />
+        <DetailTabMenu />
+        <div className={styles.container}>
+          <p className={styles.errorMessage}>
+            이미지 데이터를 불러오는 중 오류가 발생했습니다.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  console.log("uploadedImage: ", uploadedImage);
+  console.log("fileInputRef ", fileInputRef);
+  
+  
 
   return (
     <div className={styles.pageContainer}>
-      <IconHeader />
-      <DetailTabMenu />
-      <div className={styles.container}>
-        <GalleryDetail galleryData={detail.gallery} />
-      </div>
+    <IconHeader />
+    <DetailTabMenu />
+    <div className={styles.container}>
+      {galleryData.length === 0 ? (
+        <p className={styles.noGallery}>등록된 사진이 없습니다</p>
+      ) : (
+        <GalleryDetail
+          galleryData={galleryData}
+          setGalleryData={setGalleryData}
+        />
+      )}
+    </div>
 
-    
+      <CircleButton onClick={openUploaderModal} />
 
-      <Modal isOpen={isModalOpen} onClose={closeModal}>
-        <div className={styles.modalContainer}>
-          <div className={styles.noticeModalBox}>
+      {/* 사진 업로드 모달창 */}
+      <Modal isOpen={isModalOpen} onClose={closeUploaderModal}>
+        <div className={styles.uploaderModalContainer}>
+          <div className={styles.uploaderModalBox}>
             <span className={styles.title}>사진 업로드</span>
 
-            <div className={styles.imageWrapper}>
+            <div className={styles.uploaderImageWrapper}>
               {uploadedImage ? (
                 <div className={styles.imageContainer}>
                   <Image
@@ -93,7 +147,7 @@ const GalleryPage = () => {
                   />
                   <button
                     type="button"
-                    className={styles.deleteButton}
+                    className={styles.uploaderDeleteButton}
                     onClick={handleDeleteImage}
                   >
                     <MdClose size={25} color="white" />
@@ -124,15 +178,12 @@ const GalleryPage = () => {
                 size="sm"
                 color="--primary-color"
                 active={true}
-                onClick={closeModal}
+                onClick={onSuccessUpload}
               />
             </div>
           </div>
         </div>
       </Modal>
- 
-        <CircleButton onClick={openModal} />
-  
     </div>
   );
 };

@@ -3,54 +3,81 @@
 import Image from "next/image";
 import styles from "./GalleryDetail.module.scss";
 import Modal from "@/components/modal/Modal";
-import { FC, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import Button from "@/components/button/Button";
-import { GalleryItem } from "../../detail/types/detailTypes";
+import { Dispatch, SetStateAction } from "react";
+import { getUserIdClient } from "@/utils/supabase/client"
 
-interface GalleryDetailProps {
-  galleryData: GalleryItem[];
+export interface ImagesDto {
+  id: number;
+  appointment_id: number;
+  image_url: string;
+  creater_id: string;
+  created_at: Date;
+  nickname: string;
 }
 
-const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
-  const photos = [
-    { id: 1, src: "/images/고뭉치.png", username: "User1" },
-    { id: 2, src: "/images/고뭉치.png", username: "User2" },
-    { id: 3, src: "/images/고뭉치.png", username: "User3" },
-    { id: 4, src: "/images/고뭉치.png", username: "User4" },
-    { id: 5, src: "/images/고뭉치.png", username: "User5" },
-    { id: 6, src: "/images/고뭉치.png", username: "User6" },
-  ];
+interface GalleryDetailProps {
+  galleryData: ImagesDto[];
+  setGalleryData: Dispatch<SetStateAction<ImagesDto[]>>;
+}
+
+const GalleryDetail: FC<GalleryDetailProps> = ({
+  galleryData,
+  setGalleryData,
+}) => {
+
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const openModal = () => setIsModalOpen(true);
+  const [selectedImg, setSelectedImg] = useState<{ index: number; id: number }>(
+    { index: 0, id: 0 }
+  );
+  const [userId, setUserId] = useState<string | null>(null); 
+
+  const handleImageClick = (index: number, photoId: number) => {
+    setIsModalOpen(true);
+    setSelectedImg({ index, id: photoId });
+  };
   const closeModal = () => setIsModalOpen(false);
 
-  const handleDelete = () => {
-    const confirmation = confirm("삭제하겠습니까?");
-    if (confirmation) {
-      alert("삭제되었습니다");
+  const handleDelete = async (id: number) => {
+    if (!confirm("정말 삭제하시겠습니까?")) return;
+
+    const res = await fetch(`/api/admin/images/${id}`, { method: "DELETE" });
+    if (res.ok) {
+      setGalleryData(galleryData.filter((image) => image.id !== id));
+      setIsModalOpen(false);
+    } else {
+      alert("삭제 실패");
     }
-    closeModal();
   };
+
+
+    useEffect(() => {
+      const fetchUserId = async () => {
+        const fetchedUserId = await getUserIdClient();
+        setUserId(fetchedUserId); 
+      };
+      fetchUserId();
+    }, []);
+  
 
   return (
     <div>
       <div className={styles.galleryContainer}>
-        {galleryData.map((photo) => (
+        {galleryData.map((photo, index) => (
           <div key={photo.id} className={styles.photoCard}>
             <div className={styles.photos}>
+              {/* 사진첩 사진 */}
               <Image
-                src={photo.src}
-                alt={`Photo by ${photo.user}`}
-                width={150}
-                height={150}
-                className={styles.image}
-                onClick={openModal}
+                src={photo.image_url}
+                alt={`Photo by ${photo.nickname}`}
+                width={190}
+                height={190}
+                className={styles.galleryImage}
+                onClick={() => handleImageClick(index, photo.id)}
               />
             </div>
-            <div className={styles.userInfo}>
-              <div className={styles.userIcon}></div>
-              <span className={styles.username}>{photo.user}</span>
-            </div>
+            <div key={photo.id}>{photo.nickname}</div>
           </div>
         ))}
       </div>
@@ -58,25 +85,30 @@ const GalleryDetail: FC<GalleryDetailProps> = ({galleryData}) => {
         <Modal isOpen={isModalOpen} onClose={closeModal}>
           <div className={styles.modalContainer}>
             <div className={styles.modalBox}>
+              <div className={styles.modalNickname}>
+                {galleryData[selectedImg.index]?.nickname}님의 사진
+              </div>
               <div className={styles.photo}>
+                {/* 모달창 안 사진 */}
                 <Image
-                  src={photos[0].src}
-                  alt={`Photo by ${photos[0].username}`}
+                  src={galleryData[selectedImg.index]?.image_url || ""}
+                  alt={`Photo by ${galleryData[selectedImg.index]?.nickname}`}
                   width={360}
                   height={360}
-                  className={styles.image}
-                  onClick={openModal}
+                  className={styles.galleryModalImage}
                 />
               </div>
+
+              {userId === galleryData[selectedImg.index]?.creater_id ? ( 
               <div className={styles.deleteButton}>
                 <Button
                   text="삭제하기"
                   size="sm"
                   color="--exit-red"
                   active={true}
-                  onClick={handleDelete}
+                  onClick={() => handleDelete(selectedImg.id)}
                 />
-              </div>
+              </div> )  : null}
             </div>
           </div>
         </Modal>

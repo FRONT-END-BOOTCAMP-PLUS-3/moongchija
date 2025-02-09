@@ -21,7 +21,7 @@ padding: 0 40px;
   font-size: 20px;
 }
 
-.imageWrapper {
+.uploaderImageWrapper {
   display: flex;
   justify-content: center;
   margin-top: 20px;
@@ -59,7 +59,7 @@ padding: 0 40px;
   object-fit: cover;
 }
 
-.deleteButton {
+.uploaderDeleteButton{
   position: absolute;
   top: 8px;
   right: 8px;
@@ -70,6 +70,14 @@ padding: 0 40px;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  background-color: black;
+  background-color: var(--exit-red);
   border-radius: 50%;
+}
+
+.noGallery{
+  color: #888; 
+  font-size: 18px; 
+  text-align: center; 
+  margin-top:260px;
+  
 }

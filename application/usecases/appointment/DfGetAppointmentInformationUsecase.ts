@@ -56,6 +56,7 @@ export class DfGetAppointmentInformationUsecase {
       confirmPlace: appointment.confirm_place || undefined,
       confirmPlaceUrl: appointment.confirm_place_url || undefined,
       confirmDate: appointment.confirm_time ? new Date(appointment.confirm_time) : undefined,
+      owner_id: appointment.owner_id,
       participants: participants.map(user => ({
         nickname: user.nickname,
         emoji: user.emoji,

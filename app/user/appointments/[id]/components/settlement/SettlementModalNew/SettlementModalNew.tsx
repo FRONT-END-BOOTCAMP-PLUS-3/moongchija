@@ -2,72 +2,102 @@
 
 import { useState, useEffect } from "react";
 import { FaPlus } from "react-icons/fa6";
+import { FaMinus } from "react-icons/fa";
 import Button from "@/components/button/Button";
 import styles from "./../SettlementDetail/SettlementDetail.module.scss";
 import { banks } from "../../const/banks";
-import { FaMinus } from "react-icons/fa";
 
 type SettlementItem = {
-  place: string;
-  price: number;
+  amount: number;
+  descript: string;
 };
 
-type ModalProps = {
-  handleRegister: (data: {
-    items: SettlementItem[];
-    numberOfPeople: number;
-    accountNumber: string;
-    bank: string;
-    depositor: string;
-  }) => void;
-};
+interface SettlementModalNewProps {
+  appointmentId: number;
+  onSuccess?: () => void;
+}
 
-const SettlementModalNew = ({ handleRegister }: ModalProps) => {
+const SettlementModalNew = ({
+  appointmentId,
+  onSuccess,
+}: SettlementModalNewProps) => {
   const [totalPrice, setTotalPrice] = useState(0); // 총액
-  const [numberOfPeople, setNumberOfPeople] = useState(1); // 인원 수 (기본값 1)
+  const [memberCount, setMemberCount] = useState(1); // 인원 수 (기본값 1)
   const [dividedPrice, setDividedPrice] = useState(0); // 인당 금액
   const [accountNumber, setAccountNumber] = useState(""); // 계좌번호
   const [selectedBank, setSelectedBank] = useState(banks[0]); // 기본 은행 선택
-  const [depositor, setDepositor] = useState(""); // 예금주
+  const [accountHolderName, setAccountHolderName] = useState(""); // 예금주
 
   // 장소 & 금액 입력 필드
-  const [inputSets, setInputSets] = useState<SettlementItem[]>([{ place: "", price: 0 }]);
+  const [inputSets, setInputSets] = useState<SettlementItem[]>([
+    { descript: "", amount: 0 },
+  ]);
 
+  // 인원 수가 변경될 때마다 인당 금액 계산
   useEffect(() => {
-    if (numberOfPeople > 0) {
-      setDividedPrice(Math.floor(totalPrice / numberOfPeople));
+    if (memberCount > 0) {
+      setDividedPrice(Math.floor(totalPrice / memberCount));
     }
-  }, [totalPrice, numberOfPeople]);
+  }, [totalPrice, memberCount]);
 
+  // 총 금액 업데이트
   useEffect(() => {
-    const updatedTotalPrice = inputSets.reduce((acc, set) => acc + set.price, 0);
+    const updatedTotalPrice = inputSets.reduce(
+      (acc, set) => acc + set.amount,
+      0
+    );
     setTotalPrice(updatedTotalPrice);
   }, [inputSets]);
 
+  // 새로운 장소 & 금액 추가
   const addNewSet = () => {
-    setInputSets((prev) => [...prev, { place: "", price: 0 }]);
+    setInputSets((prev) => [...prev, { descript: "", amount: 0 }]);
   };
 
+  // 금액 변경 시, "amount" 키 업데이트
   const handlePriceChange = (index: number, newPrice: number) => {
     setInputSets((prev) =>
-      prev.map((set, idx) => (idx === index ? { ...set, price: newPrice } : set))
+      prev.map((set, idx) =>
+        idx === index ? { ...set, amount: newPrice } : set
+      )
     );
   };
 
-  const handleSubmit = () => {
-    handleRegister({
-      items: inputSets,
-      numberOfPeople,
-      accountNumber,
-      bank: selectedBank,
-      depositor,
-    });
+  // 등록
+  const handleRegister = async () => {
+    try {
+      const response = await fetch(
+        `/api/user/appointments/${appointmentId}/settlement`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            appointmentId: appointmentId,
+            accountNumber: accountNumber,
+            accountHolderName: accountHolderName,
+            bank: selectedBank,
+            memberCount: memberCount,
+            details: inputSets, // [{ descript, amount }, ...] 형태로 전송됨
+          }),
+        }
+      );
+
+      if (!response.ok) throw new Error("정산 등록 실패");
+
+      alert("등록되었습니다");
+      if (onSuccess) onSuccess();
+    } catch (error) {
+      console.error(error);
+      alert("정산 등록에 실패했습니다.");
+    }
   };
 
-    // 마지막 장소&금액 세트 삭제
-    const removeLastSet = () => {
-      setInputSets((prevInputSets) => prevInputSets.slice(0, -1)); // 마지막 세트 삭제
-    };
+  // 마지막 장소 & 금액 세트 삭제
+  const removeLastSet = () => {
+    setInputSets((prevInputSets) => prevInputSets.slice(0, -1));
+  };
 
   return (
     <div className={styles.modalContainer}>
@@ -82,19 +112,22 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
                     className={styles.place}
                     type="text"
                     placeholder="장소"
-                    value={set.place}
+                    value={set.descript}
                     onChange={(e) => {
                       const newPlace = e.target.value;
                       setInputSets((prev) =>
-                        prev.map((s, idx) => (idx === index ? { ...s, place: newPlace } : s))
+                        prev.map((s, idx) =>
+                          idx === index ? { ...s, descript: newPlace } : s
+                        )
                       );
                     }}
                   />
+                  {/* 금액 입력: 값은 set.amount, onChange에서 amount 업데이트 */}
                   <input
                     className={styles.price}
                     type="text"
                     placeholder="금액"
-                    value={set.price.toString().replace(/^0+/, "")}
+                    value={set.amount.toString().replace(/^0+/, "")}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (/[^0-9]/.test(value)) return;
@@ -104,12 +137,14 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
                   원
                 </div>
               ))}
-               <div className={styles.buttonContainer}>
-                {/* + 버튼과 - 버튼을 나란히 배치 */}
+              <div className={styles.buttonContainer}>
                 <button className={styles.inputPlusButton} onClick={addNewSet}>
                   <FaPlus className={styles.icon} />
                 </button>
-                <button className={styles.inputMinusButton} onClick={removeLastSet}>
+                <button
+                  className={styles.inputMinusButton}
+                  onClick={removeLastSet}
+                >
                   <FaMinus className={styles.icon} />
                 </button>
               </div>
@@ -129,12 +164,13 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
                   <span className={styles.divide}>÷</span>
                   <input
                     type="number"
-                    value={numberOfPeople}
+                    value={memberCount.toString()}
                     onChange={(e) => {
                       const value = e.target.value;
                       if (value.includes("-")) return;
-                      setNumberOfPeople(Number(value) || 1);
+                      setMemberCount(Number(value));
                     }}
+                    onBlur={() => setMemberCount(Number(memberCount))}
                   />
                   <span>명</span>
                 </div>
@@ -166,7 +202,10 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
             </div>
             <div className={styles.bank}>
               <span>은행사</span>
-              <select value={selectedBank} onChange={(e) => setSelectedBank(e.target.value)}>
+              <select
+                value={selectedBank}
+                onChange={(e) => setSelectedBank(e.target.value)}
+              >
                 {banks.map((bank, index) => (
                   <option key={index} value={bank}>
                     {bank}
@@ -179,8 +218,8 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
               <input
                 type="text"
                 placeholder="홍길동"
-                value={depositor}
-                onChange={(e) => setDepositor(e.target.value)}
+                value={accountHolderName}
+                onChange={(e) => setAccountHolderName(e.target.value)}
               />
             </div>
           </div>
@@ -188,7 +227,13 @@ const SettlementModalNew = ({ handleRegister }: ModalProps) => {
       </div>
 
       <div className={styles.modalEditButton}>
-        <Button text="추가하기" size="sm" color="--primary-color" active={true} onClick={handleSubmit} />
+        <Button
+          text="추가하기"
+          size="sm"
+          color="--primary-color"
+          active={true}
+          onClick={handleRegister}
+        />
       </div>
     </div>
   );
