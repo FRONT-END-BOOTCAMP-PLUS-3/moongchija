@@ -109,14 +109,18 @@ const GalleryPage = () => {
 
   return (
     <div className={styles.pageContainer}>
-      <IconHeader />
-      <DetailTabMenu />
-      <div className={styles.container}>
+    <IconHeader />
+    <DetailTabMenu />
+    <div className={styles.container}>
+      {galleryData.length === 0 ? (
+        <p className={styles.noGallery}>등록된 사진이 없습니다</p>
+      ) : (
         <GalleryDetail
           galleryData={galleryData}
           setGalleryData={setGalleryData}
         />
-      </div>
+      )}
+    </div>
 
       <CircleButton onClick={openUploaderModal} />
 

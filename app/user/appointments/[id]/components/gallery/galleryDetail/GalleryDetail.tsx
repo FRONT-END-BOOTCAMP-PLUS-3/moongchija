@@ -25,7 +25,6 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
   galleryData,
   setGalleryData,
 }) => {
-  console.log(galleryData);
 
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedImg, setSelectedImg] = useState<{ index: number; id: number }>(
