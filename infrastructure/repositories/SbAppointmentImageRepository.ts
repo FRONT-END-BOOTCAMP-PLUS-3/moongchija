@@ -49,7 +49,29 @@ export class SbAppointmentImageRepository implements AppointmentImageRepository 
     }));
   }
 
-  // 이미지 삭제 (기존 코드 유지)
+  // 이미지 생성
+  async createImage(newImage: Omit<AppointmentImage, 'id' | 'created_at'>): Promise<AppointmentImage> {
+    const supabase = await this.getClient();
+    const { data, error } = await supabase
+      .from("appointment_image")
+      .insert(newImage)
+      .select();
+
+    if (error || !data || data.length === 0) {
+      throw new Error("이미지 생성 실패: " + (error?.message || "알 수 없는 오류"));
+    }
+
+    const createdImage = data[0];
+    return {
+      id: createdImage.id,
+      appointment_id: createdImage.appointment_id,
+      image_url: createdImage.image_url,
+      creater_id: createdImage.creater_id,
+      created_at: new Date(createdImage.created_at),
+    };
+  }
+
+  // 이미지 삭제
   async deleteImage(imageId: string): Promise<boolean> {
     const supabase = await this.getClient();
 

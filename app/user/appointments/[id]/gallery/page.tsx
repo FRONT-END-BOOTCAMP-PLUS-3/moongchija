@@ -107,6 +107,11 @@ const GalleryPage = () => {
     );
   }
 
+  console.log("uploadedImage: ", uploadedImage);
+  console.log("fileInputRef ", fileInputRef);
+  
+  
+
   return (
     <div className={styles.pageContainer}>
     <IconHeader />
@@ -124,6 +129,7 @@ const GalleryPage = () => {
 
       <CircleButton onClick={openUploaderModal} />
 
+      {/* 사진 업로드 모달창 */}
       <Modal isOpen={isModalOpen} onClose={closeUploaderModal}>
         <div className={styles.uploaderModalContainer}>
           <div className={styles.uploaderModalBox}>
