@@ -1,6 +1,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState, useCallback } from "react";
 import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import { fallbackCopy } from "@/utils/copy/copyUtils";
 
 const useCreateComplete = (onIsComplete: () => void) => {
   const basicUrl = process.env.NEXT_PUBLIC_SITE_URL;
@@ -12,15 +13,10 @@ const useCreateComplete = (onIsComplete: () => void) => {
 
   const appointmentId = appointment.id || "";
 
-  const handleCopy = useCallback(async (text: string, type: "link" | "id") => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedText(type);
-      setTimeout(() => setCopiedText(null), 2000);
-      setCopyActive(true);
-    } catch {
-      alert(type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
-    }
+  const handleCopy = useCallback((text: string, type: "link" | "id") => {
+    fallbackCopy(text, setCopyActive, type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
+    setCopiedText(type);
+    setTimeout(() => setCopiedText(null), 2000);
   }, []);
 
   useEffect(() => {

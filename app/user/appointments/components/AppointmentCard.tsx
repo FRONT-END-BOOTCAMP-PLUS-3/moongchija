@@ -10,6 +10,7 @@ import {
 } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 import Image from "next/image";
+import { fallbackCopy } from "@/utils/copy/copyUtils";
 
 interface AppointmentCardProps {
   appointment: AppointmentCardDto;
@@ -37,16 +38,11 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     else return styles.count;
   };
 
-  const handleCopy = async (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
+  const handleCopy = (e: React.MouseEvent<HTMLButtonElement>, text: string) => {
     e.preventDefault();
     e.stopPropagation();
-
-    try {
-      await navigator.clipboard.writeText(text);
-      alert(`✅ 초대링크가 복사되었습니다! ${text}`);
-    } catch {
-      alert("초대링크 복사 실패");
-    }
+  
+    fallbackCopy(text, () => alert(`✅ 초대링크가 복사되었습니다! ${text}`), "초대링크 복사 실패");
   };
 
   return (
