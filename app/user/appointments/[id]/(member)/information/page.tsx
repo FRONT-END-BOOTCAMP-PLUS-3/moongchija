@@ -1,7 +1,7 @@
 "use client";
 
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-import Button from "@/components/button/Button";
+// import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
@@ -11,28 +11,24 @@ import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
 import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 import { useRouter } from "next/navigation";
-import { getUserIdClient } from "@/utils/supabase/client"
-
-
+import { getUserIdClient } from "@/utils/supabase/client";
 
 const InformationPage = () => {
   const { id } = useParams();
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
-  const [userId, setUserId] = useState<string | null>(null); 
-
-  
+  const [userId, setUserId] = useState<string | null>(null);
 
   const fetchInfo = async () => {
     try {
       const response = await fetch(`/api/user/appointments/${id}/information`);
       if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-    
+
       const data = await response.json();
       setInfoData(data);
     } catch (error) {
       console.error(error);
-    } 
+    }
   };
 
   useEffect(() => {
@@ -42,11 +38,10 @@ const InformationPage = () => {
   useEffect(() => {
     const fetchUserId = async () => {
       const fetchedUserId = await getUserIdClient();
-      setUserId(fetchedUserId); 
+      setUserId(fetchedUserId);
     };
     fetchUserId();
   }, []);
-
 
   const handleCopyRoomId = () => {
     if (id) {
@@ -80,8 +75,8 @@ const InformationPage = () => {
 
       if (confirmation) {
         alert("방이 삭제되었습니다.");
-        setInfoData(undefined); 
-        await fetchInfo(); 
+        setInfoData(undefined);
+        await fetchInfo();
       } else {
         alert("약속 삭제를 취소했습니다.");
       }
@@ -115,62 +110,54 @@ const InformationPage = () => {
               appointmentId={Number(id)}
             />
             <div className={styles.buttonWrapper}>
-              <div className={styles.copyButton}>
-                <Button
-                  text="방 번호 복사"
-                  size="sm"
-                  color="--primary-color"
-                  active={true}
-                  onClick={handleCopyRoomId}
-                />
-              </div>
+              <button
+                type="button"
+                className={styles.copyButton}
+                onClick={handleCopyRoomId}
+              >
+                방번호 복사
+              </button>
 
               <div className={styles.blueButtonWrapper}>
-                <div className={styles.resultButton}>
-                  <Button
-                    text="투표 조회"
-                    size="sm"
-                    color="--secondary-color"
-                    active={true}
-                    onClick={handleViewResult}
-                  />
-                </div>
+                <button
+                  className={styles.resultButton}
+                  type="button"
+                  onClick={handleViewResult}
+                >
+                  투표 조회
+                </button>
 
                 {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
-                <div className={styles.changeScheduleButton}>
-                  <Button
-                    text="일정 변경"
-                    size="sm"
-                    color="--secondary-color"
-                    active={true}
+                  <button
+                    className={styles.changeScheduleButton}
+                    type="button"
                     onClick={handleChangeSchedule}
-                  />
-                </div>) : null}
+                  >
+                    일정 변경
+                  </button>
+                ) : null}
               </div>
 
               <div className={styles.redButtonWrapper}>
+                {userId === infoData.owner_id ? ( // 방장이면, 방 삭제 가능
+                  <button
+                    className={styles.deleteButton}
+                    type="button"
+                    onClick={() => handleDeleteRoom(Number(id))}
+                  >
+                    삭제 하기
+                  </button>
+                ) : null}
 
-              {userId === infoData.owner_id ? (  // 방장이면, 방 삭제 가능
-                <div className={styles.deleteButton}>
-                  <Button
-                    text="삭제하기"
-                    size="sm"
-                    color="--exit-red"
-                    active={true}
-                    onClick={() => handleDeleteRoom(Number(id))} 
-                  />
-                </div> ) : null}
-
-                {userId !== infoData.owner_id ? (  // 멤버면, 방 나가기
-                <div className={styles.exitButton}>
-                  <Button
-                    text="방 나가기"
-                    size="sm"
-                    color="--exit-red"
-                    active={true}
+                {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
+                  <button
+                    className={styles.exitButton}
+                    type="button"
                     onClick={handleExitRoom}
-                  />
-                </div> ) : null}
+                  >
+                    방 나가기
+                  </button>
+                ) : null}
               </div>
             </div>
           </>

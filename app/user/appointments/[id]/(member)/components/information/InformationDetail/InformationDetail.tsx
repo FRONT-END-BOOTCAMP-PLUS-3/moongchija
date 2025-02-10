@@ -9,7 +9,7 @@ import {
 } from "react-icons/fa";
 import Link from "next/link";
 import { calculateCountdown, formatTime } from "@/utils/dateUtils/dateUtils";
-import { AppointmentInformationDto } from "../../../../../../../application/usecases/appointment/dto/AppointmentInformationDto";
+import { AppointmentInformationDto } from "../../../../../../../../application/usecases/appointment/dto/AppointmentInformationDto";
 
 interface InformationDetailProps {
   informationData: AppointmentInformationDto;

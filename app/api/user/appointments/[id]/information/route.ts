@@ -4,9 +4,9 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { SbNoticeRepository } from "@/infrastructure/repositories/SbNoticeRepository";
 import { DfGetAppointmentInformationUsecase } from "@/application/usecases/appointment/DfGetAppointmentInformationUsecase";
-import { DfCreateNoticeUsecase } from "@/application/usecases/appointment/DfCreateNotionUsecase";
-import { DfUpdateNoticeUsecase } from "@/application/usecases/appointment/DfUpdateNotionUsecase";
-import { DfDeleteNoticeUsecase } from "@/application/usecases/appointment/DfDeleteNotionUsecase";
+import { DfCreateNoticeUsecase } from "@/application/usecases/appointment/DfCreateNoticeUsecase";
+import { DfUpdateNoticeUsecase } from "@/application/usecases/appointment/DfUpdateNoticeUsecase";
+import { DfDeleteNoticeUsecase } from "@/application/usecases/appointment/DfDeleteNoticeUsecase";
 
 const appointmentRepository = new SbAppointmentRepository();
 const memberRepository = new SbMemberRepository();
