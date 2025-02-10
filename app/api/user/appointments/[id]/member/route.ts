@@ -11,7 +11,6 @@ export async function DELETE(req: NextRequest,) {
     const body = await req.json();
     const { userId } = body;
     
-    console.log(body);
     
     
     

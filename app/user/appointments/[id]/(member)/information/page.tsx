@@ -4,7 +4,7 @@ import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
-import { useEffect, useState } from "react";
+import { useEffect, useState} from 'react';
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
@@ -97,9 +97,6 @@ const InformationPage = () => {
 
   // 방 나가기 버튼
   const handleExitRoom = async () => {
-    console.log(typeof userId);
-    console.log(typeof id);
-
     if (!confirm("정말 방을 나가시겠습니까?")) return;
 
     try {
@@ -121,6 +118,8 @@ const InformationPage = () => {
     }
   };
 
+  
+
   return (
     <div className={styles.pageContainer}>
       <IconHeader />
@@ -136,6 +135,8 @@ const InformationPage = () => {
             <NoticeDetail
               noticeData={infoData.notices}
               appointmentId={Number(id)}
+              ownerId={infoData.owner_id}
+              userId={userId}
             />
             {/* 동그라미 플러스 버튼 */}
             <CircleButton onClick={handleCircleButtonClick} />

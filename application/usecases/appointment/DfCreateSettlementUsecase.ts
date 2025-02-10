@@ -53,7 +53,6 @@ export class DfCreateSettlementUsecase {
         throw new Error("세부 내역 설명은 비워둘 수 없습니다.");
       }
 
-      console.log("details ", details, "detail: ", detail);
       
       await this.paymentsDetailRepository.create(payment.id, detail.amount, detail.descript);
     }
