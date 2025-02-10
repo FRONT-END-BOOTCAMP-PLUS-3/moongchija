@@ -14,7 +14,9 @@ import { useRouter } from "next/navigation";
 import { getUserIdClient } from "@/utils/supabase/client";
 
 const InformationPage = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string;
+
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
@@ -86,12 +88,33 @@ const InformationPage = () => {
     }
   };
 
-  const handleExitRoom = () => {
-    const confirmation = confirm("방을 정말 나가시겠습니까?");
-    if (confirmation) {
+  const handleExitRoom = async () => {
+    console.log(typeof(userId));
+    console.log(typeof(id));
+    
+    if (!confirm("정말 방을 나가시겠습니까?")) return;
+  
+    try {
+      const res = await fetch(`/api/user/appointments/${id}/member`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: userId}),
+      });
+  
+      if (!res.ok) {
+        const errorData = await res.json();
+        throw new Error(errorData.error || "방 나가기 실패");
+      }
+  
       alert("방을 나갔습니다.");
+      router.push("/user/appointments");
+    } catch (error) {
+      console.error("방 나가기 중 오류 발생:", error);
     }
   };
+  
+
+
 
   return (
     <div className={styles.pageContainer}>

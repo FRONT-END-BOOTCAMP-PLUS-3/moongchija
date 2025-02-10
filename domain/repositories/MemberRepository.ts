@@ -23,4 +23,6 @@ export interface MemberRepository {
   ): Promise<void>;
 
   getVotedMemberIdsByAppointment(appointmentId: number): Promise<string[]>;
+
+  deleteMember(userId: string, appointmentId: number): Promise<void>;
 }
