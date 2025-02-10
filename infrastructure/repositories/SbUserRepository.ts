@@ -131,6 +131,7 @@ export class SbUserRepository implements UserRepository {
       emoji: user.emoji,
       created_at: new Date(user.created_at),
       provider: user.provider,
+      type: user.type,
     };
   }
 
