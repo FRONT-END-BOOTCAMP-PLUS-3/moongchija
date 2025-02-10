@@ -94,7 +94,11 @@ const PlaceResult = ({ placeProps }: { placeProps: PlaceResult }) => {
                 )}
               </div>
               <div className={styles.voterList}>
-                <span className={styles.voterTitle}>투표한 사람</span>
+                <span className={styles.voterTitle}>
+                  투표한 사람{" "}
+                  <span className={styles.voterCount}>{place.user.length}</span>
+                  명
+                </span>
                 <div className={styles.userList}>
                   {place.user.length > 0 ? (
                     place.user.map((user, idx) => <span key={idx}>{user}</span>)

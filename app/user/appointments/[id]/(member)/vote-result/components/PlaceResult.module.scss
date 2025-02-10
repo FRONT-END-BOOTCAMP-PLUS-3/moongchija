@@ -111,6 +111,10 @@
 
         .voterTitle {
           margin: 10px 0;
+          .voterCount {
+            font-weight: bold;
+            color: red;
+          }
         }
 
         .userList {
