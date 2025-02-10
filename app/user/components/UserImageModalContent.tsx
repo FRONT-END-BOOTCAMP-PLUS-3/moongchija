@@ -56,7 +56,7 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
 
     try {
       const response = await fetch("/api/user/update-emoji", {
-        method: "POST",
+        method: "PATCH",
         headers: {
           "Content-Type": "application/json",
         },
