@@ -17,7 +17,7 @@ export const copyToClipboard = (
     } else {
       fallbackCopy(text, setCopiedState, errorMessage);
     }
-  } catch (error) {
+  } catch {
     alert(errorMessage);
   }
 };
@@ -43,7 +43,7 @@ export const fallbackCopy = (
     } else {
       alert(errorMessage);
     }
-  } catch (err) {
+  } catch {
     alert(errorMessage);
   }
 
