@@ -32,8 +32,10 @@ export async function GET(req: Request) {
   } catch (error) {
     console.log("❌ Error checking vote status:", error);
 
+    const errorMessage = error instanceof Error ? error.message : "Failed to check appointment entry";
+
     return NextResponse.json(
-      { error: "Internal server error" },
+      { error: errorMessage },
       { status: 500 }
     );
   }
