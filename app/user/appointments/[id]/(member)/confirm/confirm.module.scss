@@ -1,8 +1,9 @@
 .container {
-  .mainBox {
-    width: 100%;
-    padding: 30px 30px 10px;
+  height: 100%;
+  overflow-y: scroll;
 
+  .mainBox {
+    padding: 30px 30px 10px;
     p {
       font-size: var(--font-size-md);
       font-weight: bold;
@@ -15,7 +16,7 @@
       font-weight: bold;
     }
     .datePickerWrapper {
-      margin-bottom: 9vh;
+      margin-bottom: 13vh;
 
       & > div {
         width: 100%;

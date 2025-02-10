@@ -6,6 +6,7 @@ import PlaceResult from "./components/PlaceResult";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Loading from "@/components/loading/Loading";
+import { useUser } from "@/context/UserContext";
 
 interface TimeVoteResult {
   start_time: string | null;
@@ -39,7 +40,8 @@ const VoteResultPage = () => {
   const [page, setPage] = useState(1);
 
   const [resultData, setResultData] = useState<VoteResultType | null>(null);
-  const [userId, setUserId] = useState<string | null>(null);
+  const { user } = useUser();
+  const userId = user?.id;
 
   // ✅ API 호출하여 투표 결과 가져오기
   useEffect(() => {

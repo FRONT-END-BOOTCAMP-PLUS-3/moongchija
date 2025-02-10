@@ -10,7 +10,6 @@ import { Calendar } from "react-date-range";
 import Button from "@/components/button/Button";
 import ArrowHeader from "@/components/header/ArrowHeader";
 import Loading from "@/components/loading/Loading";
-import { getUserIdClient } from "@/utils/supabase/client";
 
 const ConfirmPage = () => {
   const router = useRouter();
