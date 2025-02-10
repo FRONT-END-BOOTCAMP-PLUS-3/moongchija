@@ -69,7 +69,10 @@ export async function POST(req: NextRequest) {
     const createNoticeUsecase = new DfCreateNoticeUsecase(noticeRepository);
     await createNoticeUsecase.execute(descript, appointmentId);
 
-    return NextResponse.json({ message: "Notice created successfully" }, { status: 201 });
+    return NextResponse.json(
+      { message: "Notice created successfully" },
+      { status: 201 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -95,7 +98,10 @@ export async function PATCH(req: NextRequest) {
     const updateNoticeUsecase = new DfUpdateNoticeUsecase(noticeRepository);
     await updateNoticeUsecase.execute(noticeId, descript);
 
-    return NextResponse.json({ message: "공지사항이 수정되었습니다" }, { status: 200 });
+    return NextResponse.json(
+      { message: "공지사항이 수정되었습니다" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
@@ -121,7 +127,10 @@ export async function DELETE(req: NextRequest) {
     const deleteNoticeUsecase = new DfDeleteNoticeUsecase(noticeRepository);
     await deleteNoticeUsecase.execute(noticeId);
 
-    return NextResponse.json({ message: "공지사항이 삭제되었습니다" }, { status: 200 });
+    return NextResponse.json(
+      { message: "공지사항이 삭제되었습니다" },
+      { status: 200 }
+    );
   } catch (error) {
     console.error(error);
     return NextResponse.json(
