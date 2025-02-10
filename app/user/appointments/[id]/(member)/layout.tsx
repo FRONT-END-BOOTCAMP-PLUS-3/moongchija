@@ -4,11 +4,7 @@ import { useUser } from "@/context/UserContext";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect } from "react";
 
-export default function UserPageLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const UserPageLayout = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const params = useParams();
   const id = params.id as string;
@@ -40,4 +36,5 @@ export default function UserPageLayout({
     checkMember();
   });
   return children;
-}
+};
+export default UserPageLayout;

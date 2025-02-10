@@ -5,10 +5,10 @@ import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUse
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
-export async function POST(
+export const POST = async (
   request: NextRequest,
   { params }: { params: { id: number } }
-) {
+) => {
   try {
     const { id } = await params;
     const appointmentId = id;
@@ -63,4 +63,4 @@ export async function POST(
     console.error("❌ 투표 저장 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

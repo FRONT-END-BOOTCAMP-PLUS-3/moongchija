@@ -14,7 +14,7 @@ interface Image {
   created_at: string;
 }
 
-export default function ImagesPage() {
+const ImagesPage = () => {
   const [images, setImages] = useState<Image[]>([]);
   const { errorMessage } = useAdminCheck();
 
@@ -52,7 +52,7 @@ export default function ImagesPage() {
               {images.map((image) => (
                 <div key={image.id} className={styles.imageCard}>
                   <a href={image.image_url} target="_blank">
-                    <img
+                    <Image
                       width={100}
                       height={150}
                       src={image.image_url}
@@ -77,4 +77,6 @@ export default function ImagesPage() {
       )}
     </>
   );
-}
+};
+
+export default ImagesPage;
