@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./images.module.scss";
 
-import useAdminCheck from "@/hooks/useAdminCheck";
+import useAdminCheck from "../hooks/useAdminCheck";
 import Image from "next/image";
 
 interface Image {

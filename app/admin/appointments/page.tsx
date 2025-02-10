@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./appointments.module.scss";
 import Link from "next/link";
-import useAdminCheck from "@/hooks/useAdminCheck";
+import useAdminCheck from "../hooks/useAdminCheck";
 
 interface Appointment {
   id: number;
