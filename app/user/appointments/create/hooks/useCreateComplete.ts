@@ -8,13 +8,20 @@ const useCreateComplete = (onIsComplete: () => void) => {
   const router = useRouter();
   const { appointment } = useCreateAppointment();
 
+  const [handelCopyActive, setHandelCopyActive] = useState<boolean>(false);
   const [copyActive, setCopyActive] = useState<boolean>(false);
   const [copiedText, setCopiedText] = useState<string | null>(null);
 
   const appointmentId = appointment.id || "";
 
+  // 초대링크 복사 성공 시, 버튼 활성화
+  useEffect(() => {
+    setCopyActive(true);
+  }, [handelCopyActive]);
+
+  // 링크 복사 함수
   const handleCopy = useCallback((text: string, type: "link" | "id") => {
-    fallbackCopy(text, setCopyActive, type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
+    fallbackCopy(text, setHandelCopyActive, type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
     setCopiedText(type);
     setTimeout(() => setCopiedText(null), 2000);
   }, []);
