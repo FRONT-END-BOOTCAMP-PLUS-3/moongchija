@@ -1,53 +1,29 @@
 "use client";
 
-import styles from "./place.module.scss";
+import styles from "./createPlace.module.scss";
 import Button from "@/components/button/Button";
-import { useCreateAppointment } from "@/context/CreateAppointmentContext";
-import { useEffect, useState } from "react";
-import CircleIndicator from "./CircleIndicator";
 import Loading from "@/components/loading/Loading";
-
-const MAX_PLACES = 5;
+import useCreatePlace from "../hooks/useCreatePlace";
+import CircleIndicator from "./CircleIndicator";
 
 interface Props {
   onPageChange: (index: number) => void;
 }
 
 const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
-  const { placeVotes, setPlaceVotes, createAppointment, loading } = useCreateAppointment();
-  const [isButtonActive, setIsButtonActive] = useState(false);
-
-  useEffect(() => {
-    const allNamesFilled = placeVotes.every((place) => place.place.trim() !== "");
-    setIsButtonActive(allNamesFilled);
-  }, [placeVotes]);
-
-  const handleAddPlace = () => {
-    if (placeVotes.length < MAX_PLACES) {
-      setPlaceVotes([...placeVotes, { place: "", place_url: "", appointment_id: null }]);
-    }
-  };
-
-  const handleRemovePlace = () => {
-    if (placeVotes.length > 1) {
-      setPlaceVotes(placeVotes.slice(0, -1));
-    }
-  };
-
-  const handleChange = (index: number, key: "place" | "place_url", value: string) => {
-    const updatedPlaces = [...placeVotes];
-    updatedPlaces[index][key] = value;
-    setPlaceVotes(updatedPlaces);
-  };
-
-  const handleNextButton = async () => {
-    try {
-      await createAppointment();
-      onPageChange(4);
-    } catch {
-      alert("약속 생성에 실패했습니다. 다시 시도해주세요.");
-    }
-  };
+  const {
+    hooks: {
+      placeVotes,
+      isButtonActive,
+      loading,
+    },
+    handlers: {
+      handleAddPlace,
+      handleRemovePlace,
+      handleChange,
+      handleNextButton,
+    },
+  } = useCreatePlace(onPageChange);
 
   return (
     <div className={styles.container}>

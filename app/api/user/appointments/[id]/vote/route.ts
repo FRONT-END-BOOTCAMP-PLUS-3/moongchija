@@ -12,7 +12,7 @@ export async function POST(
   try {
     const { id } = await params;
     const appointmentId = id;
-    let { userId, timeVotes, placeVotes } = await request.json();
+    const { userId, timeVotes, placeVotes } = await request.json();
 
     // 필수 데이터 체크
     if (!userId || !timeVotes.length || !placeVotes.length) {

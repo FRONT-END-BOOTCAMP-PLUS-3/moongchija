@@ -1,12 +1,13 @@
 "use client";
 
 import { useState } from "react";
-import CreateInformation from "./components/information";
-import CreateTime from "./components/time";
-import CreatePlace from "./components/place";
 import { CreateAppointmentProvider } from "@/context/CreateAppointmentContext";
+
 import ArrowHeader from "@/components/header/ArrowHeader";
-import CreateComplete from "./components/complete";
+import CreateComplete from "./components/createComplete";
+import CreateInformation from "./components/createInformation";
+import CreateTime from "./components/createTime";
+import CreatePlace from "./components/createPlace";
 
 const CreatePage: React.FC = () => {
   const [currentPage, setCurrentPage] = useState<number>(1);
