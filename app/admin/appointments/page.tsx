@@ -3,8 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./appointments.module.scss";
 import Link from "next/link";
-import { getUserIdClient } from "@/utils/supabase/client";
-import { useRouter } from "next/navigation";
+import useAdminCheck from "@/hooks/useAdminCheck";
 
 interface Appointment {
   id: number;
@@ -12,33 +11,14 @@ interface Appointment {
   status: "voting" | "confirmed";
   confirm_time: string;
 }
-const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
+
 export default function AppointmentsPage() {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filteredAppointments, setFilteredAppointments] = useState<
     Appointment[]
   >([]);
   const [statusFilter, setStatusFilter] = useState("전체");
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [userId, setUserId] = useState<string | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const currentUserId = await getUserIdClient();
-      setUserId(currentUserId);
-      if (currentUserId !== ADMIN_USER_ID) {
-        setErrorMessage(
-          "이 페이지는 관리자 전용입니다. 권한이 없는 사용자로는 접근할 수 없습니다."
-        );
-        setTimeout(() => {
-          router.push("/user/appointments");
-        }, 2000);
-      }
-    };
-
-    checkUser();
-  }, [router]);
+  const { errorMessage } = useAdminCheck();
 
   // ✅ 약속 데이터 불러오기
   const fetchAppointments = async () => {
