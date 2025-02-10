@@ -1,4 +1,3 @@
-import { useState } from "react";
 import useInput from "./useInput";
 import {
   validateEmail,
@@ -38,8 +37,6 @@ const useForm = () => {
     password
   );
 
-  const [isNicknameAvailable, setIsNicknameAvailable] = useState(false);
-
   const isFormValid = [
     emailError,
     nicknameError,
@@ -49,7 +46,6 @@ const useForm = () => {
     !nickname,
     !password,
     !passwordCheck,
-    !isNicknameAvailable,
   ].every((error) => !error);
 
   return {
@@ -59,8 +55,6 @@ const useForm = () => {
       setNickname,
       nicknameError,
       handleChangeNickname,
-      isNicknameAvailable,
-      setIsNicknameAvailable,
     },
     password: {
       password,
