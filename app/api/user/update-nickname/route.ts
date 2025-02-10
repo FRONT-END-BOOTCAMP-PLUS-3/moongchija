@@ -28,11 +28,22 @@ export const PATCH = async (request: NextRequest) => {
     const userInfo = await updateNicknameUscase.execute(userId, { nickname });
 
     return NextResponse.json(userInfo);
-  } catch (error) {
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      if (error.message === "이미 사용 중인 닉네임입니다.") {
+        return NextResponse.json({ message: error.message }, { status: 409 });
+      }
+      return NextResponse.json(
+        {
+          message: error.message || "서버 오류가 발생했습니다.",
+        },
+        { status: 500 }
+      );
+    }
+
     return NextResponse.json(
       {
-        message:
-          error instanceof Error ? error.message : "서버 오류가 발생했습니다.",
+        message: "서버 오류가 발생했습니다.",
       },
       { status: 500 }
     );
