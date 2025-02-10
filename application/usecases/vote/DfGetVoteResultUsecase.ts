@@ -47,7 +47,7 @@ export class DfGetVoteResultUseCase {
     const placeResults = await Promise.all(
       placeVotes.map(async (placeVote) => {
         const users = await this.placeVoteUserRepo.getUsersByPlace(
-          placeVote.id
+          placeVote.id as number
         );
         return {
           place: placeVote.place,
