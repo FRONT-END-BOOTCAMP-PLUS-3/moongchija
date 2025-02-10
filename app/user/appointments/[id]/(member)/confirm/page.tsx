@@ -3,7 +3,6 @@
 import styles from "./confirm.module.scss";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { Calendar } from "react-date-range";

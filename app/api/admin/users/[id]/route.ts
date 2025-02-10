@@ -3,10 +3,10 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 import { DfDeleteUserUsecase } from "@/application/usecases/user/DfDeleteUserUsecase";
 
 // ✅ DELETE: 유저 삭제
-export async function DELETE(
+export const DELETE = async (
   request: NextRequest,
   { params }: { params: { id: string } }
-) {
+) => {
   try {
     const { id } = await params;
 
@@ -31,4 +31,4 @@ export async function DELETE(
     console.error("❌ 유저 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

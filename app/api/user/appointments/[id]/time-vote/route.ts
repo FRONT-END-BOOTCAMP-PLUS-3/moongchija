@@ -2,10 +2,7 @@ import { NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: number } }
-) {
+export const GET = async ({ params }: { params: { id: number } }) => {
   const repository = new SbAppointmentRepository();
   const usecase = new DfGetAppointmentTimeUsecase(repository);
   const { id } = await params;
@@ -19,4 +16,4 @@ export async function GET(
   }
 
   return NextResponse.json(appointmentTime);
-}
+};

@@ -2,10 +2,10 @@ import { DfIsMemberUsecase } from "@/application/usecases/member/DfIsMemberUseca
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { NextResponse } from "next/server";
 
-export async function GET(
+export const GET = async (
   request: Request,
   { params }: { params: { id: number } }
-) {
+) => {
   const { id } = await params;
   const appointmentId = id;
   const { searchParams } = new URL(request.url);
@@ -22,4 +22,4 @@ export async function GET(
     );
   }
   return NextResponse.json(isMember);
-}
+};

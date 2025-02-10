@@ -1,4 +1,4 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { SbTimeVoteUserRepository } from "@/infrastructure/repositories/SbTimeVoteUserRepository";
 import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlaceVoteUserRepository";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
@@ -8,10 +8,7 @@ import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteRes
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export const GET = async ({ params }: { params: { id: number } }) => {
   try {
     const { id } = await params;
     const appointmentId = id;
@@ -40,4 +37,4 @@ export async function GET(
     console.error("❌ 투표 결과 조회 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

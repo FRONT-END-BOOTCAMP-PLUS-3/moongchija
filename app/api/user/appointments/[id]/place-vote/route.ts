@@ -1,11 +1,8 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export const GET = async ({ params }: { params: { id: number } }) => {
   try {
     const { id } = await params;
     const appointmentId = id;
@@ -26,4 +23,4 @@ export async function GET(
     console.error("❌ 장소 투표 리스트 조회 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

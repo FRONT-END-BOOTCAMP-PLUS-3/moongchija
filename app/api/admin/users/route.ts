@@ -4,7 +4,7 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 import { UserListDto } from "@/application/usecases/user/dto/UserListDto";
 
 // ✅ GET: 전체 유저 목록 조회 (검색 기능 제거)
-export async function GET() {
+export const GET = async () => {
   try {
     const userRepo = new SbUserRepository();
     const getAllUsersUseCase = new DfGetAllUsersUsecase(userRepo);
@@ -13,8 +13,8 @@ export async function GET() {
     return NextResponse.json(users);
   } catch (error) {
     return NextResponse.json(
-      { error: (error as any).message },
+      { error: (error as Error).message },
       { status: 500 }
     );
   }
-}
+};

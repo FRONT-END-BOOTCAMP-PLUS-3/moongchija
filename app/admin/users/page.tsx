@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import styles from "./users.module.scss";
 import useAdminCheck from "../hooks/useAdminCheck";
+import { UserListDto } from "@/application/usecases/user/dto/UserListDto";
 
 interface User {
   id: string;
@@ -10,7 +11,7 @@ interface User {
   nickname: string;
 }
 
-export default function UsersPage() {
+const UsersPage = () => {
   const [users, setUsers] = useState<User[]>([]);
   const [filteredUsers, setFilteredUsers] = useState<User[]>([]); // 검색 필터링된 목록
   const [searchType, setSearchType] = useState<"id" | "email" | "nickname">(
@@ -23,7 +24,7 @@ export default function UsersPage() {
   const fetchUsers = async () => {
     const res = await fetch("/api/admin/users");
     const data = await res.json();
-    const mappedData = data.map((user: any) => ({
+    const mappedData: User[] = data.map((user: UserListDto) => ({
       id: user.id,
       email: user.user_email, // ✅ 여기서 필드명 변경
       nickname: user.nickname,
@@ -136,4 +137,6 @@ export default function UsersPage() {
       )}
     </>
   );
-}
+};
+
+export default UsersPage;

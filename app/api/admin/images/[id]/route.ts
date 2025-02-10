@@ -1,12 +1,9 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { SbAppointmentImageRepository } from "@/infrastructure/repositories/SbAppointmentImageRepository";
 import { DfDeleteImageUsecase } from "@/application/usecases/appointmentImage/DfDeleteImageUsecase";
 
 // ✅ DELETE: 이미지 삭제
-export async function DELETE(
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) {
+export const DELETE = async ({ params }: { params: { id: string } }) => {
   try {
     const { id } = await params;
 
@@ -32,4 +29,4 @@ export async function DELETE(
     console.error("❌ 이미지 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};
