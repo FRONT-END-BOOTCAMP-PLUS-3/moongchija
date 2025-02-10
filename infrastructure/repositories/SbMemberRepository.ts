@@ -133,4 +133,20 @@ export class SbMemberRepository implements MemberRepository {
 
     return data ? data.map((member) => member.user_id) : [];
   }
+
+  async deleteMember(userId: string, appointmentId: number): Promise<void> {
+    const supabase = await createClient();
+    const { error } = await supabase
+      .from("member")
+      .delete()
+      .eq("user_id", userId)
+      .eq("appointment_id", appointmentId);
+
+    if (error) {
+      console.error(`member 삭제 실패:`, error);
+      throw new Error(`Failed to delete member: ${error.message}`);
+    }
+  }
 }
+
+
