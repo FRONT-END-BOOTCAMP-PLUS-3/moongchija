@@ -16,11 +16,34 @@ const UserName = () => {
     setIsEditing((prev) => !prev);
   };
 
+  const updateNicknameFetch = async (nickname: string) => {
+    try {
+      const response = await fetch("/api/user/update-nickname", {
+        method: "PATCH",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ nickname }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data?.message || "닉네임 변경에 실패하였습니다.");
+      }
+
+      return data;
+    } catch {
+      throw new Error("서버와의 연결에 문제가 생겼습니다.");
+    }
+  };
+
   const handleChangeNickname = async () => {
     if (nickname === user?.nickname) {
       alert("기존 닉네임과 동일합니다.");
       return;
     }
+
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
       return;
@@ -36,35 +59,17 @@ const UserName = () => {
     if (!confirmChange) return;
 
     try {
-      const response = await fetch("/api/user/update-nickname", {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nickname }),
-      });
-
-      let data;
-
-      try {
-        data = await response.json();
-      } catch {
-        alert("서버에서 올바른 응답을 받지 못했습니다.");
-        return;
-      }
-
-      if (!response.ok) {
-        alert(data?.message || "닉네임 변경에 실패했습니다.");
-        return;
-      }
+      await updateNicknameFetch(nickname);
 
       if (user) {
         setUser({ ...user, nickname });
       }
 
       alert("닉네임이 성공적으로 변경되었습니다!");
-    } catch {
-      alert("서버와의 연결에 문제가 발생했습니다.");
+    } catch (error) {
+      alert(
+        error instanceof Error ? error.message : "서버 오류가 발생했습니다."
+      );
     }
 
     setIsEditing((prev) => !prev);
