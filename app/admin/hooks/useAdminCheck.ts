@@ -13,6 +13,12 @@ const useAdminCheck = () => {
       const currentUserId = await getUserIdClient();
       setUserId(currentUserId);
 
+      if (!currentUserId) {
+        alert("로그인되지 않았습니다. 로그인 페이지로 이동합니다.");
+        router.push("/login");
+        return;
+      }
+
       try {
         const response = await fetch("/api/admin");
 
