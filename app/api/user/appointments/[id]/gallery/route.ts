@@ -38,30 +38,27 @@ export async function GET(req: NextRequest, { params }: { params: { id: number }
 
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
+    const formData = await req.formData();
+    const file = formData.get("file") as File;
+    const appointmentId = formData.get("appointment_id");
+    const createrId = formData.get("creater_id");
 
-    const { appointment_id, image_url, creater_id } = body;
-    if (!appointment_id || !image_url || !creater_id) {
-      return NextResponse.json(
-        { error: "필수 필드(appointment_id, image_url, creater_id)가 누락되었습니다." },
-        { status: 400 }
-      );
+    if (!file || !appointmentId || !createrId) {
+      return NextResponse.json({ error: "필수 입력값이 없습니다." }, { status: 400 });
     }
 
-    const imageRepo = new SbAppointmentImageRepository();
-    const createUsecase = new DfCreateImageUsecase(imageRepo);
-    const createdImage = await createUsecase.execute({
-      appointment_id,
-      image_url,
-      creater_id,
+    const repository = new SbAppointmentImageRepository();
+    const usecase = new DfCreateImageUsecase(repository);
+
+    const uploadedImage = await usecase.execute({
+      appointment_id: Number(appointmentId),
+      creater_id: String(createrId),
+      file,
     });
 
-    return NextResponse.json(createdImage, { status: 201 });
+    return NextResponse.json(uploadedImage);
   } catch (error) {
-    console.error("POST Error:", error);
-    return NextResponse.json(
-      { error: "서버 내부 오류 발생" },
-      { status: 500 }
-    );
+    console.error(error);
+    return NextResponse.json({ error: "이미지 업로드 실패" }, { status: 500 });
   }
 }

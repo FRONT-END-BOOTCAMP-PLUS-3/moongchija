@@ -12,6 +12,7 @@ import Modal from "@/components/modal/Modal";
 import Button from "@/components/button/Button";
 import Image from "next/image";
 import { MdClose } from "react-icons/md";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 export interface ImagesDto {
   id: number;
@@ -23,17 +24,19 @@ export interface ImagesDto {
 }
 
 const GalleryPage = () => {
-  const { id } = useParams();
+  const params = useParams();
+  const id = params.id as string;
   const [galleryData, setGalleryData] = useState<ImagesDto[]>([]); // 약속 이미지 데이터 배열
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
+  const [userId, setUserId] = useState<string|null>(); 
+
 
   const openUploaderModal = () => setIsModalOpen(true);
   const closeUploaderModal = () => setIsModalOpen(false);
-  const onSuccessUpload = () => (setIsModalOpen(false), alert("완료"));
 
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -45,6 +48,41 @@ const GalleryPage = () => {
         }
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handleUploadImage = async () => {
+    if (!fileInputRef.current?.files?.length) {
+      alert("파일을 선택하세요.");
+      return;
+    }
+  
+    const file = fileInputRef.current.files[0];
+    
+  
+    const formData = new FormData();
+    formData.append("file", file);
+    formData.append("appointment_id", id);
+    formData.append("creater_id",String(userId) ); // ✅ 실제 유저 ID로 변경
+  
+    try {
+      const response = await fetch(`/api/user/appointments/${id}/gallery`, {
+        method: "POST",
+        body: formData,
+      });
+  
+      if (!response.ok) {
+        throw new Error("이미지 업로드 실패");
+      }
+  
+      const uploadedImage = await response.json();
+      setGalleryData((prev) => [...prev, uploadedImage]); // ✅ UI에 바로 반영
+      setIsModalOpen(false);
+      alert("이미지 업로드 완료!");
+      setIsModalOpen(false);
+    } catch (error) {
+      console.error(error);
+      alert("이미지 업로드에 실패했습니다.");
     }
   };
 
@@ -80,6 +118,14 @@ const GalleryPage = () => {
       fetchGallery();
     }
   }, [id]);
+
+  useEffect(() => {
+        const fetchUserId = async () => {
+          const fetchedUserId = await getUserIdClient();
+          setUserId(fetchedUserId); 
+        };
+        fetchUserId();
+      }, []);
 
   if (loading) {
     return (
@@ -178,7 +224,7 @@ const GalleryPage = () => {
                 size="sm"
                 color="--primary-color"
                 active={true}
-                onClick={onSuccessUpload}
+                onClick={handleUploadImage}
               />
             </div>
           </div>
