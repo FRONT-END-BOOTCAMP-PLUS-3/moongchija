@@ -2,8 +2,8 @@
 
 import { useEffect, useState } from "react";
 import styles from "./images.module.scss";
-import { useRouter } from "next/navigation";
-import { getUserIdClient } from "@/utils/supabase/client";
+
+import useAdminCheck from "@/hooks/useAdminCheck";
 import Image from "next/image";
 
 interface Image {
@@ -13,35 +13,16 @@ interface Image {
   creater_id: string;
   created_at: string;
 }
-const ADMIN_USER_ID = process.env.NEXT_PUBLIC_ADMIN_USER_ID;
+
 export default function ImagesPage() {
   const [images, setImages] = useState<Image[]>([]);
+  const { errorMessage } = useAdminCheck();
 
   const fetchImages = async () => {
     const res = await fetch("/api/admin/images");
     const data = await res.json();
     setImages(data);
   };
-  const [errorMessage, setErrorMessage] = useState<string>("");
-  const [userId, setUserId] = useState<string | null>(null);
-  const router = useRouter();
-
-  useEffect(() => {
-    const checkUser = async () => {
-      const currentUserId = await getUserIdClient();
-      setUserId(currentUserId);
-      if (currentUserId !== ADMIN_USER_ID) {
-        setErrorMessage(
-          "이 페이지는 관리자 전용입니다. 권한이 없는 사용자로는 접근할 수 없습니다."
-        );
-        setTimeout(() => {
-          router.push("/user/appointments");
-        }, 2000);
-      }
-    };
-
-    checkUser();
-  }, [router]);
 
   useEffect(() => {
     fetchImages();
