@@ -50,25 +50,66 @@ export class SbAppointmentImageRepository implements AppointmentImageRepository 
   }
 
   // 이미지 생성
-  async createImage(newImage: Omit<AppointmentImage, 'id' | 'created_at'>): Promise<AppointmentImage> {
-    const supabase = await this.getClient();
-    const { data, error } = await supabase
-      .from("appointment_image")
-      .insert(newImage)
-      .select();
+  // async createImage(newImage: Omit<AppointmentImage, 'id' | 'created_at'>): Promise<AppointmentImage> {
+  //   const supabase = await this.getClient();
+  //   const { data, error } = await supabase
+  //     .from("appointment_image")
+  //     .insert(newImage)
+  //     .select();
 
-    if (error || !data || data.length === 0) {
-      throw new Error("이미지 생성 실패: " + (error?.message || "알 수 없는 오류"));
+  //   if (error || !data || data.length === 0) {
+  //     throw new Error("이미지 생성 실패: " + (error?.message || "알 수 없는 오류"));
+  //   }
+
+  //   const createdImage = data[0];
+  //   return {
+  //     id: createdImage.id,
+  //     appointment_id: createdImage.appointment_id,
+  //     image_url: createdImage.image_url,
+  //     creater_id: createdImage.creater_id,
+  //     created_at: new Date(createdImage.created_at),
+  //   };
+  // }
+
+  async createImage(
+    file: File,
+    appointment_id: number,
+    creater_id: string
+  ): Promise<void> {
+    const supabase = await this.getClient();
+
+    // 1️⃣ ✅ Supabase 스토리지에 파일 업로드
+    const fileName = `${Date.now()}-${file.name}`;
+    const filePath = `appointment_images/${fileName}`;
+
+    const {  error: storageError } = await supabase.storage
+      .from("images") // ✅ 스토리지 버킷 이름
+      .upload(filePath, file);
+
+    if (storageError) {
+      throw new Error("스토리지 업로드 실패: " + storageError.message);
     }
 
-    const createdImage = data[0];
-    return {
-      id: createdImage.id,
-      appointment_id: createdImage.appointment_id,
-      image_url: createdImage.image_url,
-      creater_id: createdImage.creater_id,
-      created_at: new Date(createdImage.created_at),
-    };
+    const uploadedImageUrl = `https://yswjnlalguzoxdcmydxr.supabase.co/storage/v1/object/public/images/${filePath}`;
+
+    // 2️⃣ ✅ 업로드된 이미지 URL을 DB에 저장
+    const { data: dbData, error: dbError } = await supabase
+      .from("appointment_image")
+      .insert([
+        {
+          appointment_id,
+          image_url: uploadedImageUrl,
+          creater_id,
+        },
+      ])
+      .select()
+      .single();
+
+    if (dbError) {
+      throw new Error("DB 저장 실패: " + dbError.message);
+    }
+
+    return dbData;
   }
 
   // 이미지 삭제
