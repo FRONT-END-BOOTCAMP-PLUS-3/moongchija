@@ -1,8 +1,8 @@
 import { DfGetAllEmojisUsecase } from "@/application/usecases/user/DfGetAllEmojisUsecase";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 
-export const GET = async (request: NextRequest) => {
+export const GET = async () => {
   const userRepository = new SbUserRepository();
   const allEmojis = new DfGetAllEmojisUsecase(userRepository);
 

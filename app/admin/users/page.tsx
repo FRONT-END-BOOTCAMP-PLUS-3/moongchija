@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import styles from "./users.module.scss";
-import useAdminCheck from "@/hooks/useAdminCheck";
+import useAdminCheck from "../hooks/useAdminCheck";
 
 interface User {
   id: string;
