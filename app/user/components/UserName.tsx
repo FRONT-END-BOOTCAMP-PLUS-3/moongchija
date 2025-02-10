@@ -25,16 +25,22 @@ const UserName = () => {
         },
         body: JSON.stringify({ nickname }),
       });
-
       const data = await response.json();
 
       if (!response.ok) {
+        if (response.status === 409) {
+          throw new Error(data?.message || "이미 사용 중인 닉네임입니다.");
+        }
         throw new Error(data?.message || "닉네임 변경에 실패하였습니다.");
       }
 
       return data;
-    } catch {
-      throw new Error("서버와의 연결에 문제가 생겼습니다.");
+    } catch (error) {
+      throw new Error(
+        error instanceof Error
+          ? error.message
+          : "서버와의 연결에 문제가 생겼습니다."
+      );
     }
   };
 
@@ -67,9 +73,15 @@ const UserName = () => {
 
       alert("닉네임이 성공적으로 변경되었습니다!");
     } catch (error) {
-      alert(
-        error instanceof Error ? error.message : "서버 오류가 발생했습니다."
-      );
+      if (error instanceof Error) {
+        if (error.message === "이미 사용 중인 닉네임입니다.") {
+          alert("이미 사용 중인 닉네임입니다. 다른 닉네임을 시도해주세요.");
+        } else {
+          alert(error.message || "서버 오류가 발생했습니다.");
+        }
+      } else {
+        alert("서버 오류가 발생했습니다.");
+      }
     }
 
     setIsEditing((prev) => !prev);
