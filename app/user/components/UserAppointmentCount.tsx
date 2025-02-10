@@ -9,23 +9,18 @@ const UserAppointmentCount = ({
 }: {
   appointments: Event[] | null;
 }) => {
-  const votingCount =
-    appointments?.filter((appointment) => {
-      const { status } = getEventsStatus(appointment);
-      return status === "voting";
-    }).length ?? 0;
+  const getAppointmentCount = (status: string) => {
+    return (
+      appointments?.filter((appointment) => {
+        const { status: appointmentStatus } = getEventsStatus(appointment);
+        return appointmentStatus === status;
+      }).length ?? 0
+    );
+  };
 
-  const scheduledCount =
-    appointments?.filter((appointment) => {
-      const { status } = getEventsStatus(appointment);
-      return status === "scheduled";
-    }).length ?? 0;
-
-  const confirmedCount =
-    appointments?.filter((appointment) => {
-      const { status } = getEventsStatus(appointment);
-      return status === "confirmed";
-    }).length ?? 0;
+  const votingCount = getAppointmentCount("voting");
+  const scheduledCount = getAppointmentCount("scheduled");
+  const confirmedCount = getAppointmentCount("confirmed");
 
   const appointmentData = [
     { color: "greenColor", text: "투표중", count: votingCount },
