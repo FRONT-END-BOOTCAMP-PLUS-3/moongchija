@@ -89,32 +89,29 @@ const InformationPage = () => {
   };
 
   const handleExitRoom = async () => {
-    console.log(typeof(userId));
-    console.log(typeof(id));
-    
     if (!confirm("정말 방을 나가시겠습니까?")) return;
-  
+
     try {
-      const res = await fetch(`/api/user/appointments/${id}/member`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: userId}),
-      });
-  
+      const res = await fetch(
+        `/api/user/appointments/${id}/information/member`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId }),
+        }
+      );
+
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "방 나가기 실패");
       }
-  
+
       alert("방을 나갔습니다.");
       router.push("/user/appointments");
     } catch (error) {
       console.error("방 나가기 중 오류 발생:", error);
     }
   };
-  
-
-
 
   return (
     <div className={styles.pageContainer}>
