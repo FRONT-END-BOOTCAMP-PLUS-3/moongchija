@@ -37,12 +37,11 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
   return (
     <div className={styles.container}>
       {/* 남은 날짜 박스 */}
-      {/* <div className={styles.dDay}> */}
+
       <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
         {countdown}
       </div>
-      {/* </div> */}
-
+  
       {/* 약속명 */}
       <div className={styles.name}>
         <FaCrown className={styles.crownIcon} />
@@ -61,7 +60,7 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
               {String(informationData.confirmPlace)}
             </Link>
           ) : (
-            <span>{String(informationData.title)}</span>
+            <span>{String(informationData.confirmPlace)}</span>
           )}
         </div>
 
