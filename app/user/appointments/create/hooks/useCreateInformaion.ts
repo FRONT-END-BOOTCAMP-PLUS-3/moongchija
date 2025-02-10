@@ -49,8 +49,7 @@ const useCreateInformation = (onPageChange: (index: number) => void) => {
 
   // 답변 내용을 설정
   const handleSetAnswer = (answer: string) => {
-    const newAnswer = answer.trim().toLowerCase();
-    setAppointment((prev) => ({ ...prev, answer: newAnswer }));
+    setAppointment((prev) => ({ ...prev, answer }));
   };
 
   // '다음' 버튼 클릭

@@ -2,18 +2,23 @@
 
 import { Appointment } from "@/domain/entities/Appointment";
 import { PlaceVote } from "@/domain/entities/PlaceVote";
-import { getUserIdClient } from "@/utils/supabase/client";
-import { createContext, useContext, useState, ReactNode } from "react";
 import { useRouter } from "next/navigation";
+import {
+  createContext,
+  ReactNode,
+  useCallback,
+  useContext,
+  useMemo,
+  useState,
+} from "react";
+import { useUser } from "./UserContext";
 
 type CreateAppointmentContextType = {
   appointment: Appointment;
-  setAppointment: (
-    appointment: Appointment | ((prev: Appointment) => Appointment)
-  ) => void;
+  setAppointment: React.Dispatch<React.SetStateAction<Appointment>>;
   placeVotes: PlaceVote[];
-  setPlaceVotes: (votes: PlaceVote[]) => void;
-  createAppointment: () => void;
+  setPlaceVotes: React.Dispatch<React.SetStateAction<PlaceVote[]>>;
+  createAppointment: () => Promise<void>;
   loading: boolean;
 };
 
@@ -27,48 +32,43 @@ export const CreateAppointmentProvider = ({
   children: ReactNode;
 }) => {
   const router = useRouter();
-  const [loading, setLoading] = useState<boolean>(false);
-  const [appointment, setAppointment] = useState<Appointment>({
-    confirm_time: null,
-    confirm_place: null,
-    confirm_place_url: null,
-    status: "voting",
-    title: "",
-    quiz: "내 MBTI는?",
-    answer: "",
-    start_time: "",
-    end_time: "",
-    owner_id: "",
-  });
+  const { user } = useUser();
+  const [loading, setLoading] = useState(false);
 
+  const initialAppointment = useMemo<Appointment>(
+    () => ({
+      confirm_time: null,
+      confirm_place: null,
+      confirm_place_url: null,
+      status: "voting",
+      title: "",
+      quiz: "내 MBTI는?",
+      answer: "",
+      start_time: "",
+      end_time: "",
+      owner_id: "",
+    }),
+    []
+  );
+
+  const [appointment, setAppointment] = useState<Appointment>(initialAppointment);
   const [placeVotes, setPlaceVotes] = useState<PlaceVote[]>([
-    {
-      place: "",
-      place_url: "",
-      appointment_id: null,
-    },
+    { place: "", place_url: "", appointment_id: null },
   ]);
 
-  async function createAppointment() {
+  const createAppointment = useCallback(async () => {
     setLoading(true);
     try {
-      const userId = await getUserIdClient();
-      if (!userId) {
-        alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
-        router.push("/login");
-        return null;
-      }
-
-      const newAppointment: Appointment = { ...appointment, owner_id: userId };
-      const requestBody = JSON.stringify({
-        appointment: newAppointment,
-        placeVotes,
-      });
+      const newAppointment: Appointment = {
+        ...appointment,
+        owner_id: user!.id,
+        answer: appointment.answer?.trim().toLowerCase() ?? "",
+      };
 
       const response = await fetch("/api/user/appointments/create", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: requestBody,
+        body: JSON.stringify({ appointment: newAppointment, placeVotes }),
       });
 
       if (!response.ok) {
@@ -77,35 +77,38 @@ export const CreateAppointmentProvider = ({
       }
 
       const data: Appointment = await response.json();
-
       setAppointment(data);
     } catch (error) {
-      console.error("❌ 약속 생성 오류가 발생하였습니다. :", error);
+      console.error("❌ 약속 생성 오류 발생:", error);
     } finally {
       setLoading(false);
     }
-  }
+  }, [appointment, placeVotes, router]);
+
+  const contextValue = useMemo(
+    () => ({
+      appointment,
+      setAppointment,
+      placeVotes,
+      setPlaceVotes,
+      createAppointment,
+      loading,
+    }),
+    [appointment, placeVotes, createAppointment, loading]
+  );
 
   return (
-    <CreateAppointmentContext.Provider
-      value={{
-        appointment,
-        setAppointment,
-        placeVotes,
-        setPlaceVotes,
-        createAppointment,
-        loading
-      }}
-    >
+    <CreateAppointmentContext.Provider value={contextValue}>
       {children}
     </CreateAppointmentContext.Provider>
   );
 };
+
 export const useCreateAppointment = () => {
   const context = useContext(CreateAppointmentContext);
   if (!context) {
     throw new Error(
-      "useAppointment must be used within an AppointmentProvider"
+      "useCreateAppointment must be used within a CreateAppointmentProvider"
     );
   }
   return context;
