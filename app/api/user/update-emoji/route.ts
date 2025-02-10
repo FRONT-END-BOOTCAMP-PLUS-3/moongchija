@@ -3,7 +3,7 @@ import { DfUpdateEmojiUsecase } from "@/application/usecases/user/DfUpdateEmojiU
 import { cookies } from "next/headers";
 import { NextRequest, NextResponse } from "next/server";
 
-export const POST = async (request: NextRequest) => {
+export const PATCH = async (request: NextRequest) => {
   try {
     const { emoji } = await request.json();
 
