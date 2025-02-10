@@ -1,3 +1,4 @@
+import Image from "next/image";
 import styles from "./Participants.module.scss";
 
 interface ParticipantsProps {
@@ -10,7 +11,13 @@ interface ParticipantsProps {
 const Participants = ({ participant }: ParticipantsProps) => {
   return (
     <div className={styles.participants}>
-      <div>{participant.emoji}</div>
+      <Image
+        src={participant.emoji}
+        alt={`Participant`}
+        width={20}
+        height={20}
+      />
+
       <span>{participant.nickname}</span>
     </div>
   );

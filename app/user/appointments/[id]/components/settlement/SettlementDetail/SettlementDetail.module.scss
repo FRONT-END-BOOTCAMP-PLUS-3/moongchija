@@ -97,7 +97,6 @@
    display: flex;
   align-items: center;
   justify-content: space-between;
-  // gap: 10px;
   width: 100%;
     
   }
@@ -118,8 +117,8 @@
 }
 
 .copyButton {
-  width: 20%;
-  background: #aaaaaa;
+  width: 40px;
+  background: var(--grey-4-color);
   color: white;
   border: none;
   padding: 2px 4px;
@@ -332,25 +331,7 @@
 
 .editButton{
   display: flex;
-  justify-content: end;
+  justify-content: center;
   margin-top: 20px;
   margin-right: 10px;
 }
-
-.noSettlementContainer {
-  display: flex;
-  flex-direction: column;
-  justify-content: center; 
-  align-items: center;
-  margin: 0 auto; 
-  height: 100%; 
-}
-
-
-.noSettlement{
-  color: #888; 
-  font-size: 18px; 
-  text-align: center; 
-  margin-bottom: 20px;
-}
-

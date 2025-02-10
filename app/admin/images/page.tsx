@@ -2,7 +2,9 @@
 
 import { useEffect, useState } from "react";
 import styles from "./images.module.scss";
+
 import useAdminCheck from "@/hooks/useAdminCheck";
+import Image from "next/image";
 
 interface Image {
   id: number;
@@ -50,7 +52,12 @@ export default function ImagesPage() {
               {images.map((image) => (
                 <div key={image.id} className={styles.imageCard}>
                   <a href={image.image_url} target="_blank">
-                    <img src={image.image_url} alt={`이미지 ${image.id}`} />
+                    <img
+                      width={100}
+                      height={150}
+                      src={image.image_url}
+                      alt={`이미지 ${image.id}`}
+                    />
                   </a>
                   <p>업로드한 유저: {image.creater_id}</p>
                   <p>{new Date(image.created_at).toLocaleString()}</p>
