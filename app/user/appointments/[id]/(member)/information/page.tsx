@@ -1,7 +1,6 @@
 "use client";
 
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-// import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
@@ -12,6 +11,7 @@ import Loading from "@/components/loading/Loading";
 import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 import { useRouter } from "next/navigation";
 import { getUserIdClient } from "@/utils/supabase/client";
+import CircleButton from "@/components/circleButton/CircleButton";
 
 const InformationPage = () => {
   const params = useParams();
@@ -20,6 +20,9 @@ const InformationPage = () => {
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
+  const [showButtons, setShowButtons] = useState<boolean>(false);
+
+  const handleCircleButtonClick = () => setShowButtons((prev) => !prev);
 
   const fetchInfo = async () => {
     try {
@@ -45,6 +48,7 @@ const InformationPage = () => {
     fetchUserId();
   }, []);
 
+  // 방번호 복사 버튼
   const handleCopyRoomId = () => {
     if (id) {
       const roomId = id as string;
@@ -53,14 +57,17 @@ const InformationPage = () => {
     }
   };
 
+  // 투표 결과 버튼
   const handleViewResult = () => {
     router.push(`/user/appointments/${id}/vote-result`);
   };
 
+  // 일정 변경 버튼
   const handleChangeSchedule = () => {
     router.push(`/user/appointments/${id}/confirm`);
   };
 
+  // 방삭제 버튼
   const handleDeleteRoom = async (appointmentId: number) => {
     if (!confirm("정말 이 약속을 삭제하시겠습니까?")) return;
 
@@ -78,7 +85,7 @@ const InformationPage = () => {
       if (confirmation) {
         alert("방이 삭제되었습니다.");
         setInfoData(undefined);
-        await fetchInfo();
+        router.push(`/user/appointments`);
       } else {
         alert("약속 삭제를 취소했습니다.");
       }
@@ -88,33 +95,31 @@ const InformationPage = () => {
     }
   };
 
+  // 방 나가기 버튼
   const handleExitRoom = async () => {
-    console.log(typeof(userId));
-    console.log(typeof(id));
-    
+    console.log(typeof userId);
+    console.log(typeof id);
+
     if (!confirm("정말 방을 나가시겠습니까?")) return;
-  
+
     try {
       const res = await fetch(`/api/user/appointments/${id}/member`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: userId}),
+        body: JSON.stringify({ userId: userId }),
       });
-  
+
       if (!res.ok) {
         const errorData = await res.json();
         throw new Error(errorData.error || "방 나가기 실패");
       }
-  
+
       alert("방을 나갔습니다.");
       router.push("/user/appointments");
     } catch (error) {
       console.error("방 나가기 중 오류 발생:", error);
     }
   };
-  
-
-
 
   return (
     <div className={styles.pageContainer}>
@@ -132,57 +137,54 @@ const InformationPage = () => {
               noticeData={infoData.notices}
               appointmentId={Number(id)}
             />
-            <div className={styles.buttonWrapper}>
-              <button
-                type="button"
-                className={styles.copyButton}
-                onClick={handleCopyRoomId}
-              >
-                방번호 복사
+            {/* 동그라미 플러스 버튼 */}
+            <CircleButton onClick={handleCircleButtonClick} />
+            <section
+              className={`${styles.buttonBox} ${
+                showButtons ? styles.show : ""
+              }`}
+              onClick={handleCircleButtonClick}
+            >
+              <button onClick={handleCopyRoomId} className={styles.copyButton}>
+                방번호로 복사
               </button>
-
-              <div className={styles.blueButtonWrapper}>
+              <button
+                className={styles.resultButton}
+                type="button"
+                onClick={handleViewResult}
+              >
+                투표 조회
+              </button>
+              {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
                 <button
-                  className={styles.resultButton}
+                  className={styles.changeScheduleButton}
                   type="button"
-                  onClick={handleViewResult}
+                  onClick={handleChangeSchedule}
                 >
-                  투표 조회
+                  일정 변경
                 </button>
+              ) : null}
+              {userId === infoData.owner_id ? ( // 방장이면, 방 삭제 가능
+                <button
+                  className={styles.deleteButton}
+                  type="button"
+                  onClick={() => handleDeleteRoom(Number(id))}
+                >
+                  삭제 하기
+                </button>
+              ) : null}
+              {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
+              <button
+                className={styles.exitButton}
+                type="button"
+                onClick={handleExitRoom}
+              >
+                방 나가기
+              </button>
+            ) : null}
+            </section>
 
-                {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
-                  <button
-                    className={styles.changeScheduleButton}
-                    type="button"
-                    onClick={handleChangeSchedule}
-                  >
-                    일정 변경
-                  </button>
-                ) : null}
-              </div>
-
-              <div className={styles.redButtonWrapper}>
-                {userId === infoData.owner_id ? ( // 방장이면, 방 삭제 가능
-                  <button
-                    className={styles.deleteButton}
-                    type="button"
-                    onClick={() => handleDeleteRoom(Number(id))}
-                  >
-                    삭제 하기
-                  </button>
-                ) : null}
-
-                {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
-                  <button
-                    className={styles.exitButton}
-                    type="button"
-                    onClick={handleExitRoom}
-                  >
-                    방 나가기
-                  </button>
-                ) : null}
-              </div>
-            </div>
+            
           </>
         )}
       </div>
