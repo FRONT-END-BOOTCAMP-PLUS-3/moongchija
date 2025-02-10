@@ -1,40 +1,21 @@
 "use client";
 
-import styles from "./complete.module.scss";
-import { useRouter } from "next/navigation";
-import React, { useEffect, useState } from "react";
+import React from "react";
+import styles from "./createComplete.module.scss";
 import Button from "@/components/button/Button";
 import Moongchi from "@/components/moongchi/Moongchi";
-import { useCreateAppointment } from "@/context/CreateAppointmentContext";
+import useCreateComplete from "../hooks/useCreateComplete";
 
 interface Props {
   onIsComplete: () => void;
 }
 
 const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
-  const basicUrl = process.env.NEXT_PUBLIC_SITE_URL;
-  const router = useRouter();
-  const [copyActive, setCopyActive] = useState<boolean>(false);
-  const [copiedText, setCopiedText] = useState<string | null>(null);
-
-  const { appointment } = useCreateAppointment();
-  const appointmentId = appointment.id ? appointment.id : "";
-
-
-  const handleCopy = async (text: string, type: "link" | "id") => {
-    try {
-      await navigator.clipboard.writeText(text);
-      setCopiedText(type);
-      setTimeout(() => setCopiedText(null), 2000);
-      setCopyActive(true);
-    } catch {
-      alert(type === "link" ? "초대링크 복사 실패" : "방번호 복사 실패");
-    }
-  };
-
-  useEffect(() => {
-    onIsComplete();
-  }, []);
+  const {
+    basicUrl,
+    hooks: { router, copyActive, copiedText, appointmentId },
+    handlers: { handleCopy },
+  } = useCreateComplete(onIsComplete);
 
   return (
     <div className={styles.completeContainer}>
