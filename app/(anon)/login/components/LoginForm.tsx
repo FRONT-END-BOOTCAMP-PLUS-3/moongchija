@@ -3,9 +3,6 @@
 import InputField from "@/components/input-filed/InputFiled";
 import styles from "./LoginForm.module.scss";
 import Button from "@/components/button/Button";
-// import useInput from "../../signup/hooks/useInput";
-// import { useRouter } from "next/navigation";
-// import { useState } from "react";
 import useLogin from "../hooks/useLogin";
 
 const LoginForm = () => {
