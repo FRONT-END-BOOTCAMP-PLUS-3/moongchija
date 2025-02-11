@@ -1,12 +1,10 @@
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { userId: string } }
-) => {
+export const GET = async (request: NextRequest) => {
   try {
-    const { userId } = await params;
+    const urlParts = request.nextUrl.pathname.split("/");
+    const userId = urlParts[urlParts.length - 1];
 
     if (!userId) {
       return NextResponse.json(

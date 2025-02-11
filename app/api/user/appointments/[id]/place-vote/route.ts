@@ -2,13 +2,10 @@ import { NextRequest, NextResponse } from "next/server";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const GET = async (request: NextRequest) => {
   try {
-    const { id } = await params;
-    const appointmentId = Number(id);
+    const urlParts = request.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
     if (isNaN(appointmentId)) {
       return NextResponse.json(
         { error: "유효하지 않은 약속 ID입니다." },

@@ -3,12 +3,9 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextRequest, NextResponse } from "next/server";
 
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
-  const { id } = await params;
-  const appointmentId = Number(id);
+export const GET = async (request: NextRequest) => {
+  const urlParts = request.nextUrl.pathname.split("/");
+  const appointmentId = Number(urlParts[urlParts.length - 2]);
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId") as string;
 
