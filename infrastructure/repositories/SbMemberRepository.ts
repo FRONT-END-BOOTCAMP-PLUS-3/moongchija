@@ -42,7 +42,7 @@ export class SbMemberRepository implements MemberRepository {
       .eq("appointment_id", appointmentId)
       .single();
 
-    if (error && error.code !== "PGRST116") {
+    if (error) {
       console.error(`📌 [DEBUG] member 조회 실패:`, error);
       throw new Error(
         `Failed to check appointment membership: ${error.message}`
@@ -148,5 +148,3 @@ export class SbMemberRepository implements MemberRepository {
     }
   }
 }
-
-
