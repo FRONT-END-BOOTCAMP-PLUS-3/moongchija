@@ -37,7 +37,8 @@ const DeleteAccountModalContent = ({ onClose }: { onClose: () => void }) => {
     <div className={styles.modalContent}>
       <p className={styles.question}>정말로 탈퇴하시겠습니까?</p>
       <p>
-        지금까지 쌓아온 <span className={styles.highlight}>추억이 모두</span>
+        지금까지 쌓아온{" "}
+        <span className={styles.highlight}>추억이 모두&nbsp;</span>
         사라지게 됩니다.
         <br />
         <span className={styles.highlight}>확인 버튼</span>을 클릭하시면 탈퇴가
