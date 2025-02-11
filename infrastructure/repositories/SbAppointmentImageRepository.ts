@@ -3,7 +3,9 @@ import { AppointmentImageRepository } from "@/domain/repositories/AppointmentIma
 import { createClient } from "@/utils/supabase/server";
 import { SupabaseClient } from "@supabase/supabase-js";
 
-export class SbAppointmentImageRepository implements AppointmentImageRepository {
+export class SbAppointmentImageRepository
+  implements AppointmentImageRepository
+{
   private async getClient(): Promise<SupabaseClient> {
     return await createClient();
   }
@@ -29,7 +31,9 @@ export class SbAppointmentImageRepository implements AppointmentImageRepository 
   }
 
   // 특정 약속의 이미지 조회
-  async getImagesByAppointmentId(appointmentId: number): Promise<AppointmentImage[]> {
+  async getImagesByAppointmentId(
+    appointmentId: number
+  ): Promise<AppointmentImage[]> {
     const supabase = await this.getClient();
     const { data, error } = await supabase
       .from("appointment_image")
@@ -82,7 +86,7 @@ export class SbAppointmentImageRepository implements AppointmentImageRepository 
     const fileName = `${Date.now()}-${file.name}`;
     const filePath = `appointment_images/${fileName}`;
 
-    const {  error: storageError } = await supabase.storage
+    const { error: storageError } = await supabase.storage
       .from("images") // ✅ 스토리지 버킷 이름
       .upload(filePath, file);
 
@@ -113,7 +117,7 @@ export class SbAppointmentImageRepository implements AppointmentImageRepository 
   }
 
   // 이미지 삭제
-  async deleteImage(imageId: string): Promise<boolean> {
+  async deleteImage(imageId: number): Promise<boolean> {
     const supabase = await this.getClient();
 
     const { data: imageData, error: fetchError } = await supabase

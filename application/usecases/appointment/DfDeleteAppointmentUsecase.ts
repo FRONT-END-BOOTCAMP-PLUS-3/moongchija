@@ -3,7 +3,7 @@ import { AppointmentRepository } from "@/domain/repositories/AppointmentReposito
 export class DfDeleteAppointmentUsecase {
   constructor(private appointmentRepo: AppointmentRepository) {}
 
-  async execute(appointmentId: string): Promise<boolean> {
+  async execute(appointmentId: number): Promise<boolean> {
     return await this.appointmentRepo.deleteAppointment(appointmentId);
   }
 }

@@ -5,10 +5,10 @@ import { NextResponse } from "next/server";
 
 export const GET = async (
   request: NextResponse,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   const { id } = await params;
-  const appointmentId = id;
+  const appointmentId = Number(id);
   const { searchParams } = new URL(request.url);
   const userId = searchParams.get("userId") as string;
 

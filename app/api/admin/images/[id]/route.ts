@@ -9,8 +9,9 @@ export const DELETE = async (
 ) => {
   try {
     const { id } = await params;
+    const imageId = Number(id);
 
-    if (!id) {
+    if (!imageId) {
       return NextResponse.json(
         { error: "이미지 ID가 없습니다." },
         { status: 400 }
@@ -19,7 +20,7 @@ export const DELETE = async (
 
     const imageRepository = new SbAppointmentImageRepository();
     const deleteImageUsecase = new DfDeleteImageUsecase(imageRepository);
-    const isDeleted = await deleteImageUsecase.execute(id);
+    const isDeleted = await deleteImageUsecase.execute(imageId);
 
     if (!isDeleted) {
       return NextResponse.json({ error: "이미지 삭제 실패" }, { status: 404 });

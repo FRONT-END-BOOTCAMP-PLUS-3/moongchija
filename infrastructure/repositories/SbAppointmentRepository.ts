@@ -115,7 +115,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
   }
 
   // ✅ 약속 삭제
-  async deleteAppointment(id: string): Promise<boolean> {
+  async deleteAppointment(id: number): Promise<boolean> {
     const supabase = await this.getClient();
 
     const { error } = await supabase.from("appointment").delete().eq("id", id);
