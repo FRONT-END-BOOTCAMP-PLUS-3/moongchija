@@ -44,7 +44,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         }
         setUserId(user);
       } catch (error) {
-        console.error("❌ 유저 정보 가져오기 실패:", error);
+        console.log("❌ 유저 정보 가져오기 실패:", error);
       }
     };
     fetchUserId();
@@ -56,13 +56,13 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
       try {
         const response = await fetch(`/api/user/${userId}`);
         if (!response.ok) {
-          throw new Error("Failed to fetch appointments");
+          console.log("Failed to fetch appointments");
         }
 
         const userData = await response.json();
         setUser(userData);
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
 
