@@ -8,6 +8,7 @@ export const DELETE = async (request: NextRequest) => {
     const urlParts = request.nextUrl.pathname.split("/");
     const appointmentId = Number(urlParts[urlParts.length - 1]); // 마지막 부분이 ID
 
+
     if (!appointmentId) {
       return NextResponse.json(
         { error: "약속 ID가 없습니다." },
