@@ -56,17 +56,17 @@ const AppointmentsPage = () => {
   }, [statusFilter, appointments]);
 
   // ✅ 약속 삭제 기능
-  const handleDelete = async (appointmentId: number) => {
+  const handleDelete = async (id: number) => {
     if (!confirm("정말 이 약속을 삭제하시겠습니까?")) return;
 
-    const res = await fetch(`/api/admin/appointments/${appointmentId}`, {
+    const res = await fetch(`/api/admin/appointments/${id}`, {
       method: "DELETE",
     });
 
     if (res.ok) {
       alert("약속이 삭제되었습니다.");
       setAppointments(
-        appointments.filter((appointment) => appointment.id !== appointmentId)
+        appointments.filter((appointment) => appointment.id !== id)
       );
     } else {
       alert("약속 삭제에 실패했습니다.");
