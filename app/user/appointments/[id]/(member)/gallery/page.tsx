@@ -1,18 +1,18 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import Button from "@/components/button/Button";
+import CircleButton from "@/components/circleButton/CircleButton";
+import IconHeader from "@/components/header/IconHeader";
+import Loading from "@/components/loading/Loading";
+import Modal from "@/components/modal/Modal";
+import { useUser } from "@/context/UserContext";
+import Image from "next/image";
+import { useParams } from "next/navigation";
+import { useCallback, useEffect, useRef, useState } from "react";
+import { MdClose } from "react-icons/md";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import GalleryDetail from "../components/gallery/galleryDetail/GalleryDetail";
 import styles from "./gallery.module.scss";
-import { useParams } from "next/navigation";
-import IconHeader from "@/components/header/IconHeader";
-import Loading from "@/components/loading/Loading";
-import CircleButton from "@/components/circleButton/CircleButton";
-import Modal from "@/components/modal/Modal";
-import Button from "@/components/button/Button";
-import Image from "next/image";
-import { MdClose } from "react-icons/md";
-import { getUserIdClient } from "@/utils/supabase/client";
 
 export interface ImagesDto {
   id: number;
@@ -32,7 +32,7 @@ const GalleryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [userId, setUserId] = useState<string | null>();
+  const {user} =useUser();
 
   const openUploaderModal = () => setIsModalOpen(true);
   const closeUploaderModal = () => setIsModalOpen(false);
@@ -61,7 +61,7 @@ const GalleryPage = () => {
     const formData = new FormData();
     formData.append("file", file);
     formData.append("appointment_id", id);
-    formData.append("creater_id", String(userId)); // ✅ 실제 유저 ID로 변경
+    formData.append("creater_id", String(user?.id)); 
 
     try {
       const response = await fetch(`/api/user/appointments/${id}/gallery`, {
@@ -73,11 +73,17 @@ const GalleryPage = () => {
         throw new Error("이미지 업로드 실패");
       }
 
-      const uploadedImage = await response.json();
-      setGalleryData((prev) => [...prev, uploadedImage]); // ✅ UI에 바로 반영
+      const postImage = await response.json();
+
       setIsModalOpen(false);
-      alert("이미지 업로드 완료!");
-      setIsModalOpen(false);
+      alert("이미지 업로드가 완료되었습니다.");
+      const uploadedImg = {
+        ...postImage,
+        nickname: user?.nickname,
+      };
+      setGalleryData((prev) => [...prev, uploadedImg]); 
+      setUploadedImage(null);
+      setIsModalOpen(false);  
     } catch (error) {
       console.error(error);
       alert("이미지 업로드에 실패했습니다.");
@@ -88,6 +94,7 @@ const GalleryPage = () => {
     fileInputRef.current?.click();
   };
 
+  // 사진 업로드 모달창에서 사진 비울때
   const handleDeleteImage = () => {
     const confirmDelete = window.confirm("이미지를 삭제하시겠습니까?");
     if (confirmDelete) {
@@ -109,21 +116,14 @@ const GalleryPage = () => {
     } finally {
       setLoading(false);
     }
-  }, [id]); 
+  }, [id]);
   useEffect(() => {
     if (id) {
       fetchGallery();
     }
-  }, [id, fetchGallery]); 
-  
+  }, [id, fetchGallery]);
 
-  useEffect(() => {
-    const fetchUserId = async () => {
-      const fetchedUserId = await getUserIdClient();
-      setUserId(fetchedUserId);
-    };
-    fetchUserId();
-  }, []);
+
 
   if (loading) {
     return (

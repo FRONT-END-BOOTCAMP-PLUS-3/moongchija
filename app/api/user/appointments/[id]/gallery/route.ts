@@ -37,12 +37,26 @@ export async function POST(req: NextRequest) {
     const appointmentId = formData.get("appointment_id");
     const createrId = formData.get("creater_id");
 
-    if (!file || !appointmentId || !createrId) {
-      return NextResponse.json(
-        { error: "필수 입력값이 없습니다." },
-        { status: 400 }
-      );
+    if (!file) {
+      return NextResponse.json({ error: "파일이 없습니다." }, { status: 400 });
     }
+
+    if (!file.type.startsWith("image/")) {
+      return NextResponse.json({ error: "올바른 이미지 형식이 아닙니다." }, { status: 400 });
+    }
+
+    if (file.size > 5 * 1024 * 1024) {
+      return NextResponse.json({ error: "파일 크기가 너무 큽니다. (최대 5MB)" }, { status: 413 });
+    }
+
+    if (!appointmentId || isNaN(Number(appointmentId)) || Number(appointmentId) <= 0) {
+      return NextResponse.json({ error: "유효하지 않은 약속 ID입니다." }, { status: 400 });
+    }
+
+    if (!createrId) {
+      return NextResponse.json({ error: "생성자 ID가 없습니다." }, { status: 400 });
+    }
+
 
     const repository = new SbAppointmentImageRepository();
     const usecase = new DfCreateImageUsecase(repository);
