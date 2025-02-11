@@ -82,7 +82,7 @@ const useEntry = () => {
     if (user) {
       fetchGetAppointment();
     }
-  }, [user]);
+  }, [user, fetchGetAppointment]);
 
   return {
     hooks: {
