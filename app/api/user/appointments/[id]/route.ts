@@ -4,7 +4,7 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 import { NextResponse } from "next/server";
 
 export const GET = async (
-  request: Request,
+  request: NextResponse,
   { params }: { params: { id: number } }
 ) => {
   const { id } = await params;

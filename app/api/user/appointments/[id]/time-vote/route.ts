@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
-export const GET = async ({ params }: { params: { id: number } }) => {
+export const GET = async (
+  req: NextResponse,
+  { params }: { params: { id: number } }
+) => {
   const repository = new SbAppointmentRepository();
   const usecase = new DfGetAppointmentTimeUsecase(repository);
   const { id } = await params;
