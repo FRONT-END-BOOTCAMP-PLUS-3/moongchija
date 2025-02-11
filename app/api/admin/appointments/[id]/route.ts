@@ -9,7 +9,7 @@ export const DELETE = async (
 ) => {
   try {
     const { id } = await params;
-    const appointmentId = await Number(id);
+    const appointmentId = Number(id);
 
     if (!appointmentId) {
       return NextResponse.json(
