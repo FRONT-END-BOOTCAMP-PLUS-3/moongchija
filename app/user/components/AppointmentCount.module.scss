@@ -24,20 +24,9 @@
       font-family: var(--font-main);
     }
   }
-
-  @media (max-width: 768px) {
+  @media (max-width: 375px) {
     width: 60px;
     height: 60px;
-  }
-
-  @media (max-width: 375px) {
-    width: 50px;
-    height: 50px;
-
-    span:nth-child(2) {
-      font-size: var(--font-size-xxs);
-      font-family: var(--font-main);
-    }
   }
 }
 
