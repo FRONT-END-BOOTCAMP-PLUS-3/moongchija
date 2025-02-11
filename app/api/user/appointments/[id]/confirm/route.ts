@@ -5,7 +5,7 @@ import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVo
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
 export const GET = async (
-  request: NextResponse,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   try {
