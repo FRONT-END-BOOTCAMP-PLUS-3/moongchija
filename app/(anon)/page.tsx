@@ -9,7 +9,6 @@ export default function Home() {
       <div className={styles.topBox}>
         <Moongchi />
         <span className={styles.subTitle}>모임 약속 정할 땐!</span>
-
         <h1 className={styles.title}>뭉치자</h1>
       </div>
 

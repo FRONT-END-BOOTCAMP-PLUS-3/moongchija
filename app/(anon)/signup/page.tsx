@@ -6,7 +6,6 @@ const SignupPage = () => {
   return (
     <div className={styles.signupContainer}>
       <h1 className={styles.signupTitle}>회원가입</h1>
-
       <AuthForm />
     </div>
   );
