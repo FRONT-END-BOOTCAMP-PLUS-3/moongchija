@@ -2,9 +2,9 @@ import { DfCreateAppointmentUsecase } from "@/application/usecases/appointment/D
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(req: Request) {
+export async function POST(req: NextRequest) {
   try {
     const body = await req.json();
     const { appointment, placeVotes } = body;
