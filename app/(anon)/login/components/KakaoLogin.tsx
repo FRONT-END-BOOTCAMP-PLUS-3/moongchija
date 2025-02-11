@@ -7,7 +7,7 @@ import KakaoSDKLoader from "./KakaoSDKLoader";
 const KakaoLogin = () => {
   const handleKakaoLogin = () => {
     if (!window.Kakao) {
-      console.error("❌ Kakao SDK가 로드되지 않았습니다.");
+      console.log("❌ Kakao SDK가 로드되지 않았습니다.");
       return;
     }
 

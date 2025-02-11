@@ -29,7 +29,7 @@ const VotePlacePage: React.FC = () => {
         const data = await response.json();
         setPlaces(data);
       } catch (error) {
-        console.error("❌ 장소 투표 리스트 가져오기 실패:", error);
+        console.log("❌ 장소 투표 리스트 가져오기 실패:", error);
       }
     };
 

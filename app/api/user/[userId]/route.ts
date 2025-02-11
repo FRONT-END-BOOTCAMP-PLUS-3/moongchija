@@ -27,7 +27,7 @@ export const GET = async (
 
     return NextResponse.json(userData, { status: 200 });
   } catch (error) {
-    console.error("❌ 사용자 정보 조회 실패:", error);
+    console.log("❌ 사용자 정보 조회 실패:", error);
     return NextResponse.json({ error: "서버 내부 오류" }, { status: 500 });
   }
 };

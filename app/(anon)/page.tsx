@@ -3,7 +3,7 @@ import Button from "@/components/button/Button";
 import Link from "next/link";
 import Moongchi from "@/components/moongchi/Moongchi";
 
-export default function Home() {
+const Home = () => {
   return (
     <div className={styles.container}>
       <div className={styles.topBox}>
@@ -19,4 +19,5 @@ export default function Home() {
       </div>
     </div>
   );
-}
+};
+export default Home;

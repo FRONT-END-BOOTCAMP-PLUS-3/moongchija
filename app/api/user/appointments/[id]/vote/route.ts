@@ -46,7 +46,7 @@ export const POST = async (
         placeVotes,
       });
     } catch (voteError) {
-      console.error("❌ 투표 오류 발생:", voteError);
+      console.log("❌ 투표 오류 발생:", voteError);
       return NextResponse.json(
         {
           error:
@@ -60,7 +60,7 @@ export const POST = async (
       message: "✅ 투표가 성공적으로 저장되었습니다.",
     });
   } catch (error) {
-    console.error("❌ 투표 저장 중 오류 발생:", error);
+    console.log("❌ 투표 저장 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };
