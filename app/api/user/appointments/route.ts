@@ -2,12 +2,12 @@ import { DfAppointmentCardUsecase } from "@/application/usecases/appointment/DfG
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(req: Request) {
+export async function GET(req: NextRequest) {
   try {
     const { searchParams } = new URL(req.url);
-    const id = searchParams.get("userId"); 
+    const userId = searchParams.get("userId"); 
 
     const userRepository = new SbUserRepository();
     const memberRepository = new SbMemberRepository();
@@ -19,11 +19,11 @@ export async function GET(req: Request) {
       appointmentRepository
     );
 
-    if (!id) {
+    if (!userId) {
       throw new Error("userId is required");
     }
 
-    const appointments = await usecase.execute(id);
+    const appointments = await usecase.execute(userId);
 
     return NextResponse.json(appointments);
 
