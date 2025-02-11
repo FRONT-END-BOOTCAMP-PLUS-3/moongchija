@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import SettlementDetail from "../components/settlement/SettlementDetail/SettlementDetail";
 import styles from "./settlement.module.scss";
@@ -30,15 +30,14 @@ const SettlementPage = () => {
     setIsNewModalOpen(false);
   };
 
-  const fetchSettlement = async () => {
+  const fetchSettlement = useCallback(async () => {
     try {
       setLoading(true);
-      setError(false); // 요청 시작 시 에러 상태 초기화
-
+      setError(false);
+  
       const response = await fetch(`/api/user/appointments/${id}/settlement`);
-
       if (response.status === 404) {
-        setSettlementData(null); // 정산 데이터가 없음
+        setSettlementData(null);
       } else if (!response.ok) {
         throw new Error("서버 오류");
       } else {
@@ -47,15 +46,15 @@ const SettlementPage = () => {
       }
     } catch (error) {
       console.error(error);
-      setError(true); // API 호출 실패
+      setError(true);
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [id]);
+  
   useEffect(() => {
     if (id) fetchSettlement();
-  }, [id]);
+  }, [id, fetchSettlement]);
 
   if (loading) {
     return (

@@ -8,8 +8,6 @@ export class DfDeleteMemberUsecase {
       throw new Error("유효한 사용자 ID와 약속 ID가 필요합니다.");
     }
 
-    console.log('userId', userId )
-    console.log('appontmentId',appointmentId )
 
     try {
       await this.memberRepository.deleteMember(userId, appointmentId);

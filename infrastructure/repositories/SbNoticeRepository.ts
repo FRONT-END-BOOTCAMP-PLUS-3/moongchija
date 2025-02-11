@@ -40,7 +40,6 @@ export class SbNoticeRepository implements NoticeRepository {
       .from("notice")
       .update({ descript })
       .eq("id", noticeId);
-      console.log(supabase);
       
 
     if (error) {

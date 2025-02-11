@@ -1,4 +1,4 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
 import styles from "./InformationDetail.module.scss";
 import Participants from "../Participants/Participants";
 import {
@@ -10,12 +10,23 @@ import {
 import Link from "next/link";
 import { calculateCountdown, formatTime } from "@/utils/dateUtils/dateUtils";
 import { AppointmentInformationDto } from "../../../../../../../../application/usecases/appointment/dto/AppointmentInformationDto";
+import { getUserIdClient } from "@/utils/supabase/client";
 
 interface InformationDetailProps {
   informationData: AppointmentInformationDto;
 }
 
 const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
+  const [userId, setUserId] = useState<string | null>(null);
+
+  useEffect(() => {
+    const fetchUserId = async () => {
+      const fetchedUserId = await getUserIdClient();
+      setUserId(fetchedUserId);
+    };
+    fetchUserId();
+  }, []);
+
   const safeParseDate = (date: Date | undefined): Date | undefined => {
     if (!date) return undefined;
     return date instanceof Date ? date : new Date(date);
@@ -34,18 +45,20 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
     else return styles.count;
   };
 
+
   return (
     <div className={styles.container}>
       {/* 남은 날짜 박스 */}
-      {/* <div className={styles.dDay}> */}
+
       <div className={`${styles.countdown} ${getCountdownClass(countdown)}`}>
         {countdown}
       </div>
-      {/* </div> */}
 
       {/* 약속명 */}
       <div className={styles.name}>
+      {userId === informationData.owner_id ? (
         <FaCrown className={styles.crownIcon} />
+      ) : <FaUserFriends className={styles.friendsIcon} />}
         <span>{informationData.title}</span>
       </div>
 
@@ -61,7 +74,7 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
               {String(informationData.confirmPlace)}
             </Link>
           ) : (
-            <span>{String(informationData.title)}</span>
+            <span>{String(informationData.confirmPlace)}</span>
           )}
         </div>
 

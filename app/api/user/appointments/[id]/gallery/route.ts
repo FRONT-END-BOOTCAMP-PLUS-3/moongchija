@@ -8,7 +8,6 @@ export async function GET(req: NextRequest, { params }: { params: { id: number }
   try {
     const { id } = await params;
     const appointmentId = id;
-    console.log(appointmentId);
 
 
     if (isNaN(appointmentId) || appointmentId <= 0) {
