@@ -5,10 +5,10 @@ import { DfDeleteAppointmentUsecase } from "@/application/usecases/appointment/D
 // ✅ DELETE: 약속 삭제
 export const DELETE = async (
   request: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) => {
   try {
-    const { id } = await params;
+    const { id } = await context.params;
     const appointmentId = Number(id);
 
     if (!appointmentId) {
