@@ -338,4 +338,20 @@ export class SbUserRepository implements UserRepository {
 
     return true;
   }
+
+  async isUserInAdmin(userId: string): Promise<boolean> {
+    const client = await this.getClient();
+
+    const { data, error } = await client
+      .from("user")
+      .select("type")
+      .eq("id", userId)
+      .single();
+
+    if (error && error.code !== "PGRST116") {
+      throw new Error(`Failed to check admin: ${error.message}`);
+    }
+
+    return data?.type === "admin"; // ✅ 올바르게 `type` 값을 비교
+  }
 }

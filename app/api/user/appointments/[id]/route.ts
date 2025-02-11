@@ -1,5 +1,6 @@
-import { DfIsMemberUsecase } from "@/application/usecases/member/DfIsMemberUsecase";
+import { DfAccessUsecase } from "@/application/usecases/appointment/DfAccessUsecase";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
+import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextResponse } from "next/server";
 
 export const GET = async (
@@ -12,14 +13,15 @@ export const GET = async (
   const userId = searchParams.get("userId") as string;
 
   const memberRepo = new SbMemberRepository();
-  const usecase = new DfIsMemberUsecase(memberRepo);
-  const isMember = await usecase.execute(userId, appointmentId);
+  const userRepo = new SbUserRepository();
+  const accessUsecase = new DfAccessUsecase(memberRepo, userRepo);
+  const isAccess = await accessUsecase.execute({ appointmentId, userId });
 
-  if (!isMember) {
+  if (!isAccess) {
     return NextResponse.json(
-      { error: "해당 약속의 멤버가 아닙니다." },
+      { error: "해당 약속에 접근 권한이 없습니다." },
       { status: 400 }
     );
   }
-  return NextResponse.json(isMember);
+  return NextResponse.json(isAccess);
 };

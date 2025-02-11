@@ -10,7 +10,7 @@ export const getUserIdClient = async (): Promise<string | null> => {
     const data = await response.json();
     return data.userId;
   } catch (error) {
-    console.error("❌ userId 가져오기 실패:", error);
+    console.log("❌ userId 가져오기 실패:", error);
     return null;
   }
 };
