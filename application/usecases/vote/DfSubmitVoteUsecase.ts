@@ -80,7 +80,5 @@ export class DfSubmitVoteUsecase {
 
     // ✅ 8. 투표 완료 후 사용자의 `is_vote` 상태를 `true`로 업데이트
     await this.memberRepo.updateVoteStatus(userId, appointmentId, true);
-
-    console.log("📌 [DEBUG] DfSubmitVoteUsecase 완료!");
   }
 }

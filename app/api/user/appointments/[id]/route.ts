@@ -1,4 +1,4 @@
-import { DfAccessUsecase } from "@/application/usecases/appointment/DfIsMemberUsecase";
+import { DfAccessUsecase } from "@/application/usecases/appointment/DfAccessUsecase";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { NextResponse } from "next/server";
