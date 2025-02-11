@@ -46,6 +46,7 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
     if (res.ok) {
       setGalleryData(galleryData.filter((image) => image.id !== id));
       setIsModalOpen(false);
+      alert("삭제 되었습니다.")
     } else {
       alert("삭제 실패");
     }
@@ -59,6 +60,8 @@ const GalleryDetail: FC<GalleryDetailProps> = ({
       };
       fetchUserId();
     }, []);
+
+    
   
 
   return (
