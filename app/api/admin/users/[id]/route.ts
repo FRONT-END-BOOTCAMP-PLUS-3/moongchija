@@ -3,14 +3,12 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 import { DfDeleteUserUsecase } from "@/application/usecases/user/DfDeleteUserUsecase";
 
 // ✅ DELETE: 유저 삭제
-export const DELETE = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const DELETE = async (request: NextRequest) => {
   try {
-    const { id } = await params;
+    const urlParts = request.nextUrl.pathname.split("/");
+    const userId = urlParts[urlParts.length - 1];
 
-    if (!id) {
+    if (!userId) {
       return NextResponse.json(
         { error: "유저 ID가 없습니다." },
         { status: 400 }
@@ -20,7 +18,7 @@ export const DELETE = async (
     // ✅ 유즈케이스를 통해 유저 삭제 실행
     const userRepository = new SbUserRepository();
     const deleteUserUsecase = new DfDeleteUserUsecase(userRepository);
-    const isDeleted = await deleteUserUsecase.execute({ userId: id });
+    const isDeleted = await deleteUserUsecase.execute({ userId: userId });
 
     if (!isDeleted) {
       return NextResponse.json({ error: "유저 삭제 실패" }, { status: 404 });

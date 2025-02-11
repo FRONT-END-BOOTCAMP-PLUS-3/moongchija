@@ -9,7 +9,7 @@ export interface PlaceVoteDto {
 export class PlaceVoteMapper {
   static toDto(placeVote: PlaceVote): PlaceVoteDto {
     return {
-      id: placeVote.id,
+      id: placeVote.id ?? 0,
       place: placeVote.place,
       place_url: placeVote.place_url || "",
     };

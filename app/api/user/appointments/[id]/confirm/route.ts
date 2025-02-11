@@ -4,13 +4,10 @@ import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVote
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
-export const GET = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const GET = async (request: NextRequest) => {
   try {
-    const { id } = await params;
-    const appointmentId = Number(id);
+    const urlParts = request.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
@@ -33,9 +30,8 @@ export const GET = async (
 
 export async function POST(request: NextRequest) {
   try {
-    const pathname = request.nextUrl.pathname; // ex) "/api/user/appointments/1/vote-result"
-    const appointmentId = parseInt(pathname.split("/").slice(-2, -1)[0]); // 마지막에서 두 번째 값 추출
-
+    const urlParts = request.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
     if (isNaN(appointmentId)) {
       return NextResponse.json(
         { error: "유효하지 않은 약속 ID입니다." },

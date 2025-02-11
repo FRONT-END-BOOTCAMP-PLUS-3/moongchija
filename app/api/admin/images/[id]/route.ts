@@ -3,13 +3,10 @@ import { SbAppointmentImageRepository } from "@/infrastructure/repositories/SbAp
 import { DfDeleteImageUsecase } from "@/application/usecases/appointmentImage/DfDeleteImageUsecase";
 
 // ✅ DELETE: 이미지 삭제
-export const DELETE = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const DELETE = async (request: NextRequest) => {
   try {
-    const { id } = await params;
-    const imageId = Number(id);
+    const urlParts = request.nextUrl.pathname.split("/");
+    const imageId = Number(urlParts[urlParts.length - 1]);
 
     if (!imageId) {
       return NextResponse.json(
