@@ -4,7 +4,7 @@ import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
-import { useEffect, useState} from 'react';
+import { useCallback, useEffect, useState} from 'react';
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
@@ -24,21 +24,21 @@ const InformationPage = () => {
 
   const handleCircleButtonClick = () => setShowButtons((prev) => !prev);
 
-  const fetchInfo = async () => {
+  const fetchInfo = useCallback(async () => {
     try {
       const response = await fetch(`/api/user/appointments/${id}/information`);
       if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-
+  
       const data = await response.json();
       setInfoData(data);
     } catch (error) {
       console.error(error);
     }
-  };
-
+  }, [id]);
+  
   useEffect(() => {
     if (id) fetchInfo();
-  }, [id]);
+  }, [id, fetchInfo]);
 
   useEffect(() => {
     const fetchUserId = async () => {
