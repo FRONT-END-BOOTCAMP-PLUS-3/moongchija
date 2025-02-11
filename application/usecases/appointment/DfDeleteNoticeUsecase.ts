@@ -11,7 +11,7 @@ export class DfDeleteNoticeUsecase {
     try {
       await this.noticeRepository.delete(noticeId);
     } catch (error) {
-      console.error("공지사항 삭제 실패:", error);
+      console.log("공지사항 삭제 실패:", error);
       throw new Error("공지사항 삭제에 실패했습니다.");
     }
   }

@@ -24,7 +24,7 @@ export class SbMemberRepository implements MemberRepository {
     });
 
     if (error) {
-      console.error(`📌 [DEBUG] member 추가 실패:`, error);
+      console.log(`📌 [DEBUG] member 추가 실패:`, error);
       throw new Error(`Failed to add member to appointment: ${error.message}`);
     }
   }
@@ -42,8 +42,8 @@ export class SbMemberRepository implements MemberRepository {
       .eq("appointment_id", appointmentId)
       .single();
 
-    if (error) {
-      console.error(`📌 [DEBUG] member 조회 실패:`, error);
+    if (error && error.code !== "PGRST116") {
+      console.log(`📌 [DEBUG] member 조회 실패:`, error);
       throw new Error(
         `Failed to check appointment membership: ${error.message}`
       );
@@ -91,7 +91,7 @@ export class SbMemberRepository implements MemberRepository {
       .single();
 
     if (error) {
-      console.error("❌ [DEBUG] 멤버 상태 조회 실패:", error);
+      console.log("❌ [DEBUG] 멤버 상태 조회 실패:", error);
       return null;
     }
 
@@ -111,7 +111,7 @@ export class SbMemberRepository implements MemberRepository {
       .eq("appointment_id", appointmentId);
 
     if (error) {
-      console.error("❌ [DEBUG] 투표 상태 업데이트 실패:", error);
+      console.log("❌ [DEBUG] 투표 상태 업데이트 실패:", error);
       throw new Error(`Failed to update vote status: ${error.message}`);
     }
   }
@@ -143,7 +143,7 @@ export class SbMemberRepository implements MemberRepository {
       .eq("appointment_id", appointmentId);
 
     if (error) {
-      console.error(`member 삭제 실패:`, error);
+      console.log(`member 삭제 실패:`, error);
       throw new Error(`Failed to delete member: ${error.message}`);
     }
   }

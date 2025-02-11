@@ -68,7 +68,7 @@ const NoticeBox = ({
         alert(`수정 실패: ${errorData.error}`);
       }
     } catch (error) {
-      console.error("공지사항 수정 오류:", error);
+      console.log("공지사항 수정 오류:", error);
       alert("공지사항 수정 중 오류가 발생했습니다.");
     }
   };
@@ -93,7 +93,7 @@ const NoticeBox = ({
           alert(`삭제 실패: ${errorData.error}`);
         }
       } catch (error) {
-        console.error("공지사항 삭제 오류:", error);
+        console.log("공지사항 삭제 오류:", error);
         alert("공지사항 삭제 중 오류가 발생했습니다.");
       }
     }

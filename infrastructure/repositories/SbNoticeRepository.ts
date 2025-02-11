@@ -27,7 +27,7 @@ export class SbNoticeRepository implements NoticeRepository {
       .eq("appointment_id", appointmentId);
 
     if (error) {
-      console.error("공지사항 조회 실패:", error.message);
+      console.log("공지사항 조회 실패:", error.message);
       return null;
     }
 
@@ -43,7 +43,7 @@ export class SbNoticeRepository implements NoticeRepository {
       
 
     if (error) {
-      console.error(`공지사항 수정 실패: ${error.message}`);
+      console.log(`공지사항 수정 실패: ${error.message}`);
   throw new Error(`공지사항 수정 실패: ${error.message}`);
 
     }

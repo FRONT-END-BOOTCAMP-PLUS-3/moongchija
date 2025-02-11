@@ -35,7 +35,7 @@ const NoticeDetail = ({
       const data = await response.json();
       setNoticeData(data.notices);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert("공지사항을 불러오는 데 실패했습니다.");
     }
   };
@@ -72,7 +72,7 @@ const NoticeDetail = ({
       setNewNoticeContent("");
       await fetchNotices();
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert("공지사항 등록에 실패했습니다.");
     }
   };

@@ -12,7 +12,7 @@ export class DfDeleteMemberUsecase {
     try {
       await this.memberRepository.deleteMember(userId, appointmentId);
     } catch (error) {
-      console.error("멤버 삭제 실패:", error);
+      console.log("멤버 삭제 실패:", error);
       throw new Error("멤버 삭제에 실패했습니다.");
     }
   }

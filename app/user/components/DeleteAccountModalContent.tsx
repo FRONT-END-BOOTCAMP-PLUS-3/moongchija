@@ -24,7 +24,7 @@ const DeleteAccountModalContent = ({ onClose }: { onClose: () => void }) => {
       }
     } catch (error) {
       if (error instanceof Error) {
-        console.error("❌ 탈퇴 중 오류 발생:", error.message);
+        console.log("❌ 탈퇴 중 오류 발생:", error.message);
       }
       alert("탈퇴 중 오류가 발생했습니다. 다시 시도해 주세요.");
     }

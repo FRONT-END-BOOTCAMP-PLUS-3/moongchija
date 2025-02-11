@@ -3,7 +3,7 @@
     color: #fff;
     border: none;
     cursor: pointer;
-    border-radius: 10;
+    border-radius: 10px;
     font-size: var(--font-size-md);
 
     &:disabled {
@@ -15,7 +15,7 @@
     width: 50px;
     padding: 5px;
     font-size: var(--font-size-sm);
-    border-radius: 7;
+    border-radius: 7px;
   }
   .smButton {
     width: 110px;

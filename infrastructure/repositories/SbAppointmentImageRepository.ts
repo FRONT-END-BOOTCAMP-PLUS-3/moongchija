@@ -111,7 +111,7 @@ export class SbAppointmentImageRepository
       .single();
 
     if (fetchError || !imageData) {
-      console.error("❌ 이미지 정보를 찾을 수 없음:", fetchError?.message);
+      console.log("❌ 이미지 정보를 찾을 수 없음:", fetchError?.message);
       return false;
     }
 
@@ -126,7 +126,7 @@ export class SbAppointmentImageRepository
       .remove([filePath]);
 
     if (storageError) {
-      console.error("❌ 스토리지에서 이미지 삭제 실패:", storageError.message);
+      console.log("❌ 스토리지에서 이미지 삭제 실패:", storageError.message);
       return false;
     } else {
       const { error: deleteError } = await supabase
@@ -135,7 +135,7 @@ export class SbAppointmentImageRepository
         .eq("id", imageId);
 
       if (deleteError) {
-        console.error("❌ DB에서 이미지 삭제 실패:", deleteError.message);
+        console.log("❌ DB에서 이미지 삭제 실패:", deleteError.message);
         return false;
       }
     }

@@ -11,7 +11,7 @@ export class SbPlaceVoteUserRepository implements PlaceVoteUserRepository {
     });
 
     if (error) {
-      console.error(
+      console.log(
         `📌 [DEBUG] place_id 저장 실패 (userId: ${userId}, placeId: ${placeId}):`,
         error
       );

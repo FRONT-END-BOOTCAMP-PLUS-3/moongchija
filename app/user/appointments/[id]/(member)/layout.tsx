@@ -30,7 +30,7 @@ const UserPageLayout = ({ children }: { children: React.ReactNode }) => {
           }
         }
       } catch (error) {
-        console.error(error);
+        console.log(error);
       }
     };
     checkMember();

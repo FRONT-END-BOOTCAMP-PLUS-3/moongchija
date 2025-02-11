@@ -11,7 +11,7 @@ export const extractUserIdFromToken = (token: string) => {
 
     return decoded.sub;
   } catch (error) {
-    console.error("❌ 토큰 디코딩 오류:", error);
+    console.log("❌ 토큰 디코딩 오류:", error);
     return null;
   }
 };

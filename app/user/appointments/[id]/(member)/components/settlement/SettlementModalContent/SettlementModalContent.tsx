@@ -100,7 +100,7 @@ ModalContentProps) => {
       alert("등록되었습니다");
       if (onSuccess) onSuccess();
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert("정산 등록에 실패했습니다.");
     }
   };

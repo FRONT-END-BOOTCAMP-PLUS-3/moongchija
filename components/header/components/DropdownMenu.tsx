@@ -22,7 +22,7 @@ const DropdownMenu: React.FC = () => {
         router.push(redirectUrl);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 

@@ -31,7 +31,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(settlementInfo);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -97,7 +97,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to create settlement" },
       { status: 500 }
@@ -163,7 +163,7 @@ export async function PUT(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to update settlement" },
       { status: 500 }
