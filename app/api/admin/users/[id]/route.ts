@@ -26,7 +26,7 @@ export const DELETE = async (request: NextRequest) => {
 
     return NextResponse.json({ message: "유저가 성공적으로 삭제되었습니다." });
   } catch (error) {
-    console.error("❌ 유저 삭제 중 오류 발생:", error);
+    console.log("❌ 유저 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };

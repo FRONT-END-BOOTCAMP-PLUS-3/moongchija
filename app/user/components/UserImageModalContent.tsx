@@ -31,7 +31,7 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
       setEmojis(emojis);
     } catch (error) {
       if (error instanceof Error) {
-        console.error("이모지를 불러오는데 실패하였습니다.:", error.message);
+        console.log("이모지를 불러오는데 실패하였습니다.:", error.message);
       }
     } finally {
       setIsLoading(false);
@@ -74,7 +74,7 @@ const UserProfileImageModalContent = ({ onClose }: { onClose: () => void }) => {
       alert("이모지가 성공적으로 변경되었습니다!");
       onClose();
     } catch (error) {
-      console.error("Error updating emoji:", error);
+      console.log("Error updating emoji:", error);
       alert("이모지 변경 중 오류가 발생했습니다.");
     }
   };

@@ -41,7 +41,7 @@ const useAdminCheck = () => {
           setRedirectUrl(data.redirectUrl);
         }
       } catch (error) {
-        console.error("❌ useAdminCheck 오류:", error);
+        console.log("❌ useAdminCheck 오류:", error);
         setErrorMessage("관리자 권한 확인 중 오류가 발생했습니다.");
       }
     };

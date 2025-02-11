@@ -45,7 +45,7 @@ const SettlementPage = () => {
         setSettlementData(data);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
       setError(true);
     } finally {
       setLoading(false);

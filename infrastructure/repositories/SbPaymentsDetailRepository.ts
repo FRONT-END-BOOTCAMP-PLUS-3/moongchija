@@ -27,7 +27,7 @@ export class SbPaymentsDetailRepository implements PaymentsDetailRepository {
       .eq("payments_id", paymentsId);
 
     if (error) {
-      console.error("정산 세부 내역 조회 실패:", error.message);
+      console.log("정산 세부 내역 조회 실패:", error.message);
       return [];
     }
 

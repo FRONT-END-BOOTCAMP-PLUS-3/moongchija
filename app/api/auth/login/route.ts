@@ -49,7 +49,7 @@ export const POST = async (request: NextRequest) => {
         );
       }
 
-      console.error("❌ 로그인 API 오류:", error.message);
+      console.log("❌ 로그인 API 오류:", error.message);
       return NextResponse.json(
         { error: "로그인 중 예상치 못한 오류가 발생했습니다." },
         { status: 500 }

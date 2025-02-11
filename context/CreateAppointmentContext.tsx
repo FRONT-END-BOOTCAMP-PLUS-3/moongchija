@@ -79,7 +79,7 @@ export const CreateAppointmentProvider = ({
       const data: Appointment = await response.json();
       setAppointment(data);
     } catch (error) {
-      console.error("❌ 약속 생성 오류 발생:", error);
+      console.log("❌ 약속 생성 오류 발생:", error);
     } finally {
       setLoading(false);
     }

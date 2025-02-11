@@ -27,7 +27,7 @@ export const DELETE = async (request: NextRequest) => {
       message: "이미지가 성공적으로 삭제되었습니다.",
     });
   } catch (error) {
-    console.error("❌ 이미지 삭제 중 오류 발생:", error);
+    console.log("❌ 이미지 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };

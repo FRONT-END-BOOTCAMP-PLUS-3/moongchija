@@ -85,7 +85,7 @@ const GalleryPage = () => {
       setUploadedImage(null);
       setIsModalOpen(false);  
     } catch (error) {
-      console.error(error);
+      console.log(error);
       alert("이미지 업로드에 실패했습니다.");
     }
   };
@@ -111,7 +111,7 @@ const GalleryPage = () => {
       const data = await response.json();
       setGalleryData(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
       setError(true);
     } finally {
       setLoading(false);

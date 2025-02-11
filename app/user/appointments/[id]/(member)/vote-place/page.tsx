@@ -71,7 +71,7 @@ const VotePlacePage: React.FC = () => {
         router.push(`/user/appointments/${id}/vote-result`);
       }
     } catch (error) {
-      console.error("❌ 투표 저장 중 오류 발생:", error);
+      console.log("❌ 투표 저장 중 오류 발생:", error);
       alert("❌ 투표 저장 중 오류 발생");
     }
   };

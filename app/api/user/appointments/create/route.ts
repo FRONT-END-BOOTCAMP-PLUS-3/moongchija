@@ -10,7 +10,7 @@ export async function POST(req: NextRequest) {
     const { appointment, placeVotes } = body;
 
     if (!appointment || !placeVotes) {
-      console.error("❌ 필수 데이터 누락:", { appointment, placeVotes });
+      console.log("❌ 필수 데이터 누락:", { appointment, placeVotes });
       return NextResponse.json(
         { error: "Missing required fields" },
         { status: 400 }
@@ -31,7 +31,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(newAppointment, { status: 201 });
   } catch (error) {
-    console.error("❌ Error creating appointment:", error);
+    console.log("❌ Error creating appointment:", error);
     return NextResponse.json(
       { error: error instanceof Error ? error.message : "Internal server error" },
       { status: 500 }

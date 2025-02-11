@@ -29,7 +29,7 @@ export const DELETE = async (request: NextRequest) => {
 
     return NextResponse.json({ message: "약속이 성공적으로 삭제되었습니다." });
   } catch (error) {
-    console.error("❌ 약속 삭제 중 오류 발생:", error);
+    console.log("❌ 약속 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };
