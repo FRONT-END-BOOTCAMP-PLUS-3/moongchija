@@ -27,7 +27,7 @@ export const GET = async () => {
 
     return NextResponse.json({ userInfo });
   } catch (error) {
-    console.error("❌ /api/admin GET 요청 오류:", error);
+    console.log("❌ /api/admin GET 요청 오류:", error);
 
     return NextResponse.json(
       { error: "서버 내부에 오류가 생겼습니다." },

@@ -43,7 +43,7 @@ export class SbPaymentsRepository implements PaymentsRepository {
       .single();
 
     if (error) {
-      console.error("정산 정보 조회 실패:", error.message);
+      console.log("정산 정보 조회 실패:", error.message);
       return null;
     }
 

@@ -32,7 +32,7 @@ const InformationPage = () => {
       const data = await response.json();
       setInfoData(data);
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   }, [id]);
   
@@ -90,7 +90,7 @@ const InformationPage = () => {
         alert("약속 삭제를 취소했습니다.");
       }
     } catch (error) {
-      console.error("방 삭제 중 오류 발생:", error);
+      console.log("방 삭제 중 오류 발생:", error);
       alert("방 삭제 중 오류가 발생했습니다.");
     }
   };
@@ -114,7 +114,7 @@ const InformationPage = () => {
       alert("방을 나갔습니다.");
       router.push("/user/appointments");
     } catch (error) {
-      console.error("방 나가기 중 오류 발생:", error);
+      console.log("방 나가기 중 오류 발생:", error);
     }
   };
 

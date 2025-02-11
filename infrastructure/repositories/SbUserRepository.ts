@@ -48,7 +48,7 @@ export class SbUserRepository implements UserRepository {
       .maybeSingle();
 
     if (error) {
-      console.error("🚨 Supabase 에러:", error);
+      console.log("🚨 Supabase 에러:", error);
       throw new Error("Database error");
     }
 
@@ -191,7 +191,7 @@ export class SbUserRepository implements UserRepository {
       .list("emojis/", { limit: 100 });
 
     if (error) {
-      console.error("Error fetching emoji list:", error.message);
+      console.log("Error fetching emoji list:", error.message);
       throw new Error("이모지 목록을 가져오는 데 실패했습니다.");
     }
 
@@ -220,7 +220,7 @@ export class SbUserRepository implements UserRepository {
       .list("emojis/", { limit: 100 });
 
     if (error) {
-      console.error("Error fetching emoji list:", error.message);
+      console.log("Error fetching emoji list:", error.message);
       throw new Error("이모지 목록을 가져오는 데 실패했습니다.");
     }
 
@@ -283,7 +283,7 @@ export class SbUserRepository implements UserRepository {
         .single();
 
       if (updateError) {
-        console.error("🔥 Supabase 업데이트 오류 :", updateError);
+        console.log("🔥 Supabase 업데이트 오류 :", updateError);
         throw new Error("유저 정보 업데이트에 실패했습니다.");
       }
 
@@ -332,7 +332,7 @@ export class SbUserRepository implements UserRepository {
     const { error } = await supabase.from("user").delete().eq("id", userId);
 
     if (error) {
-      console.error("❌ 유저 삭제 실패:", error);
+      console.log("❌ 유저 삭제 실패:", error);
       return false;
     }
 

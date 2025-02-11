@@ -44,7 +44,7 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(appointmentInfo);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -74,7 +74,7 @@ export async function POST(req: NextRequest) {
       { status: 201 }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "Failed to create notice" },
       { status: 500 }
@@ -103,7 +103,7 @@ export async function PATCH(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "공지사항 수정에 실패했습니다" },
       { status: 500 }
@@ -132,7 +132,7 @@ export async function DELETE(req: NextRequest) {
       { status: 200 }
     );
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "공지사항 삭제에 실패했습니다" },
       { status: 500 }

@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
 
     return NextResponse.json(images, { status: 200 });
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json({ error: "서버 내부 오류 발생" }, { status: 500 });
   }
 }
@@ -69,7 +69,7 @@ export async function POST(req: NextRequest) {
 
     return NextResponse.json(uploadedImage);
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json({ error: "이미지 업로드 실패" }, { status: 500 });
   }
 }

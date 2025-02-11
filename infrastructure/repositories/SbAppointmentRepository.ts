@@ -24,7 +24,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
       .in("id", appointmentIds);
 
     if (error) {
-      console.error("Error fetching appointments by IDs:", error.message);
+      console.log("Error fetching appointments by IDs:", error.message);
       return null;
     }
     return data || null;
@@ -59,7 +59,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
       .single();
 
     if (error) {
-      console.error("Error fetching appointment time:", error.message);
+      console.log("Error fetching appointment time:", error.message);
       return null;
     }
 
@@ -121,7 +121,7 @@ export class SbAppointmentRepository implements AppointmentRepository {
     const { error } = await supabase.from("appointment").delete().eq("id", id);
 
     if (error) {
-      console.error("❌ 약속 삭제 실패:", error);
+      console.log("❌ 약속 삭제 실패:", error);
       return false;
     }
 

@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
       message: "✅ 약속이 성공적으로 확정되었습니다.",
     });
   } catch (error) {
-    console.error("❌ 약속 확정 중 오류 발생:", error);
+    console.log("❌ 약속 확정 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 }

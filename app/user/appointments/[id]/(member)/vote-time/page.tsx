@@ -50,7 +50,7 @@ const VoteTimePage: React.FC = () => {
           )
         );
       } catch (error) {
-        console.error("Error fetching appointment time:", error);
+        console.log("Error fetching appointment time:", error);
       }
     };
 

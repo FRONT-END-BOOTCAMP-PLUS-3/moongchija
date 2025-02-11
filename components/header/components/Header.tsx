@@ -34,7 +34,7 @@ const Header: React.FC<HeaderProps> = ({ children, showUsername = true }) => {
         router.push(redirectUrl);
       }
     } catch (error) {
-      console.error(error);
+      console.log(error);
     }
   };
 
