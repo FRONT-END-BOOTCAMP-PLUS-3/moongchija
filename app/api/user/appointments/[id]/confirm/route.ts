@@ -6,11 +6,11 @@ import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/
 
 export const GET = async (
   request: NextResponse,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(

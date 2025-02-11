@@ -23,5 +23,5 @@ export interface AppointmentRepository {
     }
   ): Promise<void>; // 약속 확정
   getAllAppointments(): Promise<Appointment[]>;
-  deleteAppointment(id: string): Promise<boolean>;
+  deleteAppointment(id: number): Promise<boolean>;
 }
