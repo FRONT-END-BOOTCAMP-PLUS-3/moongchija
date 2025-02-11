@@ -2,7 +2,10 @@ import { NextResponse } from "next/server";
 import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVoteRepository";
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 
-export const GET = async ({ params }: { params: { id: number } }) => {
+export const GET = async (
+  request: NextResponse,
+  { params }: { params: { id: number } }
+) => {
   try {
     const { id } = await params;
     const appointmentId = id;

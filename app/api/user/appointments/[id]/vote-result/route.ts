@@ -8,7 +8,10 @@ import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteRes
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export const GET = async ({ params }: { params: { id: number } }) => {
+export const GET = async (
+  req: NextResponse,
+  { params }: { params: { id: number } }
+) => {
   try {
     const { id } = await params;
     const appointmentId = id;

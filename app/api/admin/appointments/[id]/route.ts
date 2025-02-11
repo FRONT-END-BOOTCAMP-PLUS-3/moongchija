@@ -3,7 +3,10 @@ import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppoint
 import { DfDeleteAppointmentUsecase } from "@/application/usecases/appointment/DfDeleteAppointmentUsecase";
 
 // ✅ DELETE: 약속 삭제
-export const DELETE = async ({ params }: { params: { id: string } }) => {
+export const DELETE = async (
+  request: NextResponse,
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = params;
 

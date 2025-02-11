@@ -4,7 +4,10 @@ import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVote
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
-export const GET = async ({ params }: { params: { id: number } }) => {
+export const GET = async (
+  request: NextResponse,
+  { params }: { params: { id: number } }
+) => {
   try {
     const { id } = await params;
     const appointmentId = id;
