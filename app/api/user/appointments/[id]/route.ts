@@ -1,10 +1,10 @@
 import { DfAccessUsecase } from "@/application/usecases/appointment/DfAccessUsecase";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 
 export const GET = async (
-  request: NextResponse,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const { id } = await params;

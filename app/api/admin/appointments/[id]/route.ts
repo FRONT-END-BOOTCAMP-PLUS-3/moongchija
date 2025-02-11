@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfDeleteAppointmentUsecase } from "@/application/usecases/appointment/DfDeleteAppointmentUsecase";
 
 // ✅ DELETE: 약속 삭제
 export const DELETE = async (
-  request: NextResponse,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   try {
