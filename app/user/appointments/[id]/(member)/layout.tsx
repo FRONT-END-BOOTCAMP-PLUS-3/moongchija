@@ -24,7 +24,7 @@ const UserPageLayout = ({ children }: { children: React.ReactNode }) => {
             }
           );
           if (!response.ok) {
-            alert("❌ 해당 약속의 멤버가 아닙니다.");
+            alert("❌ 해당 약속에 접근권한이 없습니다.");
             router.push("/user/appointments");
             return;
           }
