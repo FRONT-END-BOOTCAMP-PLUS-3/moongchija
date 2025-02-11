@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
+import GalleryDetail from "../components/gallery/galleryDetail/GalleryDetail";
 import styles from "./gallery.module.scss";
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";
@@ -32,8 +32,7 @@ const GalleryPage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [uploadedImage, setUploadedImage] = useState<string | null>(null);
   const fileInputRef = useRef<HTMLInputElement | null>(null);
-  const [userId, setUserId] = useState<string|null>(); 
-
+  const [userId, setUserId] = useState<string | null>();
 
   const openUploaderModal = () => setIsModalOpen(true);
   const closeUploaderModal = () => setIsModalOpen(false);
@@ -56,25 +55,24 @@ const GalleryPage = () => {
       alert("파일을 선택하세요.");
       return;
     }
-  
+
     const file = fileInputRef.current.files[0];
-    
-  
+
     const formData = new FormData();
     formData.append("file", file);
     formData.append("appointment_id", id);
-    formData.append("creater_id",String(userId) ); // ✅ 실제 유저 ID로 변경
-  
+    formData.append("creater_id", String(userId)); // ✅ 실제 유저 ID로 변경
+
     try {
       const response = await fetch(`/api/user/appointments/${id}/gallery`, {
         method: "POST",
         body: formData,
       });
-  
+
       if (!response.ok) {
         throw new Error("이미지 업로드 실패");
       }
-  
+
       const uploadedImage = await response.json();
       setGalleryData((prev) => [...prev, uploadedImage]); // ✅ UI에 바로 반영
       setIsModalOpen(false);
@@ -120,12 +118,12 @@ const GalleryPage = () => {
   }, [id]);
 
   useEffect(() => {
-        const fetchUserId = async () => {
-          const fetchedUserId = await getUserIdClient();
-          setUserId(fetchedUserId); 
-        };
-        fetchUserId();
-      }, []);
+    const fetchUserId = async () => {
+      const fetchedUserId = await getUserIdClient();
+      setUserId(fetchedUserId);
+    };
+    fetchUserId();
+  }, []);
 
   if (loading) {
     return (
@@ -155,23 +153,21 @@ const GalleryPage = () => {
 
   console.log("uploadedImage: ", uploadedImage);
   console.log("fileInputRef ", fileInputRef);
-  
-  
 
   return (
     <div className={styles.pageContainer}>
-    <IconHeader />
-    <DetailTabMenu />
-    <div className={styles.container}>
-      {galleryData.length === 0 ? (
-        <p className={styles.noGallery}>등록된 사진이 없습니다</p>
-      ) : (
-        <GalleryDetail
-          galleryData={galleryData}
-          setGalleryData={setGalleryData}
-        />
-      )}
-    </div>
+      <IconHeader />
+      <DetailTabMenu />
+      <div className={styles.container}>
+        {galleryData.length === 0 ? (
+          <p className={styles.noGallery}>등록된 사진이 없습니다</p>
+        ) : (
+          <GalleryDetail
+            galleryData={galleryData}
+            setGalleryData={setGalleryData}
+          />
+        )}
+      </div>
 
       <CircleButton onClick={openUploaderModal} />
 
