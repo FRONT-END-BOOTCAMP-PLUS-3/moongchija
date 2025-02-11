@@ -19,5 +19,14 @@
       top: 50%;
       transform: translate(-50%, -50%);
     }
+
+    @media (max-width: 375px) {
+      width: 120px;
+      height: 120px;
+      img {
+        width: 80px;
+        height: 80px;
+      }
+    }
   }
 }

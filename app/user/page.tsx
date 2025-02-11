@@ -5,11 +5,12 @@ import Button from "@/components/button/Button";
 import { useState } from "react";
 import Modal from "@/components/modal/Modal";
 import DeleteAccountModalContent from "./components/DeleteAccountModalContent";
-import UserProfile from "./components/UserProfile";
 import MyCalendar from "./components/MyCalendar";
 import IconHeader from "@/components/header/IconHeader";
 import UserAppointmentCount from "./components/UserAppointmentCount";
 import { Event } from "@/types/Event";
+import UserName from "./components/UserName";
+import UserImage from "./components/UserImage";
 
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -22,7 +23,10 @@ const MyPagePage = () => {
       <IconHeader showUsername={false} />
       <div className={styles.myPagecontainer}>
         <div className={styles.profileWrapper}>
-          <UserProfile />
+          <UserImage />
+          <UserName />
+        </div>
+        <div>
           <UserAppointmentCount appointments={appointments} />
         </div>
         <div className={styles.calendarWrapper}>
