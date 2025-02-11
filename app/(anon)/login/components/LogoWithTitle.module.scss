@@ -1,0 +1,12 @@
+.topBox {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 30px;
+
+  .loginTitle {
+    font-family: var(--font-sub);
+    font-size: var(--font-size-lg);
+    color: var(--primary-color);
+  }
+}

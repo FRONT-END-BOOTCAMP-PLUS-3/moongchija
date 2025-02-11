@@ -1,0 +1,123 @@
+.container {
+  margin: 0 auto;
+  border-radius: 10px;
+  padding: 20px;
+  position: relative;
+  background-color: white;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.countdown {
+  position: absolute;
+  top: 0px;
+  right: 20px;
+  color: white;
+  border-radius: 0 0 20px 20px;
+  width: 75px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: var(--primary-color);
+}
+
+.name {
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+  padding-bottom: 10px;
+
+  span{
+    font-weight: 500;
+  }
+}
+
+.crownIcon {
+  color: gold;
+}
+
+.box {
+  font-size: 16px;
+  margin-top: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.place {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.markerIcon {
+  font-size: 16px;
+  color: rgb(90, 90, 244);
+}
+
+.date {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.calendarIcon {
+  font-size: 16px;
+  color: rgb(250, 76, 76);
+}
+
+.participantsBox {
+  display: flex;
+  height: 156px;
+  flex-direction: column;
+  padding: 15px;
+  border-radius: 5px;
+  gap: 20px;
+  border: 1px solid var(--grey-6-color);
+  overflow-y: auto; /* 스크롤 가능하도록 설정 */
+  scrollbar-width: thin; /* Firefox용 스크롤바 크기 조정 */
+  scrollbar-color: var(--grey-6-color) transparent; /* Firefox용 스크롤 색상 설정 */
+  
+}
+
+.participants {
+  display: flex;
+  gap: 10px;
+  border-radius: 5px;
+}
+
+.friendsIcon {
+  font-size: 16px;
+  color: rgb(4, 4, 4);
+}
+
+.divider {
+  width: 2px; 
+  height: 18px;
+  background-color: var(--grey-6-color); 
+  border-radius: 2px; 
+}
+
+.place a {
+  color: black;
+}
+
+.place a:hover {
+  color: var(--primary-color);
+}
+
+
+  .end {
+    background: var(--grey-7-color);
+  }
+  .dDay {
+    background: var(--mypage-pink);
+  }
+  .count {
+    background: var(--primary-color);
+  }

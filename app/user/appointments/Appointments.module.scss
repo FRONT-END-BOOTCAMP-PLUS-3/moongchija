@@ -1,0 +1,90 @@
+.container {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 120px);
+}
+
+.searchBox {
+  width: 100%;
+  display: flex;
+  gap: 10px;
+  padding: 20px 40px;
+
+  select {
+    padding: 5px;
+  }
+
+  .inputWrapper {
+    width: 100%;
+    background: white;
+    border-radius: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0 10px;
+  }
+
+  input {
+    padding: 10px 0;
+    width: 80%;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  select, 
+  input {
+    font-family: var(--font-main);
+    font-size: var(--font-size-sm);
+    border: none;
+    border-radius: 10px;
+  }
+}
+
+.listBox {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0 40px;
+}
+
+.buttonBox {
+  position: absolute;
+  bottom: 80px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  opacity: 0;
+  transform: translateY(20px);
+  pointer-events: none;
+  transition: opacity 0.3s ease, transform 0.3s ease;
+
+  button,
+  a {
+    font-family: var(--font-main);
+    font-size: var(--font-size-sm);
+    text-align: center;
+    text-decoration: none;
+    background-color: var(--primary-color);
+    color: white;
+    border: none;
+    padding: 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+
+    &:hover {
+      background: rgb(123, 167, 235);
+      transform: scale(1.05);
+    }
+  }
+}
+
+.buttonBox.show {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}

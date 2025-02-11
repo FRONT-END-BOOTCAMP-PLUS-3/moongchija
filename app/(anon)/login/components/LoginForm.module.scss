@@ -1,0 +1,10 @@
+.formBox {
+  max-width: 400px;
+  width: 100%;
+  margin-top: 30px;
+
+  .loginErrorMessage {
+    margin-bottom: 20px;
+    color: var(--error-color);
+  }
+}

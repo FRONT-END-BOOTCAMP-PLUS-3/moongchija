@@ -1,0 +1,141 @@
+.placeResultContainer {
+  height: 60vh;
+  overflow-y: auto;
+  width: 100%;
+  max-width: 400px;
+  position: relative;
+
+  .header {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    padding-bottom: 5px;
+    background-color: var(--grey-2-color);
+    margin-bottom: 10px;
+    font-size: var(--font-size-sm);
+
+    .dropdown {
+      background: #fff;
+      padding: 10px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      width: 150px;
+      z-index: 30;
+
+      .arrow {
+        margin-left: 5px;
+        font-size: var(--font-size-xs);
+      }
+    }
+
+    .dropdownMenu {
+      position: absolute; // ✅ 드롭다운을 버튼 기준으로 정렬
+      top: 100%; // ✅ 버튼 바로 아래 배치
+      left: 0;
+      width: 38%;
+      background: #fff;
+      border: 1px solid var(--grey-4-color);
+      border-radius: 8px;
+      box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+      list-style: none;
+      padding: 5px 0;
+      z-index: 1000;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.2s ease-in-out, transform 0.2s ease-in-out;
+      pointer-events: none;
+
+      &.open {
+        opacity: 1;
+        transform: translateY(0);
+        pointer-events: auto;
+      }
+
+      li {
+        padding: 10px 12px;
+        cursor: pointer;
+        text-align: left;
+
+        &:hover {
+          background: var(--grey-6-color);
+        }
+      }
+    }
+  }
+
+  .placeList {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    .placeItem {
+      background-color: #fff;
+      border-radius: 10px;
+      padding: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      transition: all 0.3s ease;
+
+      &.disabled {
+        opacity: 0.3;
+        pointer-events: none;
+      }
+
+      .placeHeader {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+
+        .placeName {
+          font-size: var(--font-size-md);
+          font-weight: bold;
+        }
+
+        .placeDetail {
+          font-size: var(--font-size-sm);
+          color: var(--primary-color);
+          text-decoration: none;
+        }
+      }
+
+      .voterList {
+        display: flex;
+        flex-direction: column;
+        align-items: start;
+        font-size: var(--font-size-xs);
+
+        .voterTitle {
+          margin: 10px 0;
+          .voterCount {
+            font-weight: bold;
+            color: red;
+          }
+        }
+
+        .userList {
+          display: flex;
+          flex-wrap: wrap;
+
+          span {
+            color: #333;
+            background: var(--secondary-color);
+            margin-top: 5px;
+            margin-right: 5px;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: var(--font-size-xs);
+          }
+          .noVote {
+            background: var(--grey-1-color);
+            color: var(--grey-5-color);
+          }
+        }
+      }
+    }
+  }
+}

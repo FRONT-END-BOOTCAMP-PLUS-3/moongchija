@@ -1,0 +1,21 @@
+.appointmentCountBox {
+  position: absolute;
+  top: 20%;
+  left: 40%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: row;
+  gap: 20px;
+
+  @media (max-width: 768px) {
+    top: 30%;
+    left: 42%;
+  }
+
+  @media (max-width: 375px) {
+    top: 25%;
+    left: 47%;
+    gap: 10px;
+  }
+}

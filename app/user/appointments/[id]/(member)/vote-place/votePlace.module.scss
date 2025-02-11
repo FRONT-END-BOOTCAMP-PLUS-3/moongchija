@@ -1,0 +1,114 @@
+.placeVoteContainer {
+  height: 100%;
+  .mainBox {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    .subtitle {
+      font-size: var(--font-size-md);
+      font-weight: bold;
+      margin: 4vh 0 4vh;
+    }
+
+    .placeList {
+      width: 100%;
+      min-height: 55vh;
+      max-height: 65vh;
+      display: flex;
+      flex-direction: column;
+      gap: 15px;
+
+      .placeItem {
+        height: 12vh;
+        display: flex;
+        flex-direction: column;
+        padding: 15px;
+        border: 1px solid var(--grey-1-color);
+        border-radius: 8px;
+        background: var(--background-color);
+        cursor: pointer;
+        transition: background 0.2s ease;
+
+        &:hover {
+          border-color: var(--purple-color);
+          background: #ecebff;
+        }
+
+        &.selected {
+          border-color: var(--purple-color);
+          background: #ecebff;
+
+          .radioButton {
+            border-color: var(--purple-color);
+            background: var(--purple-color);
+          }
+        }
+
+        .itemTop {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin: 10px 0 10px;
+          .placeName {
+            width: 90%;
+            margin-left: 15px;
+            font-size: var(--font-size-md);
+            font-weight: bold;
+            color: #333333;
+            .markerIcon {
+              margin-right: 5px;
+              font-size: var(--font-size-sm);
+              color: var(--purple-color);
+            }
+          }
+          .radioButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--grey-1-color);
+            border-radius: 50%;
+            transition: background 0.2s ease, border-color 0.2s ease;
+
+            &.checked {
+              background: var(--background-color);
+              border-color: var(--purple-color);
+            }
+            .innerButton {
+              width: 10px;
+              height: 10px;
+              border-radius: 50%;
+              transition: background 0.2s ease, border-color 0.2s ease;
+
+              &.checked {
+                background: var(--purple-color);
+                border-color: var(--purple-color);
+              }
+            }
+          }
+        }
+
+        .placeLink {
+          display: block;
+          width: 60px;
+          margin-left: 38px;
+          font-size: var(--font-size-xs);
+          color: #555555;
+          text-decoration: underline;
+          white-space: nowrap;
+          &:hover {
+            color: var(--purple-color);
+          }
+        }
+      }
+    }
+    .wrapButton {
+      max-width: 400px;
+      width: 100%;
+      margin-top: 4vh;
+    }
+  }
+}

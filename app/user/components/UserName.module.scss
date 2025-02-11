@@ -1,0 +1,43 @@
+.userNameBox {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-end;
+  margin-bottom: 50px;
+  font-size: var(--font-size-md);
+  font-family: var(--font-sub);
+
+  .editingBox {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 10px;
+    height: 40px;
+
+    .userName {
+      width: 100%;
+    }
+
+    .userNameInput {
+      padding: 10px 5px;
+      margin: 0;
+      border: 1px solid #d1d5db;
+      border-radius: 10px;
+      outline: none;
+      font-size: 12px;
+      flex: 1;
+
+      &::placeholder {
+        color: #898989;
+      }
+
+      &:focus {
+        border-color: #2563eb;
+      }
+    }
+
+    .hiddenLabel {
+      display: none;
+    }
+  }
+}

@@ -1,0 +1,25 @@
+.fc-day-sun,
+.fc-day-sat {
+  color: red;
+}
+
+.fc-prev-button,
+.fc-next-button {
+  background-color: var(--primary-color) !important;
+  border: none !important;
+  transition: transform 0.3s ease;
+}
+
+.fc-prev-button:hover,
+.fc-next-button:hover {
+  background-color: var(--secondary-color);
+  transform: scale(1.1);
+}
+
+.fc-daygrid-day-number {
+  font-size: var(--font-size-xs);
+}
+
+.fc-event-title {
+  font-size: var(--font-size-xs);
+}

@@ -1,0 +1,72 @@
+.galleryContainer {
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(
+    auto-fit,
+    minmax(130px, 1fr)
+  ); 
+  gap: 20px;
+  margin-top: 20px;
+  position: relative;
+  margin-bottom: 20px;
+}
+
+.photoCard {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 190px;
+  gap: 10px;
+}
+
+.photos {
+  width: 100%;
+  max-width: 190px;
+  aspect-ratio: 1/1;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 4px 4px rgba(0, 0, 0, 0.1), 0 1px 1px rgba(0, 0, 0, 0.06); /* 그림자 */
+  cursor: pointer;
+}
+
+.galleryImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  max-width: 190px;
+  max-height: 190px;
+}
+
+.modalNickname {
+  margin-bottom: 15px;
+  margin-top: 5px;
+}
+
+.galleryModalImage {
+  width: 360px;
+  height: 360px;
+  object-fit: cover;
+  border-radius: 10px;
+}
+
+.deleteButton {
+  margin-top: 15px;
+  display: flex;
+  justify-content: center;
+}
+
+.uploaderDeleteButton {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  border: none;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  background-color: black;
+  border-radius: 50%;
+}

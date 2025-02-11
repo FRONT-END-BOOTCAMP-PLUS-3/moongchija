@@ -1,0 +1,64 @@
+.container {
+  display: flex;
+  width: 100%;
+  height: 65px;
+  background-color: var(--background-color);
+  justify-content: space-between;
+}
+
+.information,
+.settlement,
+.gallery {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.information button,
+.settlement button,
+.gallery button {
+  width: 100%;
+  height: 100%;
+  border: none;
+  color: var(--grey-4-color);
+  background-color: transparent;
+  font-size: 20px;
+  font-weight: bold;
+  position: relative;
+  transition: color 0.3s, border-bottom 0.5s;
+  text-align: center;
+}
+
+.information button:hover,
+.settlement button:hover,
+.gallery button:hover {
+  color: var(--primary-color);
+  cursor: pointer;
+}
+
+.information button::after,
+.settlement button::after,
+.gallery button::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: var(--primary-color);
+  visibility: hidden;
+}
+
+/* 활성화된 버튼에 밑줄 표시 */
+.information.active button::after,
+.settlement.active button::after,
+.gallery.active button::after {
+  visibility: visible;
+}
+
+.information.active button,
+.settlement.active button,
+.gallery.active button {
+  color: var(--primary-color);
+}
