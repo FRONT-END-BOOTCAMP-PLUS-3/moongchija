@@ -26,7 +26,7 @@ export const GET = async (
 
     return NextResponse.json(places);
   } catch (error) {
-    console.error("❌ 장소 투표 리스트 조회 중 오류 발생:", error);
+    console.log("❌ 장소 투표 리스트 조회 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
 };

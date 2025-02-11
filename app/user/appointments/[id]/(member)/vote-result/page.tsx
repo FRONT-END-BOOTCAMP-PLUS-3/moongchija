@@ -58,7 +58,7 @@ const VoteResultPage = () => {
         const data = await response.json();
         setResultData(data);
       } catch (error) {
-        console.error("❌ [ERROR] 투표 결과 로드 실패:", error);
+        console.log("❌ [ERROR] 투표 결과 로드 실패:", error);
       }
     };
 
