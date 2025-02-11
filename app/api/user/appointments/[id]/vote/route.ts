@@ -5,13 +5,10 @@ import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUse
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
-export const POST = async (
-  request: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const POST = async (request: NextRequest) => {
   try {
-    const { id } = await params;
-    const appointmentId = Number(id);
+    const urlParts = request.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
     const { userId, timeVotes, placeVotes } = await request.json();
 
     // 필수 데이터 체크
