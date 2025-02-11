@@ -4,11 +4,10 @@ import { DfGetImageUsecase } from "@/application/usecases/appointmentImage/DfGet
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { DfCreateImageUsecase } from "@/application/usecases/appointmentImage/DfCreateImageUsecase";
 
-export async function GET(req: NextRequest, { params }: { params: { id: number } }) {
+export async function GET(request: NextRequest) {
   try {
-    const { id } = await params;
-    const appointmentId = id;
-
+    const urlParts = request.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
 
     if (isNaN(appointmentId) || appointmentId <= 0) {
       return NextResponse.json(
@@ -27,13 +26,9 @@ export async function GET(req: NextRequest, { params }: { params: { id: number }
     return NextResponse.json(images, { status: 200 });
   } catch (error) {
     console.error(error);
-    return NextResponse.json(
-      { error: "서버 내부 오류 발생" },
-      { status: 500 }
-    );
+    return NextResponse.json({ error: "서버 내부 오류 발생" }, { status: 500 });
   }
 }
-
 
 export async function POST(req: NextRequest) {
   try {
@@ -43,7 +38,10 @@ export async function POST(req: NextRequest) {
     const createrId = formData.get("creater_id");
 
     if (!file || !appointmentId || !createrId) {
-      return NextResponse.json({ error: "필수 입력값이 없습니다." }, { status: 400 });
+      return NextResponse.json(
+        { error: "필수 입력값이 없습니다." },
+        { status: 400 }
+      );
     }
 
     const repository = new SbAppointmentImageRepository();

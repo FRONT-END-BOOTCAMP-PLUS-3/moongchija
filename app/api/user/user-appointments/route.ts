@@ -9,7 +9,7 @@ export const GET = async () => {
   const userId = (await cookieStore).get("userId")?.value || null;
 
   if (!userId) {
-    return { error: "유저 ID가 없습니다." };
+    return NextResponse.json({ error: "유저 ID가 없습니다." }, { status: 401 });
   }
 
   const memberRepository = new SbMemberRepository();

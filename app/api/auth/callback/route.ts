@@ -1,5 +1,4 @@
 import { NextRequest, NextResponse } from "next/server";
-import { getKakaoUserInfo } from "../kakao-user/route";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 import { DfSocialLoginUseCase } from "@/application/usecases/auth/DfSocialLoginUseCase";
 import { extractUserIdFromToken } from "@/utils/auth/extractUserIdFromToken";
@@ -54,6 +53,21 @@ export async function GET(request: NextRequest) {
         { status: 400 }
       );
     }
+
+    const getKakaoUserInfo = async (accessToken: string) => {
+      const userInfoUrl = "https://kapi.kakao.com/v2/user/me";
+
+      const response = await fetch(userInfoUrl, {
+        method: "GET",
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+          "Content-Type": "application/x-www-form-urlencoded",
+        },
+      });
+
+      const data = await response.json();
+      return data;
+    };
 
     const userInfo = await getKakaoUserInfo(tokenData.access_token);
 

@@ -3,19 +3,13 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 import { DfDeleteMemberUsecase } from "@/application/usecases/appointment/DfDeleteMemberUsecase";
 
 // 멤버 삭제
-export async function DELETE(
-  req: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export async function DELETE(req: NextRequest) {
   try {
-    const { id } = await params;
-    const appointmentId = id;
+    const urlParts = req.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
     const body = await req.json();
     const { userId } = body;
-    
-    
-    
-    
+
     if (!userId || !appointmentId || isNaN(appointmentId)) {
       return NextResponse.json(
         { error: "Invalid request data" },

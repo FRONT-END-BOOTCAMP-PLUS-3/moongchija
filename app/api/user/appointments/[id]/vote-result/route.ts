@@ -8,13 +8,10 @@ import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteRes
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export const GET = async (
-  req: NextRequest,
-  { params }: { params: { id: string } }
-) => {
+export const GET = async (req: NextRequest) => {
   try {
-    const { id } = await params;
-    const appointmentId = Number(id);
+    const urlParts = req.nextUrl.pathname.split("/");
+    const appointmentId = Number(urlParts[urlParts.length - 2]);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
