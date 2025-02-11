@@ -8,9 +8,10 @@ export const DELETE = async (
   { params }: { params: { id: string } }
 ) => {
   try {
-    const { id } = params;
+    const { id } = await params;
+    const appointmentId = await Number(id);
 
-    if (!id) {
+    if (!appointmentId) {
       return NextResponse.json(
         { error: "약속 ID가 없습니다." },
         { status: 400 }
@@ -22,7 +23,7 @@ export const DELETE = async (
       appointmentRepo
     );
 
-    const isDeleted = await deleteAppointmentUsecase.execute(id);
+    const isDeleted = await deleteAppointmentUsecase.execute(appointmentId);
 
     if (!isDeleted) {
       return NextResponse.json({ error: "약속 삭제 실패" }, { status: 404 });

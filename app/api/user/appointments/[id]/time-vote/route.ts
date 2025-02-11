@@ -4,12 +4,13 @@ import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAp
 
 export const GET = async (
   req: NextResponse,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   const repository = new SbAppointmentRepository();
   const usecase = new DfGetAppointmentTimeUsecase(repository);
   const { id } = await params;
-  const appointmentTime = await usecase.execute(id);
+  const appointmentId = Number(id);
+  const appointmentTime = await usecase.execute(appointmentId);
 
   if (!appointmentTime) {
     return NextResponse.json(

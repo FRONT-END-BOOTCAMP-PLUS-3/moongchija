@@ -7,11 +7,11 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 
 export const POST = async (
   request: NextRequest,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
     const { userId, timeVotes, placeVotes } = await request.json();
 
     // 필수 데이터 체크

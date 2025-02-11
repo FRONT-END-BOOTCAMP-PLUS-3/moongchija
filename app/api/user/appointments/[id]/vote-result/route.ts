@@ -10,11 +10,11 @@ import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository
 
 export const GET = async (
   req: NextResponse,
-  { params }: { params: { id: number } }
+  { params }: { params: { id: string } }
 ) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
