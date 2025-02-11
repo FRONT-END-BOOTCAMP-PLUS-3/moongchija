@@ -18,13 +18,9 @@ export default function RootLayout({
         <title>뭉치자</title>
       </head>
       <body>
-<<<<<<< HEAD
-        <div>{children}</div>
-=======
         <TimeVoteProvider>
           <div className="container">{children}</div>
         </TimeVoteProvider>
->>>>>>> develop
       </body>
     </html>
   );

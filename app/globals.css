@@ -186,8 +186,6 @@ body,
 button {
   font-family: var(--font-main);
 }
-<<<<<<< HEAD
-=======
 
 button {
   padding: 0;
@@ -202,4 +200,3 @@ button {
   margin: 0 auto;
   background-color: var(--grey-2-color);
 }
->>>>>>> develop
