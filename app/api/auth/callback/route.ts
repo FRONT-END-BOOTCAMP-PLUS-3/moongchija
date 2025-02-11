@@ -80,7 +80,7 @@ export async function GET(request: NextRequest) {
     }
     return response;
   } catch (error) {
-    console.error("카카오 로그인 오류:", error);
+    console.log("카카오 로그인 오류:", error);
 
     return NextResponse.json({ message: "서버 오류" }, { status: 500 });
   }
