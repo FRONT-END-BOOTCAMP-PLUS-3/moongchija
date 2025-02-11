@@ -148,5 +148,3 @@ export class SbMemberRepository implements MemberRepository {
     }
   }
 }
-
-
