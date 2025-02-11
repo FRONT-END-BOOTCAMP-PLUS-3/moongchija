@@ -3,7 +3,7 @@ import { useCreateAppointment } from "@/context/CreateAppointmentContext";
 import { formatToISOStringWithKST } from "@/utils/dateUtils/dateUtils";
 import { RangeKeyDict } from "react-date-range";
 
-const MAX_DAYS = 7;
+const MAX_DAYS = 7 - 1; // 7일까지 선택 가능
 
 const useCreateTime = (onPageChange: (index: number) => void) => {
   const { setAppointment } = useCreateAppointment();
@@ -28,7 +28,7 @@ const useCreateTime = (onPageChange: (index: number) => void) => {
     const range = rangesByKey.selection;
   
     if (range && range.startDate && range.endDate) {
-      const differenceInDays = (range.endDate.getTime() - range.startDate.getTime()) / (1000 * 60 * 60 * 24);
+      const differenceInDays = range.endDate.getDate() - range.startDate.getDate();
   
       if (differenceInDays <= MAX_DAYS) {
         setSelectedRange([
