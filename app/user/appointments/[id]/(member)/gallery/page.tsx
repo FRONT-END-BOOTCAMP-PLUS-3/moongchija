@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import GalleryDetail from "../components/gallery/galleryDetail/GalleryDetail";
 import styles from "./gallery.module.scss";
@@ -95,7 +95,7 @@ const GalleryPage = () => {
     }
   };
 
-  const fetchGallery = async () => {
+  const fetchGallery = useCallback(async () => {
     try {
       setLoading(true);
       setError(false);
@@ -109,13 +109,13 @@ const GalleryPage = () => {
     } finally {
       setLoading(false);
     }
-  };
-
+  }, [id]); 
   useEffect(() => {
     if (id) {
       fetchGallery();
     }
-  }, [id]);
+  }, [id, fetchGallery]); 
+  
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -150,9 +150,6 @@ const GalleryPage = () => {
       </div>
     );
   }
-
-  console.log("uploadedImage: ", uploadedImage);
-  console.log("fileInputRef ", fileInputRef);
 
   return (
     <div className={styles.pageContainer}>

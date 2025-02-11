@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SbTimeVoteUserRepository } from "@/infrastructure/repositories/SbTimeVoteUserRepository";
 import { SbPlaceVoteUserRepository } from "@/infrastructure/repositories/SbPlaceVoteUserRepository";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
@@ -9,7 +9,7 @@ import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberReposi
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
 export const GET = async (
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   try {

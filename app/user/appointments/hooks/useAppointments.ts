@@ -63,10 +63,16 @@ const useAppointments = () => {
     [searchText, selectedOption]
   );
 
-  // 약속 데이터 불러오기
+  // 약속 데이터 불러오기 (API)
   const fetchAppointments = useCallback(async () => {
+    if (!user) return;
     try {
-      const response = await fetch(`/api/user/appointments?userId=${user?.id}`);
+      const response = await fetch(`/api/user/appointments?userId=${user.id}`, {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
       if (!response.ok) throw new Error("Failed to fetch appointments");
 
       const appointments: AppointmentCardDto[] = await response.json();

@@ -1,9 +1,9 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
 export const GET = async (
-  req: NextResponse,
+  req: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   const repository = new SbAppointmentRepository();

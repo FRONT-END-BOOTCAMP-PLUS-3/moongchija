@@ -1,10 +1,10 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SbAppointmentImageRepository } from "@/infrastructure/repositories/SbAppointmentImageRepository";
 import { DfDeleteImageUsecase } from "@/application/usecases/appointmentImage/DfDeleteImageUsecase";
 
 // ✅ DELETE: 이미지 삭제
 export const DELETE = async (
-  request: NextResponse,
+  request: NextRequest,
   { params }: { params: { id: string } }
 ) => {
   try {

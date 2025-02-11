@@ -10,18 +10,26 @@ import NoticeBox from "../NoticeBox/NoticeBox";
 interface NoticeDetailProps {
   appointmentId: number; // Appointment ID
   noticeData?: { id: number; descript: string; createdAt: Date }[];
+  ownerId: string; // 방장 ID
+  userId: string | null; // 유저 ID
 }
 
-const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: NoticeDetailProps) => {
+const NoticeDetail = ({
+  appointmentId,
+  noticeData: initialNotices = [],
+  ownerId,
+  userId,
+}: NoticeDetailProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [newNoticeContent, setNewNoticeContent] = useState(""); 
-  const [noticeData, setNoticeData] = useState(initialNotices); 
-
+  const [newNoticeContent, setNewNoticeContent] = useState("");
+  const [noticeData, setNoticeData] = useState(initialNotices);
 
   // 공지사항 가져오기 GET
   const fetchNotices = async () => {
     try {
-      const response = await fetch(`/api/user/appointments/${appointmentId}/information`);
+      const response = await fetch(
+        `/api/user/appointments/${appointmentId}/information`
+      );
       if (!response.ok) throw new Error("공지사항 불러오기 실패");
 
       const data = await response.json();
@@ -35,7 +43,6 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
 
-
   // 공지사항 등록 POST
   const handleRegister = async () => {
     if (!newNoticeContent.trim()) {
@@ -44,23 +51,26 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
     }
 
     try {
-      const response = await fetch(`/api/user/appointments/${appointmentId}/information`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          descript: newNoticeContent,
-          appointmentId: Number(appointmentId),
-        }),
-      });
+      const response = await fetch(
+        `/api/user/appointments/${appointmentId}/information`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            descript: newNoticeContent,
+            appointmentId: Number(appointmentId),
+          }),
+        }
+      );
 
       if (!response.ok) throw new Error("공지사항 등록 실패");
 
       alert("등록되었습니다");
       closeModal();
-      setNewNoticeContent(""); 
-      await fetchNotices(); 
+      setNewNoticeContent("");
+      await fetchNotices();
     } catch (error) {
       console.error(error);
       alert("공지사항 등록에 실패했습니다.");
@@ -68,10 +78,15 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
   };
 
   // 수정 시 업데이트하는 콜백
-  const handleNoticeUpdate = (updatedNotice: { noticeId: number, content: string }) => {
+  const handleNoticeUpdate = (updatedNotice: {
+    noticeId: number;
+    content: string;
+  }) => {
     setNoticeData((prevNoticeData) =>
       prevNoticeData.map((notice) =>
-        notice.id === updatedNotice.noticeId ? { ...notice, descript: updatedNotice.content } : notice
+        notice.id === updatedNotice.noticeId
+          ? { ...notice, descript: updatedNotice.content }
+          : notice
       )
     );
   };
@@ -79,7 +94,7 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
   // 삭제 시 해당 공지사항을 목록에서 제거하는 콜백
   const handleNoticeDelete = (noticeId: number) => {
     setNoticeData((prevNoticeData) =>
-      prevNoticeData.filter(notice => notice.id !== noticeId)
+      prevNoticeData.filter((notice) => notice.id !== noticeId)
     );
   };
 
@@ -88,7 +103,9 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
       <div className={styles.container}>
         <div className={styles.title}>
           <span>공지사항</span>
-          <FaPlus className={styles.plusIcon} onClick={openModal} />
+          {userId === ownerId ? (
+            <FaPlus className={styles.plusIcon} onClick={openModal} />
+          ) : null}
         </div>
 
         <div className={styles.wrapper}>
@@ -100,7 +117,9 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
                 content={noticeItem.descript}
                 appointmentId={appointmentId}
                 onNoticeUpdate={handleNoticeUpdate}
-                onNoticeDelete={handleNoticeDelete}  // 삭제 콜백 전달
+                onNoticeDelete={handleNoticeDelete} // 삭제 콜백 전달
+                userId={userId}
+                ownerId={ownerId}
               />
             ))
           ) : (
@@ -119,6 +138,7 @@ const NoticeDetail = ({ appointmentId, noticeData: initialNotices = [] }: Notice
               value={newNoticeContent}
               onChange={(e) => setNewNoticeContent(e.target.value)}
             />
+
             <div className={styles.noticeButton}>
               <Button
                 text="등록"

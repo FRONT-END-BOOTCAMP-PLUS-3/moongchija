@@ -1,17 +1,17 @@
 "use client";
 
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-// import Button from "@/components/button/Button";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState} from 'react';
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
 import { AppointmentInformationDto } from "@/application/usecases/appointment/dto/AppointmentInformationDto";
 import { useRouter } from "next/navigation";
 import { getUserIdClient } from "@/utils/supabase/client";
+import CircleButton from "@/components/circleButton/CircleButton";
 
 const InformationPage = () => {
   const params = useParams();
@@ -20,22 +20,25 @@ const InformationPage = () => {
   const [infoData, setInfoData] = useState<AppointmentInformationDto>();
   const router = useRouter();
   const [userId, setUserId] = useState<string | null>(null);
+  const [showButtons, setShowButtons] = useState<boolean>(false);
 
-  const fetchInfo = async () => {
+  const handleCircleButtonClick = () => setShowButtons((prev) => !prev);
+
+  const fetchInfo = useCallback(async () => {
     try {
       const response = await fetch(`/api/user/appointments/${id}/information`);
       if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-
+  
       const data = await response.json();
       setInfoData(data);
     } catch (error) {
       console.error(error);
     }
-  };
-
+  }, [id]);
+  
   useEffect(() => {
     if (id) fetchInfo();
-  }, [id]);
+  }, [id, fetchInfo]);
 
   useEffect(() => {
     const fetchUserId = async () => {
@@ -45,6 +48,7 @@ const InformationPage = () => {
     fetchUserId();
   }, []);
 
+  // 방번호 복사 버튼
   const handleCopyRoomId = () => {
     if (id) {
       const roomId = id as string;
@@ -53,14 +57,17 @@ const InformationPage = () => {
     }
   };
 
+  // 투표 결과 버튼
   const handleViewResult = () => {
     router.push(`/user/appointments/${id}/vote-result`);
   };
 
+  // 일정 변경 버튼
   const handleChangeSchedule = () => {
     router.push(`/user/appointments/${id}/confirm`);
   };
 
+  // 방삭제 버튼
   const handleDeleteRoom = async (appointmentId: number) => {
     if (!confirm("정말 이 약속을 삭제하시겠습니까?")) return;
 
@@ -78,7 +85,7 @@ const InformationPage = () => {
       if (confirmation) {
         alert("방이 삭제되었습니다.");
         setInfoData(undefined);
-        await fetchInfo();
+        router.push(`/user/appointments`);
       } else {
         alert("약속 삭제를 취소했습니다.");
       }
@@ -88,18 +95,16 @@ const InformationPage = () => {
     }
   };
 
+  // 방 나가기 버튼
   const handleExitRoom = async () => {
     if (!confirm("정말 방을 나가시겠습니까?")) return;
 
     try {
-      const res = await fetch(
-        `/api/user/appointments/${id}/information/member`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ userId }),
-        }
-      );
+      const res = await fetch(`/api/user/appointments/${id}/member`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: userId }),
+      });
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -112,6 +117,8 @@ const InformationPage = () => {
       console.error("방 나가기 중 오류 발생:", error);
     }
   };
+
+  
 
   return (
     <div className={styles.pageContainer}>
@@ -128,58 +135,57 @@ const InformationPage = () => {
             <NoticeDetail
               noticeData={infoData.notices}
               appointmentId={Number(id)}
+              ownerId={infoData.owner_id}
+              userId={userId}
             />
-            <div className={styles.buttonWrapper}>
-              <button
-                type="button"
-                className={styles.copyButton}
-                onClick={handleCopyRoomId}
-              >
-                방번호 복사
+            {/* 동그라미 플러스 버튼 */}
+            <CircleButton onClick={handleCircleButtonClick} />
+            <section
+              className={`${styles.buttonBox} ${
+                showButtons ? styles.show : ""
+              }`}
+              onClick={handleCircleButtonClick}
+            >
+              <button onClick={handleCopyRoomId} className={styles.copyButton}>
+                방번호로 복사
               </button>
-
-              <div className={styles.blueButtonWrapper}>
+              <button
+                className={styles.resultButton}
+                type="button"
+                onClick={handleViewResult}
+              >
+                투표 조회
+              </button>
+              {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
                 <button
-                  className={styles.resultButton}
+                  className={styles.changeScheduleButton}
                   type="button"
-                  onClick={handleViewResult}
+                  onClick={handleChangeSchedule}
                 >
-                  투표 조회
+                  일정 변경
                 </button>
+              ) : null}
+              {userId === infoData.owner_id ? ( // 방장이면, 방 삭제 가능
+                <button
+                  className={styles.deleteButton}
+                  type="button"
+                  onClick={() => handleDeleteRoom(Number(id))}
+                >
+                  삭제 하기
+                </button>
+              ) : null}
+              {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
+              <button
+                className={styles.exitButton}
+                type="button"
+                onClick={handleExitRoom}
+              >
+                방 나가기
+              </button>
+            ) : null}
+            </section>
 
-                {userId === infoData.owner_id ? ( // 방장이면, 일정변경 가능
-                  <button
-                    className={styles.changeScheduleButton}
-                    type="button"
-                    onClick={handleChangeSchedule}
-                  >
-                    일정 변경
-                  </button>
-                ) : null}
-              </div>
-
-              <div className={styles.redButtonWrapper}>
-                {userId === infoData.owner_id ? ( // 방장이면, 방 삭제 가능
-                  <button
-                    className={styles.deleteButton}
-                    type="button"
-                    onClick={() => handleDeleteRoom(Number(id))}
-                  >
-                    삭제 하기
-                  </button>
-                ) : null}
-
-                {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
-                  <button
-                    className={styles.exitButton}
-                    type="button"
-                    onClick={handleExitRoom}
-                  >
-                    방 나가기
-                  </button>
-                ) : null}
-              </div>
-            </div>
+            
           </>
         )}
       </div>

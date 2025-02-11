@@ -12,9 +12,10 @@ export async function DELETE(
     const appointmentId = id;
     const body = await req.json();
     const { userId } = body;
-
-    console.log(body);
-
+    
+    
+    
+    
     if (!userId || !appointmentId || isNaN(appointmentId)) {
       return NextResponse.json(
         { error: "Invalid request data" },

@@ -8,14 +8,27 @@ interface NoticeBoxProps {
   noticeId: number;
   content: string;
   appointmentId: number;
-  onNoticeUpdate: (updatedNotice: { noticeId: number, content: string }) => void;
+  onNoticeUpdate: (updatedNotice: {
+    noticeId: number;
+    content: string;
+  }) => void;
   onNoticeDelete: (noticeId: number) => void;
+  ownerId: string; // 방장 ID
+  userId: string | null; // 유저 ID
 }
 
-const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate, onNoticeDelete }: NoticeBoxProps) => {
+const NoticeBox = ({
+  noticeId,
+  content,
+  appointmentId,
+  onNoticeUpdate,
+  onNoticeDelete,
+  ownerId,
+  userId,
+}: NoticeBoxProps) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isShowMore, setIsShowMore] = useState(false);
-  const [updatedContent, setUpdatedContent] = useState(content); 
+  const [updatedContent, setUpdatedContent] = useState(content);
   const textLimit = useRef(30);
 
   const truncatedContent = useMemo(() => {
@@ -37,11 +50,14 @@ const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate, onNoticeD
     }
 
     try {
-      const response = await fetch(`/api/user/appointments/${appointmentId}/information`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ noticeId, descript: updatedContent }),
-      });
+      const response = await fetch(
+        `/api/user/appointments/${appointmentId}/information`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ noticeId, descript: updatedContent }),
+        }
+      );
 
       if (response.ok) {
         alert("공지사항이 수정되었습니다.");
@@ -61,11 +77,14 @@ const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate, onNoticeD
     const confirmation = confirm("삭제하겠습니까?");
     if (confirmation) {
       try {
-        const response = await fetch(`/api/user/appointments/${appointmentId}/information`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ noticeId }),
-        });
+        const response = await fetch(
+          `/api/user/appointments/${appointmentId}/information`,
+          {
+            method: "DELETE",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ noticeId }),
+          }
+        );
         if (response.ok) {
           alert("공지사항이 삭제되었습니다.");
           onNoticeDelete(noticeId); // 부모에게 삭제된 noticeId 전달
@@ -94,10 +113,12 @@ const NoticeBox = ({ noticeId, content, appointmentId, onNoticeUpdate, onNoticeD
             </span>
           )}
         </div>
-        <div className={styles.icons}>
-          <FaEdit className={styles.editIcon} onClick={openModal} />
-          <FaTrash className={styles.trashIcon} onClick={handleDelete} />
-        </div>
+        {userId === ownerId ? (
+          <div className={styles.icons}>
+            <FaEdit className={styles.editIcon} onClick={openModal} />
+            <FaTrash className={styles.trashIcon} onClick={handleDelete} />
+          </div>
+        ) : null}
       </div>
 
       <Modal isOpen={isModalOpen} onClose={closeModal}>
