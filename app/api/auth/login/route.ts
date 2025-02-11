@@ -17,9 +17,13 @@ export const POST = async (request: NextRequest) => {
     const authRepository = new SbAuthRepository();
     const loginUsecase = new DfLoginUsecase(authRepository);
 
-    const { token } = await loginUsecase.execute(user_email, password);
+    const { token, user } = await loginUsecase.execute(user_email, password);
 
-    const redirectUrl = `${process.env.SITE_URL}/user/appointments`;
+    console.log("userType", user.type);
+    const redirectUrl =
+      user.type === "admin"
+        ? `${process.env.SITE_URL}/admin/appointments`
+        : `${process.env.SITE_URL}/user/appointments`;
     const response = NextResponse.json({
       redirectUrl,
     });

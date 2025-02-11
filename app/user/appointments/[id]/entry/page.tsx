@@ -1,87 +1,27 @@
 "use client";
 
+import styles from "./entry.module.scss";
+import useEntry from "./hooks/useEntry";
 import Button from "@/components/button/Button";
 import IconHeader from "@/components/header/IconHeader";
 import InputField from "@/components/input-filed/InputFiled";
-import Moongchi from "@/components/moongchi/Moongchi";
-import { useParams, useRouter } from "next/navigation";
-import { useEffect, useMemo, useState } from "react";
-import styles from "./entry.module.scss";
-import { Appointment } from "@/domain/entities/Appointment";
-import { useUser } from "@/context/UserContext";
 import Loading from "@/components/loading/Loading";
+import Moongchi from "@/components/moongchi/Moongchi";
 
 const EntryPage = () => {
-  const [loading, setLoading] = useState<boolean>(true);
-  const { user } = useUser();
-
-  const params = useParams();
-  const router = useRouter();
-
-  const [appointment, setAppointment] = useState<Appointment>();
-
-  const [answer, setAnswer] = useState("");
-  const [error, setError] = useState("");
-
-  const appointmentId = params.id as string;
-
-  const answerActive = useMemo(() => answer.trim() !== "", [answer]);
-
-  useEffect(() => {
-    if (user) {
-      fetchGetAppointment();
-    }
-  }, [user]);
-
-  const fetchGetAppointment = async () => {
-    try {
-      const res = await fetch(`/api/user/appointments/${appointmentId}/entry`);
-
-      const appointmentData = await res.json();
-      setAppointment(appointmentData);
-    } catch (error) {
-      console.log("오류 발생 :", error);
-    } finally {
-      setLoading(false);
-    }
-  };
-
-  const fetchEntryMember = async () => {
-    if (!handleValidation()) return;
-
-    try {
-      const response = await fetch(
-        `/api/user/appointments/${appointmentId}/entry`,
-        {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ userId: user?.id }),
-        }
-      );
-
-      if (response.status === 200) {
-        router.push(`/user/appointments/${appointmentId}/vote-time`);
-      }
-    } catch (error) {
-      console.log("오류 발생 :", error);
-    }
-  };
-
-  const handleValidation = () => {
-    if (answer.trim() !== appointment?.answer) {
-      setError("답이 틀렸습니다.");
-      return false;
-    }
-    setError("");
-    return true;
-  };
-
-  const handleAnswerChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAnswer(e.target.value);
-    if (error) setError("");
-  };
+  const {
+    hooks: {
+      loading,
+      appointment,
+      answer,
+      error,
+      answerActive,
+    },
+    handlers: {
+      handleAnswerChange,
+      fetchEntryMember,
+    },
+  } = useEntry();
 
   return (
     <>

@@ -5,5 +5,6 @@ export interface LoginResponseDto {
     user_email: string;
     nickname: string;
     emoji: string;
+    type?: string;
   };
 }

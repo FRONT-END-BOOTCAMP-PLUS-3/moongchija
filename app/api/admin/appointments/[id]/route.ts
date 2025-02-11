@@ -3,14 +3,15 @@ import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppoint
 import { DfDeleteAppointmentUsecase } from "@/application/usecases/appointment/DfDeleteAppointmentUsecase";
 
 // ✅ DELETE: 약속 삭제
-export async function DELETE(
+export const DELETE = async (
   request: NextRequest,
   { params }: { params: { id: string } }
-) {
+) => {
   try {
-    const { id } = params;
+    const { id } = await params;
+    const appointmentId = await Number(id);
 
-    if (!id) {
+    if (!appointmentId) {
       return NextResponse.json(
         { error: "약속 ID가 없습니다." },
         { status: 400 }
@@ -22,7 +23,7 @@ export async function DELETE(
       appointmentRepo
     );
 
-    const isDeleted = await deleteAppointmentUsecase.execute(id);
+    const isDeleted = await deleteAppointmentUsecase.execute(appointmentId);
 
     if (!isDeleted) {
       return NextResponse.json({ error: "약속 삭제 실패" }, { status: 404 });
@@ -33,4 +34,4 @@ export async function DELETE(
     console.error("❌ 약속 삭제 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

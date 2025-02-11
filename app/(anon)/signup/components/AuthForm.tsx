@@ -6,28 +6,13 @@ import styles from "./AuthForm.module.scss";
 import EmailInputField from "./EmailInputField";
 import useForm from "../hooks/useForm";
 import Link from "next/link";
-import { useState } from "react";
-import { useRouter } from "next/navigation";
+import useCheckNickname from "../hooks/useCheckNickname";
+import useSubmitSignup from "../hooks/useSubmitSignup";
 
 const AuthForm = () => {
-  const [isLoading, setIsLoading] = useState(false);
-  const [submitError, setSubmitError] = useState<string | null>(null);
-  const [nicknameCheckError, setNicknameCheckError] = useState<string | null>(
-    null
-  );
-  const [nicknameCheckSuccess, setNicknameCheckSuccess] = useState<
-    string | null
-  >(null);
-  const router = useRouter();
-
   const {
     email: { email, emailError, handleChangeEmail },
-    nickname: {
-      nickname,
-      nicknameError,
-      handleChangeNickname,
-      setIsNicknameAvailable,
-    },
+    nickname: { nickname, nicknameError, handleChangeNickname },
     password: { password, passwordError, handleChangePassword },
     passwordCheck: {
       passwordCheck,
@@ -37,96 +22,38 @@ const AuthForm = () => {
     isFormValid,
   } = useForm();
 
+  const {
+    isNicknameAvailable,
+    nicknameCheckError,
+    nicknameCheckSuccess,
+    handleCheckNickname,
+    resetNicknameCheckState,
+  } = useCheckNickname();
+
+  const { submitSignup, isLoading, submitError } = useSubmitSignup();
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
-    if (!isFormValid) {
+    if (!isNicknameAvailable || !isFormValid) {
       return;
     }
 
-    setIsLoading(true);
-    setSubmitError(null);
-
-    try {
-      const response = await fetch("/api/auth/signup", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          user_email: email,
-          password: password,
-          nickname: nickname,
-        }),
-      });
-      if (response.ok) {
-        const { redirectUrl } = await response.json();
-        if (redirectUrl) {
-          router.push(redirectUrl);
-        }
-      }
-    } catch (error) {
-      setSubmitError(
-        error instanceof Error
-          ? error.message
-          : "회원가입 중 오류가 발생했습니다."
-      );
-    } finally {
-      setIsLoading(false);
-    }
+    await submitSignup(email, password, nickname);
   };
 
-  const handleCheckNickname = async (
+  const handleCheckNicknameClick = async (
     e: React.MouseEvent<HTMLButtonElement>
   ) => {
     e.preventDefault();
-
-    if (!nickname) {
-      setNicknameCheckError(null);
-      setNicknameCheckSuccess(null);
-      return;
-    }
-
-    setNicknameCheckError(null);
-    setNicknameCheckSuccess(null);
-
-    try {
-      const response = await fetch("/api/auth/check-nickname", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ nickname }),
-      });
-
-      const data = await response.json();
-
-      if (data.isAvailable) {
-        setIsNicknameAvailable(true);
-        setNicknameCheckSuccess("사용 가능한 닉네임입니다.");
-      } else {
-        setNicknameCheckError("이미 사용중인 닉네임입니다.");
-        setIsNicknameAvailable(false);
-      }
-    } catch (error) {
-      setNicknameCheckSuccess(
-        error instanceof Error
-          ? error.message
-          : "회원가입 중 오류가 발생했습니다."
-      );
-
-      setIsNicknameAvailable(false);
-    }
+    handleCheckNickname(nickname);
   };
 
   const handleChangeNicknameWithReset = (
     e: React.ChangeEvent<HTMLInputElement>
   ) => {
     handleChangeNickname(e);
-
-    setNicknameCheckError(null);
-    setNicknameCheckSuccess(null);
-    setIsNicknameAvailable(false);
+    resetNicknameCheckState();
   };
 
   return (
@@ -148,7 +75,11 @@ const AuthForm = () => {
             error={nicknameCheckError ? nicknameCheckError : nicknameError}
             success={nicknameCheckSuccess}
           />
-          <Button text="중복검사" size="md" onClick={handleCheckNickname} />
+          <Button
+            text="중복검사"
+            size="md"
+            onClick={handleCheckNicknameClick}
+          />
         </div>
         <InputField
           type="password"
@@ -170,7 +101,7 @@ const AuthForm = () => {
         <Button
           text={isLoading ? "처리중..." : "회원가입"}
           size="lg"
-          active={isFormValid}
+          active={isFormValid && isNicknameAvailable}
         />
 
         <p className={styles.loginLink}>

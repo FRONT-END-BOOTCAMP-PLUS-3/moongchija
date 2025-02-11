@@ -1,15 +1,16 @@
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfGetAppointmentTimeUsecase } from "@/application/usecases/vote/DfGetAppointmentTimeUsecase.ts";
 
-export async function GET(
-  request: Request,
-  { params }: { params: { id: number } }
-) {
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   const repository = new SbAppointmentRepository();
   const usecase = new DfGetAppointmentTimeUsecase(repository);
   const { id } = await params;
-  const appointmentTime = await usecase.execute(id);
+  const appointmentId = Number(id);
+  const appointmentTime = await usecase.execute(appointmentId);
 
   if (!appointmentTime) {
     return NextResponse.json(
@@ -19,4 +20,4 @@ export async function GET(
   }
 
   return NextResponse.json(appointmentTime);
-}
+};

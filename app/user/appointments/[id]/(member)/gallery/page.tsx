@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef, useCallback } from "react";
 import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
-import GalleryDetail from "../components/gallery/GalleryDetail/GalleryDetail";
+import GalleryDetail from "../components/gallery/galleryDetail/GalleryDetail";
 import styles from "./gallery.module.scss";
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";

@@ -17,9 +17,6 @@ export async function POST(req: Request) {
       );
     }
 
-    // id 자동 증감을 위해 id 속성은 보내지 않음
-    const { id, ...data } = appointment; 
-
     const appointmentRepository = new SbAppointmentRepository();
     const placeVoteRepository = new SbPlaceVoteRepository();
     const memberRepository = new SbMemberRepository();
@@ -30,7 +27,7 @@ export async function POST(req: Request) {
       memberRepository
     );
 
-    const newAppointment = await usecase.execute(data, placeVotes);
+    const newAppointment = await usecase.execute(appointment, placeVotes);
 
     return NextResponse.json(newAppointment, { status: 201 });
   } catch (error) {

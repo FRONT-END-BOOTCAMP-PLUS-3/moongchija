@@ -32,4 +32,5 @@ export interface UserRepository {
   ): Promise<User>;
   getAllUsers(): Promise<User[]>;
   deleteUser(userId: string): Promise<boolean>;
+  isUserInAdmin(userId: string): Promise<boolean>;
 }

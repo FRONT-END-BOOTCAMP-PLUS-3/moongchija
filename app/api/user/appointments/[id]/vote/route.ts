@@ -5,13 +5,13 @@ import { DfSubmitVoteUsecase } from "@/application/usecases/vote/DfSubmitVoteUse
 import { SbTimeVoteRepository } from "@/infrastructure/repositories/SbTimeVoteRepository";
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 
-export async function POST(
+export const POST = async (
   request: NextRequest,
-  { params }: { params: { id: number } }
-) {
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
     const { userId, timeVotes, placeVotes } = await request.json();
 
     // 필수 데이터 체크
@@ -46,7 +46,7 @@ export async function POST(
         placeVotes,
       });
     } catch (voteError) {
-      console.error("❌ 투표 오류 발생:", voteError);
+      console.log("❌ 투표 오류 발생:", voteError);
       return NextResponse.json(
         {
           error:
@@ -60,7 +60,7 @@ export async function POST(
       message: "✅ 투표가 성공적으로 저장되었습니다.",
     });
   } catch (error) {
-    console.error("❌ 투표 저장 중 오류 발생:", error);
+    console.log("❌ 투표 저장 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

@@ -15,7 +15,7 @@ export const POST = async () => {
 
     return response;
   } catch (error) {
-    console.error(error);
+    console.log(error);
     return NextResponse.json(
       { error: "알 수 없는 에러가 발생했습니다." },
       { status: 500 }

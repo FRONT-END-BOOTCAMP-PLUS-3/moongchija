@@ -11,8 +11,7 @@ interface Appointment {
   status: "voting" | "confirmed";
   confirm_time: string;
 }
-
-export default function AppointmentsPage() {
+const AppointmentsPage = () => {
   const [appointments, setAppointments] = useState<Appointment[]>([]);
   const [filteredAppointments, setFilteredAppointments] = useState<
     Appointment[]
@@ -175,4 +174,6 @@ export default function AppointmentsPage() {
       )}
     </>
   );
-}
+};
+
+export default AppointmentsPage;

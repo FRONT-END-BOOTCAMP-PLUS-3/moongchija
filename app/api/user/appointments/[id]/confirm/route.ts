@@ -4,13 +4,13 @@ import { SbPlaceVoteRepository } from "@/infrastructure/repositories/SbPlaceVote
 import { DfGetPlaceVotesUsecase } from "@/application/usecases/vote/DfGetPlaceVotesUsecase";
 import { DfConfirmAppointmentUseCase } from "@/application/usecases/appointment/DfConfirmUseCase";
 
-export async function GET(
+export const GET = async (
   request: NextRequest,
-  { params }: { params: { id: number } }
-) {
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
@@ -26,10 +26,10 @@ export async function GET(
 
     return NextResponse.json(places);
   } catch (error) {
-    console.error("❌ 장소 투표 리스트 조회 중 오류 발생:", error);
+    console.log("❌ 장소 투표 리스트 조회 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};
 
 export async function POST(request: NextRequest) {
   try {

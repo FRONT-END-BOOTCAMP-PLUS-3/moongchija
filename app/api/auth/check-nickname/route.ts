@@ -22,7 +22,7 @@ export const POST = async (request: NextRequest) => {
 
     return NextResponse.json(result);
   } catch (error) {
-    console.error("Error checking nickname:", error);
+    console.log("Error checking nickname:", error);
     return NextResponse.json(
       { error: "닉네임 중복 확인 중 오류가 발생했습니다." },
       { status: 500 }

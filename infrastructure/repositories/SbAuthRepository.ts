@@ -38,6 +38,7 @@ export class SbAuthRepository implements AuthRepository {
       emoji: userData.emoji,
       created_at: userData.created_at,
       provider: userData.provider,
+      type: userData.type,
       token: token,
     };
   }

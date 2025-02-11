@@ -96,7 +96,7 @@ const useAppointments = () => {
 
   useEffect(() => {
     if (user) fetchAppointments();
-  }, [fetchAppointments]);
+  }, [user, fetchAppointments]);
 
   return {
     hooks: {

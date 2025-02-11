@@ -11,11 +11,7 @@ const tabs = [
   { name: "이미지 관리", href: "/admin/images" },
 ];
 
-export default function AdminLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+const AdminLayout = ({ children }: { children: React.ReactNode }) => {
   const pathname = usePathname();
 
   return (
@@ -23,6 +19,7 @@ export default function AdminLayout({
       <div className={styles.adminContainer}>
         <Header
           showUsername={false}
+          // eslint-disable-next-line react/no-children-prop
           children={<h1 className={styles.title}>ADMIN</h1>}
         />
         <div className={styles.mainBox}>
@@ -44,4 +41,6 @@ export default function AdminLayout({
       </div>
     </>
   );
-}
+};
+
+export default AdminLayout;

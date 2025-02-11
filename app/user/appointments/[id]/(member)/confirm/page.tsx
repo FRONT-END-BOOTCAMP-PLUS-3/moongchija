@@ -3,7 +3,6 @@
 import styles from "./confirm.module.scss";
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
-
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { Calendar } from "react-date-range";
@@ -37,14 +36,14 @@ const ConfirmPage = () => {
           setPlaceList(data); // ✅ API에서 받은 데이터를 그대로 저장
           setConfirmPlace(data[0]?.place || ""); // ✅ 기본 선택 값 설정
         } else {
-          alert(
+          console.log(
             `❌ 장소 데이터를 불러오는 중 오류 발생: ${
               data.error || "알 수 없는 오류"
             }`
           );
         }
       } catch (error) {
-        console.error("❌ 장소 목록 불러오기 실패:", error);
+        console.log("❌ 장소 목록 불러오기 실패:", error);
       }
     };
 
@@ -112,7 +111,7 @@ const ConfirmPage = () => {
         alert(`❌ 약속 확정 실패: ${data.error || "알 수 없는 오류"}`);
       }
     } catch (error) {
-      console.error("❌ 약속 확정 API 요청 실패:", error);
+      console.log("❌ 약속 확정 API 요청 실패:", error);
     }
   };
 

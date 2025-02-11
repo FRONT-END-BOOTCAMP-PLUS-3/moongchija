@@ -40,7 +40,7 @@ export const POST = async (request: NextRequest) => {
     return response;
   } catch (error: unknown) {
     if (error instanceof Error) {
-      console.error("Error in signup:", error.message);
+      console.log("Error in signup:", error.message);
       const errorMessage =
         error.message === "User already registered"
           ? "이미 가입된 사용자입니다."
@@ -48,7 +48,7 @@ export const POST = async (request: NextRequest) => {
 
       return NextResponse.json({ error: errorMessage }, { status: 400 });
     } else {
-      console.error("Unknown error:", error);
+      console.log("Unknown error:", error);
       return NextResponse.json(
         { error: "알 수 없는 오류 발생" },
         { status: 400 }

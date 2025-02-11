@@ -8,13 +8,13 @@ import { DfGetVoteResultUseCase } from "@/application/usecases/vote/DfGetVoteRes
 import { SbMemberRepository } from "@/infrastructure/repositories/SbMemberRepository";
 import { SbUserRepository } from "@/infrastructure/repositories/SbUserRepository";
 
-export async function GET(
-  request: NextRequest,
-  { params }: { params: { id: number } }
-) {
+export const GET = async (
+  req: NextRequest,
+  { params }: { params: { id: string } }
+) => {
   try {
     const { id } = await params;
-    const appointmentId = id;
+    const appointmentId = Number(id);
 
     if (isNaN(appointmentId)) {
       return NextResponse.json(
@@ -37,7 +37,7 @@ export async function GET(
 
     return NextResponse.json(voteResult);
   } catch (error) {
-    console.error("❌ 투표 결과 조회 중 오류 발생:", error);
+    console.log("❌ 투표 결과 조회 중 오류 발생:", error);
     return NextResponse.json({ error: "서버 오류 발생" }, { status: 500 });
   }
-}
+};

@@ -1,10 +1,10 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextResponse } from "next/server";
 import { SbAppointmentRepository } from "@/infrastructure/repositories/SbAppointmentRepository";
 import { DfGetAllAppointmentsUsecase } from "@/application/usecases/appointment/DfGetAllAppointmentsUsecase";
 import { AppointmentListDto } from "@/application/usecases/appointment/dto/AppointmentListDto";
 
 // ✅ GET: 약속 목록 조회
-export async function GET(request: NextRequest) {
+export const GET = async () => {
   try {
     const appointmentRepo = new SbAppointmentRepository();
     const getAllAppointmentsUseCase = new DfGetAllAppointmentsUsecase(
@@ -17,8 +17,8 @@ export async function GET(request: NextRequest) {
     return NextResponse.json(appointments);
   } catch (error) {
     return NextResponse.json(
-      { error: (error as any).message },
+      { error: (error as Error).message },
       { status: 500 }
     );
   }
-}
+};

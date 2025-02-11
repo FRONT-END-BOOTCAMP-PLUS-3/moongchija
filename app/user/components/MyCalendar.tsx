@@ -39,7 +39,7 @@ const MyCalendar = ({
     };
 
     appointmentsListFetch();
-  }, []);
+  }, [onAppointmentsFetch]);
 
   return (
     <div className="calendarWrapper">
