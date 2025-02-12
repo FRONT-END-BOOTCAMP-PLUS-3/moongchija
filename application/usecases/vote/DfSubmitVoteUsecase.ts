@@ -22,6 +22,7 @@ export class DfSubmitVoteUsecase {
 
     // ✅ 1. 투표하려는 사용자의 is_vote 확인
     const member = await this.memberRepo.getMemberStatus(userId, appointmentId);
+    console.log("member", member);
     if (!member) {
       throw new Error("해당 약속의 멤버가 아닙니다.");
     }
@@ -67,14 +68,22 @@ export class DfSubmitVoteUsecase {
     // ✅ 6. 사용자가 시간 투표한 데이터 저장 (time_vote_user 테이블)
     await Promise.all(
       processedTimeVotes.map(async (timeVote: TimeVoteDto) => {
-        await this.timeVoteUserRepo.voteForTime(userId, timeVote.timeId);
+        await this.timeVoteUserRepo.voteForTime(
+          userId,
+          timeVote.timeId,
+          member.id
+        );
       })
     );
 
     // ✅ 7. 사용자가 장소 투표한 데이터 저장 (place_vote_user 테이블)
     await Promise.all(
       placeVotes.map(async (placeVote: PlaceVoteDto) => {
-        await this.placeVoteUserRepo.voteForPlace(userId, placeVote.placeId);
+        await this.placeVoteUserRepo.voteForPlace(
+          userId,
+          placeVote.placeId,
+          member.id
+        );
       })
     );
 
