@@ -39,6 +39,14 @@
           text-align: center;
           margin-right: 5px;
           color: var(--grey-3-color);
+          @media (max-width: 390px) {
+            width: 40px;
+            margin-right: 4.5px;
+          }
+          @media (max-width: 375px) {
+            width: 37px;
+            margin-right: 5px;
+          }
         }
         .day {
           width: 45px;
@@ -46,6 +54,14 @@
           text-align: center;
           margin-right: 5px;
           margin-bottom: 1vh;
+          @media (max-width: 390px) {
+            width: 40px;
+            margin-right: 4.5px;
+          }
+          @media (max-width: 375px) {
+            width: 37px;
+            margin-right: 5px;
+          }
         }
       }
     }
@@ -70,6 +86,14 @@
           align-items: center;
           justify-content: center;
           font-size: var(--font-size-md);
+          @media (max-width: 390px) {
+            width: 40px;
+            height: 40px;
+          }
+          @media (max-width: 375px) {
+            width: 37px;
+            height: 37px;
+          }
         }
       }
 
@@ -89,6 +113,14 @@
           border-radius: 4px;
           cursor: pointer;
           transition: background 0.2s ease-in-out;
+          @media (max-width: 390px) {
+            width: 40px;
+            height: 40px;
+          }
+          @media (max-width: 375px) {
+            width: 37px;
+            height: 37px;
+          }
 
           &.selected {
             background: var(--primary-color);
