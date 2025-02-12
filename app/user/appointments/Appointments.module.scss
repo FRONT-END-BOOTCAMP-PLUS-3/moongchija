@@ -3,6 +3,15 @@
   display: flex;
   flex-direction: column;
   height: calc(100vh - 120px);
+
+  @media (max-width: 480px) {
+    .searchBox {
+      & > select,
+      & > .inputWrapper > input {
+        font-size: var(--font-size-xs);
+      }
+    } // searchBox
+  } // @media
 }
 
 .searchBox {
@@ -34,7 +43,7 @@
     }
   }
 
-  select, 
+  select,
   input {
     font-family: var(--font-main);
     font-size: var(--font-size-sm);
