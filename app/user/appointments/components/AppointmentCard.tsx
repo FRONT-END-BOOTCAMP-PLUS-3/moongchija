@@ -42,7 +42,8 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     e.preventDefault();
     e.stopPropagation();
   
-    fallbackCopy(text, () => alert(`✅ 초대링크가 복사되었습니다! ${text}`), "초대링크 복사 실패");
+    fallbackCopy(text, () => {}, "초대링크 복사 실패");
+    alert(`✅ 초대링크가 복사되었습니다! ${text}`); 
   };
 
   return (

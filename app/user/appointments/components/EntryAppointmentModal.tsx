@@ -1,7 +1,7 @@
 import styles from "./EntryAppointmentModal.module.scss";
 import Button from "@/components/button/Button";
 import InputField from "@/components/input-filed/InputFiled";
-import useEnrtyAppointmentModal from "../hooks/useEnrtyAppointmentModal";
+import useEntryAppointmentModal from "../hooks/useEntryAppointmentModal";
 
 const EntryAppointmentModal: React.FC = () => {
   const {
@@ -13,7 +13,7 @@ const EntryAppointmentModal: React.FC = () => {
       handleRoomNumberChange,
       fetchCheckAppointmentEntry,
     },
-  } = useEnrtyAppointmentModal();
+  } = useEntryAppointmentModal();
 
   return (
     <div className={styles.roomEntryBox}>
