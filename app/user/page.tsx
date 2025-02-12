@@ -15,6 +15,7 @@ import UserImage from "./components/UserImage";
 const MyPagePage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [appointments, setAppointments] = useState<Event[]>([]);
+  const [selectedStatus, setSelectedStatus] = useState<string | null>(null);
   const handleopenModal = () => setIsModalOpen(true);
   const handlecloseModal = () => setIsModalOpen(false);
 
@@ -27,10 +28,16 @@ const MyPagePage = () => {
           <UserName />
         </div>
         <div>
-          <UserAppointmentCount appointments={appointments} />
+          <UserAppointmentCount
+            appointments={appointments}
+            onStatusChange={setSelectedStatus}
+          />
         </div>
         <div className={styles.calendarWrapper}>
-          <MyCalendar onAppointmentsFetch={setAppointments} />
+          <MyCalendar
+            onAppointmentsFetch={setAppointments}
+            selectedStatus={selectedStatus}
+          />
         </div>
 
         <div className={styles.deleteAccountButton}>
