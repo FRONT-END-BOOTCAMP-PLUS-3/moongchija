@@ -6,11 +6,10 @@ const nextConfig = {
   images: {
     domains: ["yswjnlalguzoxdcmydxr.supabase.co"], // 허용할 이미지 도메인
   },
-  webpack: (config, { isServer }) => {
-    if (!isServer) {
-      config.resolve.fallback = { fs: false }; // Webpack 오류 방지
-    }
-    return config;
+  experimental: {
+    turbo: {
+      resolve: {}, // Turbopack을 활성화하면서 Webpack 기능 유지 가능
+    },
   },
 };
 
