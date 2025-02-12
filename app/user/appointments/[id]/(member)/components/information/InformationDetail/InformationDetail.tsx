@@ -45,7 +45,6 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
     else return styles.count;
   };
 
-
   return (
     <div className={styles.container}>
       {/* 남은 날짜 박스 */}
@@ -56,9 +55,11 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
 
       {/* 약속명 */}
       <div className={styles.name}>
-      {userId === informationData.owner_id ? (
-        <FaCrown className={styles.crownIcon} />
-      ) : <FaUserFriends className={styles.friendsIcon} />}
+        {userId === informationData.owner_id ? (
+          <FaCrown className={styles.crownIcon} />
+        ) : (
+          <FaUserFriends className={styles.friendsIcon} />
+        )}
         <span>{informationData.title}</span>
       </div>
 
@@ -70,7 +71,11 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
           <span>장소</span>
           <div className={styles.divider}></div>
           {informationData.confirmPlaceUrl ? (
-            <Link href={String(informationData.confirmPlaceUrl)}>
+            <Link
+              href={String(informationData.confirmPlaceUrl)}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               {String(informationData.confirmPlace)}
             </Link>
           ) : (
