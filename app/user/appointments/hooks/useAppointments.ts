@@ -112,6 +112,10 @@ const useAppointments = () => {
       searchText,
       selectedOption,
       isModalOpen,
+      filteredAppointments,
+      inProgressAppointments,
+      confirmedAppointments,
+      setAppointments,
     },
     handlers: {
       openModal,
@@ -120,9 +124,6 @@ const useAppointments = () => {
       handleCircleButtonClick,
       handleSearchChange,
       handleSelectChange,
-      filteredAppointments,
-      inProgressAppointments,
-      confirmedAppointments,
     }
   };
 };

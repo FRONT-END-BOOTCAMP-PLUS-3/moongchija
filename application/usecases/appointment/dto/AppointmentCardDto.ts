@@ -10,4 +10,5 @@ export interface AppointmentCardDto {
     extraParticipants: number;
     status: "voting" | "confirmed"
     isVote: boolean // 현재 유저가 해당 약속에 대한 투표 유무
+    ownerId: string;
   }

@@ -1,9 +1,11 @@
 .container {
+  position: relative;
   background-color: var(--background-color);
   box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
   border-radius: 10px;
   display: flex;
   width: 100%;
+  margin-bottom: 20px;
 
   .leftBox {
     width: 70%;
@@ -64,19 +66,27 @@
     }
 
     .linkWrapper {
+      position: absolute;
       display: flex;
       justify-content: flex-end;
+      bottom: 0;
+      right: 0;
 
-      .copyButton {
+      .linkButton {
+        width: 100%;
         background: none;
         color: var(--grey-7-color);
         border: none;
         border-radius: 5px;
-        padding: 10px;
+        padding: 10px 10px 10px 0;
         cursor: pointer;
         font-size: var(--font-size-xs);
         display: flex;
         gap: 2px;
+
+        & > p {
+          white-space: nowrap;
+        }
 
         &:hover {
           color: var(--primary-color);

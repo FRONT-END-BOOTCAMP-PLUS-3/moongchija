@@ -7,9 +7,13 @@ import { AppointmentCardDto } from "@/application/usecases/appointment/dto/Appoi
 
 interface AppointmentListProps {
   appointments: AppointmentCardDto[];
+  onSetAppointments: React.Dispatch<React.SetStateAction<AppointmentCardDto[]>>;
 }
 
-const AppointmentList: React.FC<AppointmentListProps> = ({ appointments }) => {
+const AppointmentList: React.FC<AppointmentListProps> = ({
+  appointments,
+  onSetAppointments,
+}) => {
   return (
     <div className={styles.container}>
       {appointments.map((data, index) => (
@@ -23,7 +27,10 @@ const AppointmentList: React.FC<AppointmentListProps> = ({ appointments }) => {
           }`}
           key={index}
         >
-          <AppointmentCard appointment={data} />
+          <AppointmentCard
+            appointment={data}
+            onSetAppointments={onSetAppointments}
+          />
         </Link>
       ))}
       {/* 약속이 없을 경우 */}
