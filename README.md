@@ -99,7 +99,8 @@
 - 약속 장소 후보 등록 가능
 - 약속 방번호 자동 생성 및 공유 가능
 
-(영상 추가)
+![약속 생성](https://github.com/user-attachments/assets/92da0a13-ff2f-4cb1-a17c-b53d53c81ffc)
+
 
 <br>
 
@@ -134,7 +135,8 @@
 - 정산 기능 제공 (참여자 간 비용 정산 가능)
 - 사진 공유 기능 제공 (약속 사진 업로드 및 공유)
 
-(영상 추가)
+![약속 상세 페이지](https://github.com/user-attachments/assets/e74223d2-15ea-4176-a294-3a769fa3e449)
+
 
 <br>
 
