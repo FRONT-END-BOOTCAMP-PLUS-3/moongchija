@@ -1,5 +1,5 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import styles from "./UserName.module.scss";
 import useInput from "@/app/(anon)/signup/hooks/useInput";
 import Button from "@/components/button/Button";
@@ -10,7 +10,11 @@ import { validateNickname } from "@/app/(anon)/signup/hooks/useValidate";
 const UserName = () => {
   const [isEditing, setIsEditing] = useState<boolean>(false);
   const { user, setUser } = useUser();
-  const { value: nickname, onChange: handleChangeInput } = useInput("");
+  const {
+    value: nickname,
+    setValue,
+    onChange: handleChangeInput,
+  } = useInput("");
 
   const handleEditClick = () => {
     setIsEditing((prev) => !prev);
@@ -43,6 +47,32 @@ const UserName = () => {
       );
     }
   };
+
+  useEffect(() => {
+    if (!isEditing) return;
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsEditing(false);
+        setValue("");
+      }
+    };
+
+    const handleClickOutside = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest(`.${styles.editingBox}`)) {
+        setIsEditing(false);
+        setValue("");
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    document.addEventListener("mousedown", handleClickOutside);
+
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      document.removeEventListener("mousedown", handleClickOutside);
+    };
+  }, [isEditing, user?.nickname, setValue]);
 
   const handleChangeNickname = async () => {
     if (nickname === user?.nickname) {
