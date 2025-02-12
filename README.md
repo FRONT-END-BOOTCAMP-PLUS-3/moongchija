@@ -2,7 +2,7 @@
 
 <br>
 
-### 서비스 링크 : 
+### 서비스 링크 : https://moongchija.vercel.app/
 
 <br>
 
@@ -60,19 +60,39 @@
 
 ## 📌 웹 사이트 사용 예시
 
-## 1. 회원가입 및 로그인
+## 1. 초기화면
+### 초기화면
+![Image](https://github.com/user-attachments/assets/869dcaec-47b1-40fb-80c4-991123504ab6)
+
+## 2. 회원가입 및 로그인
 
 - 이메일과 비밀번호를 이용한 회원가입
 - 카카오 로그인 이용 가능
 - 로그인 후 서비스 이용 가능
 - 사용자 프로필 관리 기능 제공
 
-(영상 추가)
+
+### 카카오 로그인
+![Image](https://github.com/user-attachments/assets/5dfacf07-0aae-4648-924c-8c9e30676514)
+![Image](https://github.com/user-attachments/assets/2ccb5080-4a50-445e-aa30-54997f23f55c)
+
+### 로그인 - 성공/실패
+![Image](https://github.com/user-attachments/assets/b1588be8-8c9d-4555-9183-d23d26553978)
+![Image](https://github.com/user-attachments/assets/3e6abfbc-3561-4df6-a0c5-f25713b50e83)
+
+
+### 회원가입 - 성공/실패
+![Image](https://github.com/user-attachments/assets/b31a19be-efad-4d32-8c4f-2063c4d083ef)
+![Image](https://github.com/user-attachments/assets/d2ecbe4a-7278-47c4-acab-3884d395b4de)
+
+
+
+
 
 <br>
 
 
-## 2. 약속 생성 (방장 기능)
+## 3. 약속 생성 (방장 기능)
 
 - 방제목, 퀴즈 및 정답 설정 가능
 - 약속 시간 투표 가능 기간 및 시간 범위 설정
@@ -84,7 +104,7 @@
 <br>
 
 
-## 3. 약속 참여 (멤버 기능)
+## 4. 약속 참여 (멤버 기능)
 
 - 방번호를 입력하여 약속 참여 가능
 - 방장이 설정한 퀴즈의 정답을 맞추면 멤버로 추가됨
@@ -95,7 +115,7 @@
 <br>
 
 
-## 4. 투표 및 약속 확정
+## 5. 투표 및 약속 확정
 
 - 방장과 멤버는 투표 페이지에서 시간 및 장소 투표 진행 가능
 - 투표를 제출하면 투표결과 확인 가능
@@ -108,7 +128,7 @@
 <br>
 
 
-## 5. 약속 상세 페이지
+## 6. 약속 상세 페이지
 
 - 확정된 약속의 정보 확인 가능
 - 정산 기능 제공 (참여자 간 비용 정산 가능)
@@ -119,7 +139,7 @@
 <br>
 
 
-## 6. 메인 페이지
+## 7. 메인 페이지
 
 - 사용자의 약속 리스트 제공
 - 투표 중인 약속, 확정된 약속 필터링 가능
@@ -130,13 +150,14 @@
 <br>
 
 
-## 7. 마이페이지
+## 8. 마이페이지
 
 - 사용자의 약속을 달력 형태로 요약하여 제공
 - 개인 프로필 수정 가능
 - 약속 상태에 따른 색상 구분 및 약속 상태에 따른 필터링 제공
 
-(영상 추가)
+### 마이페이지 - 닉네임 변경, 이모지 변경, 약속 상태 필터링, 탈퇴 기능
+![Image](https://github.com/user-attachments/assets/f4d9cc1f-03cf-45b6-8e55-cbf73deba70a)
 
 <br>
 
