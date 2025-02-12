@@ -81,11 +81,11 @@ export class SbMemberRepository implements MemberRepository {
   async getMemberStatus(
     userId: string,
     appointmentId: number
-  ): Promise<{ is_vote: boolean } | null> {
+  ): Promise<{ id: number; is_vote: boolean } | null> {
     const supabase = await createClient();
     const { data, error } = await supabase
       .from("member")
-      .select("is_vote")
+      .select("id, is_vote")
       .eq("user_id", userId)
       .eq("appointment_id", appointmentId)
       .single();

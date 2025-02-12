@@ -13,6 +13,7 @@ export interface MemberRepository {
     userId: string,
     appointmentId: number
   ): Promise<{
+    id: number;
     is_vote: boolean;
   } | null>;
 
