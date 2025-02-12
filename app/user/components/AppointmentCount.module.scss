@@ -1,7 +1,7 @@
 .appointmentContainer {
-  width: 70px;
+  width: 100px;
   height: 70px;
-  border-radius: 50%;
+  border-radius: 10px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -13,20 +13,21 @@
     align-items: center;
     text-align: center;
     gap: 10px;
-
     color: #fff;
 
     span:nth-child(1) {
       font-family: var(--font-sub);
+      font-size: var(--font-size-md);
     }
     span:nth-child(2) {
-      font-size: var(--font-size-xs);
+      font-size: var(--font-size-sm);
       font-family: var(--font-main);
     }
   }
   @media (max-width: 375px) {
-    width: 60px;
+    width: 100px;
     height: 60px;
+    border-radius: 10px;
   }
 }
 
