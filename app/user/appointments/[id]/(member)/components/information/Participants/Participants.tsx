@@ -9,9 +9,6 @@ interface ParticipantsProps {
 }
 
 const Participants = ({ participant }: ParticipantsProps) => {
- 
- console.log(participant);
- 
   return (
     <div className={styles.participants}>
       <Image

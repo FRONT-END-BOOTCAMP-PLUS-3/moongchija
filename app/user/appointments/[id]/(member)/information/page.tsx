@@ -4,7 +4,7 @@ import DetailTabMenu from "../components/detail/DetailTabMenu/DetailTabMenu";
 import styles from "./information.module.scss";
 import InformationDetail from "../components/information/InformationDetail/InformationDetail";
 import NoticeDetail from "../components/information/NoticeDetail/NoticeDetail";
-import { useCallback, useEffect, useState} from 'react';
+import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import IconHeader from "@/components/header/IconHeader";
 import Loading from "@/components/loading/Loading";
@@ -28,14 +28,14 @@ const InformationPage = () => {
     try {
       const response = await fetch(`/api/user/appointments/${id}/information`);
       if (!response.ok) throw new Error("약속 상세 정보 가져오기 실패");
-  
+
       const data = await response.json();
       setInfoData(data);
     } catch (error) {
       console.log(error);
     }
   }, [id]);
-  
+
   useEffect(() => {
     if (id) fetchInfo();
   }, [id, fetchInfo]);
@@ -100,11 +100,14 @@ const InformationPage = () => {
     if (!confirm("정말 방을 나가시겠습니까?")) return;
 
     try {
-      const res = await fetch(`/api/user/appointments/${id}/member`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ userId: userId }),
-      });
+      const res = await fetch(
+        `/api/user/appointments/${id}/information/member`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ userId: userId }),
+        }
+      );
 
       if (!res.ok) {
         const errorData = await res.json();
@@ -117,8 +120,6 @@ const InformationPage = () => {
       console.log("방 나가기 중 오류 발생:", error);
     }
   };
-
-  
 
   return (
     <div className={styles.pageContainer}>
@@ -175,17 +176,15 @@ const InformationPage = () => {
                 </button>
               ) : null}
               {userId !== infoData.owner_id ? ( // 멤버면, 방 나가기
-              <button
-                className={styles.exitButton}
-                type="button"
-                onClick={handleExitRoom}
-              >
-                방 나가기
-              </button>
-            ) : null}
+                <button
+                  className={styles.exitButton}
+                  type="button"
+                  onClick={handleExitRoom}
+                >
+                  방 나가기
+                </button>
+              ) : null}
             </section>
-
-            
           </>
         )}
       </div>

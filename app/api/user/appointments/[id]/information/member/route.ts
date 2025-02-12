@@ -6,7 +6,7 @@ import { DfDeleteMemberUsecase } from "@/application/usecases/appointment/DfDele
 export async function DELETE(req: NextRequest) {
   try {
     const urlParts = req.nextUrl.pathname.split("/");
-    const appointmentId = Number(urlParts[urlParts.length - 2]);
+    const appointmentId = Number(urlParts[urlParts.length - 3]);
     const body = await req.json();
     const { userId } = body;
 
