@@ -62,7 +62,7 @@
 
 ## 1. 초기화면
 ### 초기화면
-![Image](https://github.com/user-attachments/assets/869dcaec-47b1-40fb-80c4-991123504ab6)
+<img src="https://github.com/user-attachments/assets/869dcaec-47b1-40fb-80c4-991123504ab6" width="400">
 
 ## 2. 회원가입 및 로그인
 
@@ -71,26 +71,19 @@
 - 로그인 후 서비스 이용 가능
 - 사용자 프로필 관리 기능 제공
 
-
 ### 카카오 로그인
-![Image](https://github.com/user-attachments/assets/5dfacf07-0aae-4648-924c-8c9e30676514)
-![Image](https://github.com/user-attachments/assets/2ccb5080-4a50-445e-aa30-54997f23f55c)
+<img src="https://github.com/user-attachments/assets/5dfacf07-0aae-4648-924c-8c9e30676514" width="400">
+<img src="https://github.com/user-attachments/assets/2ccb5080-4a50-445e-aa30-54997f23f55c" width="400">
 
 ### 로그인 - 성공/실패
-![Image](https://github.com/user-attachments/assets/b1588be8-8c9d-4555-9183-d23d26553978)
-![Image](https://github.com/user-attachments/assets/3e6abfbc-3561-4df6-a0c5-f25713b50e83)
-
+<img src="https://github.com/user-attachments/assets/b1588be8-8c9d-4555-9183-d23d26553978" width="400">
+<img src="https://github.com/user-attachments/assets/3e6abfbc-3561-4df6-a0c5-f25713b50e83" width="400">
 
 ### 회원가입 - 성공/실패
-![Image](https://github.com/user-attachments/assets/b31a19be-efad-4d32-8c4f-2063c4d083ef)
-![Image](https://github.com/user-attachments/assets/d2ecbe4a-7278-47c4-acab-3884d395b4de)
-
-
-
-
+<img src="https://github.com/user-attachments/assets/b31a19be-efad-4d32-8c4f-2063c4d083ef" width="400">
+<img src="https://github.com/user-attachments/assets/d2ecbe4a-7278-47c4-acab-3884d395b4de" width="400">
 
 <br>
-
 
 ## 3. 약속 생성 (방장 기능)
 
@@ -99,35 +92,31 @@
 - 약속 장소 후보 등록 가능
 - 약속 방번호 자동 생성 및 공유 가능
 
-![약속 생성](https://github.com/user-attachments/assets/92da0a13-ff2f-4cb1-a17c-b53d53c81ffc)
-
+<img src="https://github.com/user-attachments/assets/92da0a13-ff2f-4cb1-a17c-b53d53c81ffc" width="400">
 
 <br>
-
 
 ## 4. 약속 참여 (멤버 기능)
 
 - 방번호를 입력하여 약속 참여 가능
 - 방장이 설정한 퀴즈의 정답을 맞추면 멤버로 추가됨
-- 멤버들은 방장이 설정한 시간,장소 후보중에 가능한 시간 및 원하는 장소 투표 가능
+- 멤버들은 방장이 설정한 시간, 장소 후보 중에서 가능한 시간 및 원하는 장소 투표 가능
 
-(영상 추가)
+<img src="https://github.com/user-attachments/assets/4527a444-0329-4d0b-addf-8e22ed84d790" width="400">
 
 <br>
-
 
 ## 5. 투표 및 약속 확정
 
 - 방장과 멤버는 투표 페이지에서 시간 및 장소 투표 진행 가능
-- 투표를 제출하면 투표결과 확인 가능
+- 투표를 제출하면 투표 결과 확인 가능
 - 모든 멤버가 투표 완료 시, 방장은 약속 확정 가능
-- 확정된 약속은 시간과 장소 정보가 결정되고 정보를 공유할 수 있는 약속상세페이지가 생성
+- 확정된 약속은 시간과 장소 정보가 결정되고 정보를 공유할 수 있는 약속 상세 페이지가 생성
 - 확정 후에 일정과 장소는 수정 가능
 
-(영상 추가)
+<img src="https://github.com/user-attachments/assets/2dd3c7e0-07d1-4bbf-a88a-75aff80815f9" width="400">
 
 <br>
-
 
 ## 6. 약속 상세 페이지
 
@@ -135,10 +124,10 @@
 - 정산 기능 제공 (참여자 간 비용 정산 가능)
 - 사진 공유 기능 제공 (약속 사진 업로드 및 공유)
 
-![약속 상세 페이지](https://github.com/user-attachments/assets/e74223d2-15ea-4176-a294-3a769fa3e449)
-
+<img src="https://github.com/user-attachments/assets/e74223d2-15ea-4176-a294-3a769fa3e449" width="400">
 
 <br>
+
 
 
 ## 7. 메인 페이지
@@ -159,7 +148,7 @@
 - 약속 상태에 따른 색상 구분 및 약속 상태에 따른 필터링 제공
 
 ### 마이페이지 - 닉네임 변경, 이모지 변경, 약속 상태 필터링, 탈퇴 기능
-![Image](https://github.com/user-attachments/assets/f4d9cc1f-03cf-45b6-8e55-cbf73deba70a)
+<img src="https://github.com/user-attachments/assets/f4d9cc1f-03cf-45b6-8e55-cbf73deba70a" width="400">
 
 <br>
 
