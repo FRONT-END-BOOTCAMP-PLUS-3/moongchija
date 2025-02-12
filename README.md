@@ -136,9 +136,10 @@
 - 투표 중인 약속, 확정된 약속 필터링 가능
 - 예정된 약속 및 지난 약속을 쉽게 확인 가능
 
-(영상 추가)
+<img src="https://github.com/user-attachments/assets/469b3e66-d27c-48d3-a31a-717dfd047a5c" width="400">
 
 <br>
+
 
 
 ## 8. 마이페이지
