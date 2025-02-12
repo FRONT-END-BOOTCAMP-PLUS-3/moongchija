@@ -4,4 +4,9 @@
   align-items: center;
   flex-direction: row;
   gap: 20px;
+
+  .statusButton {
+    border: none;
+    cursor: pointer;
+  }
 }

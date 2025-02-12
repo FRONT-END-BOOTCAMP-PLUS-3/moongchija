@@ -6,8 +6,10 @@ import { getEventsStatus } from "@/utils/user/getEventsStatus";
 
 const UserAppointmentCount = ({
   appointments = [],
+  onStatusChange,
 }: {
   appointments: Event[] | null;
+  onStatusChange: (status: string | null) => void;
 }) => {
   const getAppointmentCount = (status: string) => {
     return (
@@ -18,25 +20,43 @@ const UserAppointmentCount = ({
     );
   };
 
+  const totalCount = appointments?.length ?? 0;
   const votingCount = getAppointmentCount("voting");
   const scheduledCount = getAppointmentCount("scheduled");
   const confirmedCount = getAppointmentCount("confirmed");
 
   const appointmentData = [
+    { color: "blackColor", text: "전체", count: totalCount },
     { color: "greenColor", text: "투표중", count: votingCount },
     { color: "orangeColor", text: "예정", count: scheduledCount },
-    { color: "pinkColor", text: "확정", count: confirmedCount },
+    { color: "pinkColor", text: "종료", count: confirmedCount },
   ];
 
   return (
     <div className={styles.appointmentCountBox}>
       {appointmentData.map((item, index) => (
-        <AppointmentCount
+        <button
           key={index}
-          color={item.color}
-          text={item.text}
-          count={item.count}
-        />
+          onClick={() => {
+            onStatusChange(
+              item.text === "투표중"
+                ? "voting"
+                : item.text === "예정"
+                ? "scheduled"
+                : item.text === "종료"
+                ? "confirmed"
+                : null
+            );
+          }}
+          className={styles.statusButton}
+        >
+          <AppointmentCount
+            key={index}
+            color={item.color}
+            text={item.text}
+            count={item.count}
+          />
+        </button>
       ))}
     </div>
   );
