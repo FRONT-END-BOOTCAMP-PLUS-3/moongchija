@@ -63,17 +63,17 @@
       }
 
       .voting {
-        color: #007bff;
+        color: var(--mypage-green);
         font-weight: bold;
       }
 
       .upcoming {
-        color: #28a745;
+        color: var(--mypage-orange);
         font-weight: bold;
       }
 
       .finished {
-        color: #dc3545;
+        color: var(--mypage-pink);
         font-weight: bold;
       }
 
