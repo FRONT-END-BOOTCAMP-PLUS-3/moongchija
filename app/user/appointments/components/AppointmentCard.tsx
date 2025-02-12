@@ -186,7 +186,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
                   onClick={handleDeleteRoom}
                   className={styles.linkButton}
                 >
-                  <MdDeleteOutline />
+                  <MdDeleteOutline size={14} />
                   <p>방 삭제</p>
                 </button>
               ) : ( // 멤버면, 방 나가기 가능
