@@ -1,5 +1,6 @@
 "use client";
 
+import styles from "./AppointmentCard.module.scss";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
 import { fallbackCopy } from "@/utils/copy/copyUtils";
 import {
@@ -12,7 +13,6 @@ import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import { IoMdExit } from "react-icons/io";
 import { MdDeleteOutline } from "react-icons/md";
-import styles from "./AppointmentCard.module.scss";
 import { useUser } from "@/context/UserContext";
 
 interface AppointmentCardProps {
@@ -70,14 +70,9 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
 
       if (!res.ok) throw new Error("약속 삭제 실패");
 
-      const confirmation = confirm(
-        "방을 삭제하면 해당 약속과 관련된 정보가 전부 사라지게 됩니다. 방을 정말 삭제 하시겠습니까?"
-      );
-
-      if (confirmation) {
-        alert("방이 삭제되었습니다.");
-        onSetAppointments((prev) => prev.filter((app) => app.id !== id));
-      }
+      alert("방이 삭제되었습니다.");
+      onSetAppointments((prev) => prev.filter((app) => app.id !== id));
+      
     } catch (error) {
       console.log("방 삭제 중 오류 발생:", error);
       alert("방 삭제 중 오류가 발생했습니다.");
@@ -88,7 +83,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({
   const handleExitRoom = async (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     e.stopPropagation();
-    
+
     if (!confirm("정말 방을 나가시겠습니까?")) return;
 
     try {
