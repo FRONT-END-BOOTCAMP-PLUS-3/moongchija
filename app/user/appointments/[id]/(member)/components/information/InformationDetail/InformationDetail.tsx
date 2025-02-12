@@ -56,11 +56,13 @@ const InformationDetail: FC<InformationDetailProps> = ({ informationData }) => {
       {/* 약속명 */}
       <div className={styles.name}>
         {userId === informationData.owner_id ? (
-          <FaCrown className={styles.crownIcon} />
+          <FaCrown className={styles.nameCrownIcon} />
         ) : (
-          <FaUserFriends className={styles.friendsIcon} />
+          <FaUserFriends className={styles.nameFriendsIcon} />
         )}
-        <span>{informationData.title}</span>
+        <div className={styles.title}>
+          <span>{informationData.title}</span>
+        </div>
       </div>
 
       {/* 장소 + 일자 + 참여인원 */}
