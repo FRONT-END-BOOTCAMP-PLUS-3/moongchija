@@ -1,6 +1,7 @@
 "use client";
 
 import styles from "./AppointmentCard.module.scss";
+import Image from "next/image";
 import { FaCrown, FaMapMarkerAlt, FaUserFriends } from "react-icons/fa";
 import { FiCopy } from "react-icons/fi";
 import {
@@ -9,7 +10,6 @@ import {
   formatTime,
 } from "@/utils/dateUtils/dateUtils";
 import { AppointmentCardDto } from "@/application/usecases/appointment/dto/AppointmentCardDto";
-import Image from "next/image";
 import { fallbackCopy } from "@/utils/copy/copyUtils";
 
 interface AppointmentCardProps {
@@ -42,7 +42,8 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
     e.preventDefault();
     e.stopPropagation();
   
-    fallbackCopy(text, () => alert(`✅ 초대링크가 복사되었습니다! ${text}`), "초대링크 복사 실패");
+    fallbackCopy(text, () => {}, "초대링크 복사 실패");
+    alert(`✅ 초대링크가 복사되었습니다! ${text}`); 
   };
 
   return (
@@ -72,6 +73,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
         <div className={styles.participantWrapper}>
           {participants.map((participant, index) => (
             <Image
+              className={styles.participantImage}
               src={participant}
               alt={`Participant ${index + 1}`}
               key={index}
@@ -110,7 +112,7 @@ const AppointmentCard: React.FC<AppointmentCardProps> = ({ appointment }) => {
                 className={styles.copyButton}
               >
                 <FiCopy />
-                <p>복사</p>
+                <p>초대 링크</p>
               </button>
             </>
           )}

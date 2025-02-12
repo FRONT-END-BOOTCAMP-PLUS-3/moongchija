@@ -1,4 +1,3 @@
-import Button from "@/components/button/Button";
 import Image from "next/image";
 import styles from "./UserImage.module.scss";
 import Modal from "@/components/modal/Modal";
@@ -7,6 +6,8 @@ import UserImageModalContent from "./UserImageModalContent";
 import { useUser } from "@/context/UserContext";
 import { getEmojiAltText } from "@/utils/user/userEmojiAltText";
 import EmojiSkeleton from "./user-skeleton/EmojiSkeleton";
+import { FaCamera } from "react-icons/fa";
+
 const UserImage = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const handleopenModal = () => setIsModalOpen(true);
@@ -34,8 +35,11 @@ const UserImage = () => {
             <Image src={user?.emoji} width={100} height={100} alt={altText} />
           )
         )}
+        <button onClick={handleopenModal} className={styles.editButton}>
+          <FaCamera className={styles.cameraIcon} />
+        </button>
       </div>
-      <Button text="수정" size="xs" onClick={handleopenModal} />
+
       <Modal isOpen={isModalOpen} onClose={handlecloseModal}>
         <UserImageModalContent onClose={handlecloseModal} />
       </Modal>

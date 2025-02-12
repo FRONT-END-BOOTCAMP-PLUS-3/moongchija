@@ -25,18 +25,29 @@
 .name {
   font-size: 20px;
   display: flex;
-  align-items: center;
+  // align-items: center;
   gap: 10px;
   border-radius: 5px;
   padding-bottom: 10px;
 
-  span{
+  span {
     font-weight: 500;
   }
 }
 
-.crownIcon {
+.nameCrownIcon {
   color: gold;
+  font-size: 20px;
+  min-width: 20px;
+}
+
+.nameFriendsIcon {
+  font-size: 20px;
+  min-width: 20px;
+}
+
+.title {
+  margin-right: 80px;
 }
 
 .box {
@@ -82,7 +93,6 @@
   overflow-y: auto; /* 스크롤 가능하도록 설정 */
   scrollbar-width: thin; /* Firefox용 스크롤바 크기 조정 */
   scrollbar-color: var(--grey-6-color) transparent; /* Firefox용 스크롤 색상 설정 */
-  
 }
 
 .participants {
@@ -97,10 +107,10 @@
 }
 
 .divider {
-  width: 2px; 
+  width: 2px;
   height: 18px;
-  background-color: var(--grey-6-color); 
-  border-radius: 2px; 
+  background-color: var(--grey-6-color);
+  border-radius: 2px;
 }
 
 .place a {
@@ -111,13 +121,12 @@
   color: var(--primary-color);
 }
 
-
-  .end {
-    background: var(--grey-7-color);
-  }
-  .dDay {
-    background: var(--mypage-pink);
-  }
-  .count {
-    background: var(--primary-color);
-  }
+.end {
+  background: var(--grey-7-color);
+}
+.dDay {
+  background: var(--mypage-pink);
+}
+.count {
+  background: var(--primary-color);
+}

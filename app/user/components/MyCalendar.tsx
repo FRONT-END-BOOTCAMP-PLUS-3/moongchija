@@ -12,8 +12,10 @@ import CalendarSkeleton from "./user-skeleton/CalendarSkeleton";
 
 const MyCalendar = ({
   onAppointmentsFetch,
+  selectedStatus,
 }: {
   onAppointmentsFetch: (appointments: Event[]) => void;
+  selectedStatus: string | null;
 }) => {
   const [events, setEvents] = useState<Event[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -23,6 +25,7 @@ const MyCalendar = ({
       setIsLoading(true);
       const response = await fetch("/api/user/user-appointments");
       const appointments = await response.json();
+
       const transformedEvents = appointments.map((event: Event) => {
         const { status, color } = getEventsStatus(event);
 
@@ -41,6 +44,10 @@ const MyCalendar = ({
     appointmentsListFetch();
   }, [onAppointmentsFetch]);
 
+  const filteredEvents = selectedStatus
+    ? events.filter((event) => event.status === selectedStatus)
+    : events;
+
   return (
     <div className="calendarWrapper">
       {isLoading ? (
@@ -50,7 +57,8 @@ const MyCalendar = ({
           plugins={[dayGridPlugin]}
           initialView="dayGridMonth"
           firstDay={1}
-          events={events}
+          events={filteredEvents}
+          eventDisplay="block"
           eventContent={(eventInfo) => {
             return (
               <div

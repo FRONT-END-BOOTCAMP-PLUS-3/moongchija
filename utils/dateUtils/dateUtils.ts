@@ -23,12 +23,11 @@ export const formatTime = (date: Date): string => {
 
 export const calculateCountdown = (startDate: Date): string => {
   const today = new Date();
-  const timeDiff = startDate.getTime() - today.getTime(); // 시간 차이 (밀리초)
-  const daysLeft = Math.ceil(timeDiff / (1000 * 60 * 60 * 24)); // 밀리초 -> 일 단위로 변환
+  const daysDiff = startDate.getDate() - today.getDate();
 
-  if (daysLeft < 0) return "종료"; // 이미 지난 날짜
-  if (daysLeft === 0) return "D-DAY"; // 당일
-  return `D-${daysLeft}`;
+  if (daysDiff < 0) return "종료"; // 이미 지난 날짜
+  if (daysDiff === 0) return "D-DAY"; // 당일
+  return `D-${daysDiff}`;
 };
 
 export const formatToISOStringWithKST = (date: Date) => {
