@@ -14,12 +14,18 @@
       font-size: var(--font-size-md);
       font-weight: bold;
       margin: 4vh 0 3vh;
+      @media (max-width: 375px) {
+        margin: 2vh 0 3vh;
+      }
     }
     .wrapTapButton {
       display: flex;
       flex-direction: row-reverse;
       width: 100%;
       margin-bottom: 25px;
+      @media (max-width: 375px) {
+        margin-bottom: 10px;
+      }
       .tapButton {
         width: 120px;
         border-radius: 10px;
@@ -46,6 +52,9 @@
     .wrapButton {
       width: 100%;
       margin-top: 3vh;
+      @media (max-width: 375px) {
+        margin-top: 1vh;
+      }
       .ownerButtons {
         display: flex;
         gap: 30px;
