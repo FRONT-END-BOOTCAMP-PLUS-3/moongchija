@@ -24,6 +24,10 @@ const AppointmentsPage: React.FC = () => {
       searchText,
       selectedOption,
       isModalOpen,
+      filteredAppointments,
+      inProgressAppointments,
+      confirmedAppointments,
+      setAppointments
     },
     handlers: {
       openModal,
@@ -32,9 +36,6 @@ const AppointmentsPage: React.FC = () => {
       handleCircleButtonClick,
       handleSearchChange,
       handleSelectChange,
-      filteredAppointments,
-      inProgressAppointments,
-      confirmedAppointments,
     }
   } = useAppointments();
 
@@ -71,12 +72,14 @@ const AppointmentsPage: React.FC = () => {
           {!loading && currentTab === 0 && (
             <AppointmentList
               appointments={filteredAppointments(inProgressAppointments)}
+              onSetAppointments={setAppointments}
             />
           )}
           {/* 확정된 약속 */}
           {!loading && currentTab === 1 && (
             <AppointmentList
               appointments={filteredAppointments(confirmedAppointments)}
+              onSetAppointments={setAppointments}
             />
           )}
         </section>

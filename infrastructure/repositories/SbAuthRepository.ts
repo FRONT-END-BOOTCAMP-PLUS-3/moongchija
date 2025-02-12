@@ -21,7 +21,7 @@ export class SbAuthRepository implements AuthRepository {
     const isPasswordValid = await comparePassword(password, userData.password);
 
     if (!isPasswordValid) {
-      throw new Error("로그인 실패: 비밀번호가 일치하지 않음");
+      throw new Error("유효하지 않은 이메일 또는 비밀번호입니다.");
     }
 
     const token = generateJwtToken(

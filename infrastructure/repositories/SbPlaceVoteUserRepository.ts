@@ -2,12 +2,17 @@ import { createClient } from "@/utils/supabase/server";
 import { PlaceVoteUserRepository } from "@/domain/repositories/PlaceVoteUserRepository";
 
 export class SbPlaceVoteUserRepository implements PlaceVoteUserRepository {
-  async voteForPlace(userId: string, placeId: number): Promise<void> {
+  async voteForPlace(
+    userId: string,
+    placeId: number,
+    memberId: number
+  ): Promise<void> {
     const supabase = await createClient();
 
     const { error } = await supabase.from("place_vote_user").insert({
       place_id: placeId,
       user_id: userId,
+      member_id: memberId,
     });
 
     if (error) {

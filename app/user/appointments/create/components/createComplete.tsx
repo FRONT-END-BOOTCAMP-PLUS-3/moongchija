@@ -24,7 +24,7 @@ const CreateComplete: React.FC<Props> = ({ onIsComplete }) => {
           <Moongchi />
         </div>
 
-        <h2 className={styles.title}>약속이 확정 됐어요</h2>
+        <h2 className={styles.title}>약속이 생성 됐어요</h2>
         <p className={styles.description}>
           투표를 완료하고, <br />
           약속을 확정해주세요!

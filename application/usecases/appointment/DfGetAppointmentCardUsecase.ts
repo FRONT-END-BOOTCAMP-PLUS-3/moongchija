@@ -43,6 +43,7 @@ export class DfAppointmentCardUsecase {
       extraParticipants: Math.max(0, participants.length - 5),
       status: appointment.status as "voting" | "confirmed",
       isVote: members.some(m => m.user_id === userId && m.is_vote),
+      ownerId: appointment.owner_id,
     };
   }
 }
