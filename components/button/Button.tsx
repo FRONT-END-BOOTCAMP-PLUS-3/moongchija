@@ -9,7 +9,7 @@ const Button = ({
 }: {
   text: string;
   size: "xs" | "sm" | "md" | "lg";
-  color?: "--primary-color" | "--exit-red" | "--grey-5-color" |"--secondary-color";
+  color?: "--primary-color" | "--exit-red" | "--grey-5-color" | "--secondary-color" | "--grey-7-color";
   active?: boolean;
   onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }) => {

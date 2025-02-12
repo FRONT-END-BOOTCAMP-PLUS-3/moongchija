@@ -39,13 +39,13 @@ const CreatePlace: React.FC<Props> = ({ onPageChange }) => {
             size="xs"
             text="+"
             onClick={handleAddPlace}
-            color={"--grey-5-color"}
+            color={"--grey-7-color"}
           />
           <Button
             size="xs"
             text="-"
             onClick={handleRemovePlace}
-            color={"--grey-5-color"}
+            color={"--grey-7-color"}
           />
         </div>
 
