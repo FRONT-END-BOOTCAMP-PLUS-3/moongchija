@@ -92,7 +92,7 @@
 - 약속 장소 후보 등록 가능
 - 약속 방번호 자동 생성 및 공유 가능
 
-<img src="https://github.com/user-attachments/assets/92da0a13-ff2f-4cb1-a17c-b53d53c81ffc" width="400">
+<img src="https://github.com/user-attachments/assets/fed93640-0c43-44fd-bb96-de07c88e52e9" width="400">
 
 <br>
 
