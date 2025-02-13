@@ -39,6 +39,7 @@ export const UserProvider = ({ children }: { children: ReactNode }) => {
         const user = await getUserIdClient();
         if (!user) {
           alert("❌ 로그인이 필요합니다. 로그인 페이지로 이동합니다.");
+          localStorage.setItem("redirectPath", window.location.pathname);
           router.push("/login");
           return;
         }
