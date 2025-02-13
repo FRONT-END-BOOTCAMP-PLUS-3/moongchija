@@ -36,8 +36,12 @@ const useLogin = () => {
       }
 
       const { redirectUrl } = await response.json();
+      const redirectPath = localStorage.getItem("redirectPath");
 
-      if (redirectUrl) {
+      if (redirectPath) {
+        router.push(redirectPath);
+        localStorage.removeItem("redirectPath");
+      } else {
         router.push(redirectUrl);
       }
     } catch (error) {
