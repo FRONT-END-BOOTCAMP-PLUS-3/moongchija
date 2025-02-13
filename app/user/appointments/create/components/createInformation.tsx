@@ -43,7 +43,7 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
           error={nameError}
         />
 
-        <label htmlFor="quiz-select">비밀번호 퀴즈</label>
+        <label htmlFor="quiz-select">약속 퀴즈</label>
         <select
           id="quiz-select"
           value={isCustomQuiz ? "직접 입력하기" : appointment.quiz!}
@@ -66,8 +66,8 @@ const CreateInformation: React.FC<Props> = ({ onPageChange }) => {
         )}
 
         <InputField
-          label="비밀번호 퀴즈 답"
-          placeholder="퀴즈 답을 입력하세요."
+          label="약속 퀴즈 답"
+          placeholder="답을 입력하세요."
           value={appointment.answer!}
           onChange={(e) => handleSetAnswer(e.target.value)}
         />
