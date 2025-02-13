@@ -19,7 +19,6 @@ export const POST = async (request: NextRequest) => {
 
     const { token, user } = await loginUsecase.execute(user_email, password);
 
-    console.log("userType", user.type);
     const redirectUrl =
       user.type === "admin"
         ? `${process.env.SITE_URL}/admin/appointments`
