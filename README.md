@@ -32,7 +32,7 @@
 ## :globe_with_meridians: 개발환경
 - 개발 언어: HTML, CSS, JavaScript
 - 사용 기술: React, Next.js, TypeScript, moduleSCSS, PWA
-- 데이터베이스: Supabase
+- 백엔드 서비스(데이터베이스): Supabase
 - 배포: Vercel
 - 버전 관리 및 협업: Git, Figma, Discord, Notion
 
